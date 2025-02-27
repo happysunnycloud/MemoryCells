@@ -1,0 +1,85 @@
+inherited CellUnitFrame: TCellUnitFrame
+  Size.Width = 421.000000000000000000
+  Size.Height = 63.000000000000000000
+  object CellUnitPanel: TPanel
+    Align = Client
+    HitTest = False
+    Size.Width = 421.000000000000000000
+    Size.Height = 63.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object CellUnitButton: TButton
+      Align = Contents
+      Size.Width = 421.000000000000000000
+      Size.Height = 63.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'CellUnitButton'
+      object CellUnitNameText: TText
+        Align = Client
+        HitTest = False
+        Padding.Top = 10.000000000000000000
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 314.000000000000000000
+        Size.Height = 43.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Cell'
+        TextSettings.HorzAlign = Leading
+        TextSettings.VertAlign = Leading
+      end
+      object RightLayout: TLayout
+        Align = Right
+        Position.X = 324.000000000000000000
+        Size.Width = 97.000000000000000000
+        Size.Height = 63.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object Layout1: TLayout
+          Align = Top
+          Size.Width = 97.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object UpdateDateText: TText
+            Align = Client
+            Margins.Left = 5.000000000000000000
+            Margins.Top = 10.000000000000000000
+            Margins.Right = 5.000000000000000000
+            Size.Width = 87.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Update date'
+            TextSettings.HorzAlign = Leading
+          end
+        end
+        object Layout2: TLayout
+          Align = Bottom
+          Position.Y = 33.000000000000000000
+          Size.Width = 97.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object FavoriteCellButton: TButton
+            Align = Right
+            Position.X = 67.000000000000000000
+            Size.Width = 30.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+          end
+          object CellUnitCheckBox: TCheckBox
+            Align = Right
+            Position.X = 67.000000000000000000
+            Size.Width = 30.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Visible = False
+          end
+        end
+      end
+    end
+  end
+end

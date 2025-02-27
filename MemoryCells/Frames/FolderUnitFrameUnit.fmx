@@ -1,0 +1,30 @@
+inherited FolderUnitFrame: TFolderUnitFrame
+  Size.Width = 218.000000000000000000
+  Size.Height = 55.000000000000000000
+  object Panel: TPanel
+    Align = Contents
+    HitTest = False
+    Size.Width = 218.000000000000000000
+    Size.Height = 55.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object FolderUnitButton: TButton
+      Align = Contents
+      Size.Width = 218.000000000000000000
+      Size.Height = 55.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object FolderUnitNameText: TText
+        Align = Client
+        HitTest = False
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Size.Width = 198.000000000000000000
+        Size.Height = 55.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Folder'
+        TextSettings.HorzAlign = Leading
+      end
+    end
+  end
+end

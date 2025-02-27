@@ -1,0 +1,5 @@
+object BaseCellFrame: TBaseCellFrame
+  Size.Width = 249.000000000000000000
+  Size.Height = 89.000000000000000000
+  Size.PlatformDefault = False
+end

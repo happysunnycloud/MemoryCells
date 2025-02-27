@@ -1,0 +1,21 @@
+inherited CurrentFolderFrame: TCurrentFolderFrame
+  Size.Width = 354.000000000000000000
+  Size.Height = 48.000000000000000000
+  object Panel: TPanel
+    Align = Contents
+    Size.Width = 354.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object FolderNameText: TText
+      Align = Contents
+      HitTest = False
+      Margins.Left = 10.000000000000000000
+      Size.Width = 344.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Current folder'
+      TextSettings.HorzAlign = Leading
+    end
+  end
+end

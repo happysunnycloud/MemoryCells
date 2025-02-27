@@ -1,0 +1,74 @@
+inherited EditFolderNameFrame: TEditFolderNameFrame
+  Size.Width = 500.000000000000000000
+  Size.Height = 50.000000000000000000
+  object Panel: TPanel
+    Align = Contents
+    Size.Width = 500.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object CancelButtonLayout: TLayout
+      Align = Right
+      Position.X = 300.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object EditFolderNameOkButton: TButton
+        Align = Center
+        StyledSettings = [Style, FontColor]
+        Padding.Left = 10.000000000000000000
+        Padding.Top = 10.000000000000000000
+        Padding.Right = 10.000000000000000000
+        Padding.Bottom = 10.000000000000000000
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Ok'
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+    object OkButtonLayout: TLayout
+      Align = MostRight
+      Position.X = 400.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object EditFolderNameCancelButton: TButton
+        Align = Center
+        StyledSettings = [Style, FontColor]
+        Size.Width = 80.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+    object TextLayout: TLayout
+      Align = Client
+      Size.Width = 300.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object FolderNameEdit: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Center
+        Anchors = [akLeft, akRight]
+        TabOrder = 0
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 16.000000000000000000
+        Size.Width = 285.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Style]
+      end
+    end
+  end
+end

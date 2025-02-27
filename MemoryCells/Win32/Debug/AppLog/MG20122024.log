@@ -1,0 +1,414 @@
+20.12.2024; 10:43:04; Start app
+20.12.2024; 10:43:27; TCloseFormThread.Execute.Enter
+20.12.2024; 10:43:27; FForm assigned
+20.12.2024; 10:43:27; FForm.ThreadRegistry assigned
+20.12.2024; 10:43:28; TCloseFormThread.Execute.Leave
+20.12.2024; 10:43:28; Finish app
+20.12.2024; 10:43:33; Start app
+20.12.2024; 10:43:49; TCloseFormThread.Execute.Enter
+20.12.2024; 10:43:49; FForm assigned
+20.12.2024; 10:43:49; FForm.ThreadRegistry assigned
+20.12.2024; 10:43:49; TCloseFormThread.Execute.Leave
+20.12.2024; 10:43:49; Finish app
+20.12.2024; 10:43:57; Start app
+20.12.2024; 10:44:13; TCloseFormThread.Execute.Enter
+20.12.2024; 10:44:13; FForm assigned
+20.12.2024; 10:44:13; FForm.ThreadRegistry assigned
+20.12.2024; 10:44:14; TCloseFormThread.Execute.Leave
+20.12.2024; 10:44:14; Finish app
+20.12.2024; 10:44:19; Start app
+20.12.2024; 10:44:45; TCloseFormThread.Execute.Enter
+20.12.2024; 10:44:45; FForm assigned
+20.12.2024; 10:44:45; FForm.ThreadRegistry assigned
+20.12.2024; 10:44:45; TCloseFormThread.Execute.Leave
+20.12.2024; 10:44:45; Finish app
+20.12.2024; 10:44:51; Start app
+20.12.2024; 10:46:44; Start app
+20.12.2024; 10:46:51; TCloseFormThread.Execute.Enter
+20.12.2024; 10:46:51; FForm assigned
+20.12.2024; 10:46:51; FForm.ThreadRegistry assigned
+20.12.2024; 10:46:53; TCloseFormThread.Execute.Leave
+20.12.2024; 10:46:53; Finish app
+20.12.2024; 11:37:24; Start app
+20.12.2024; 11:38:48; TCloseFormThread.Execute.Enter
+20.12.2024; 11:38:48; FForm assigned
+20.12.2024; 11:38:48; FForm.ThreadRegistry assigned
+20.12.2024; 11:38:49; TCloseFormThread.Execute.Leave
+20.12.2024; 11:38:49; Finish app
+20.12.2024; 17:56:37; Start app
+20.12.2024; 17:57:00; TCloseFormThread.Execute.Enter
+20.12.2024; 17:57:00; FForm assigned
+20.12.2024; 17:57:00; FForm.ThreadRegistry assigned
+20.12.2024; 17:57:00; TCloseFormThread.Execute.Leave
+20.12.2024; 17:57:01; Finish app
+20.12.2024; 17:57:07; Start app
+20.12.2024; 17:57:21; TCloseFormThread.Execute.Enter
+20.12.2024; 17:57:21; FForm assigned
+20.12.2024; 17:57:21; FForm.ThreadRegistry assigned
+20.12.2024; 17:57:21; TCloseFormThread.Execute.Leave
+20.12.2024; 17:57:21; Finish app
+20.12.2024; 17:57:27; Start app
+20.12.2024; 17:58:27; Start app
+20.12.2024; 18:00:44; Start app
+20.12.2024; 18:01:29; TCloseFormThread.Execute.Enter
+20.12.2024; 18:01:29; FForm assigned
+20.12.2024; 18:01:29; FForm.ThreadRegistry assigned
+20.12.2024; 18:01:30; TCloseFormThread.Execute.Leave
+20.12.2024; 18:01:31; Finish app
+20.12.2024; 18:01:42; Start app
+20.12.2024; 18:06:46; Start app
+20.12.2024; 18:12:48; Start app
+20.12.2024; 18:12:52; TCloseFormThread.Execute.Enter
+20.12.2024; 18:12:52; FForm assigned
+20.12.2024; 18:12:52; FForm.ThreadRegistry assigned
+20.12.2024; 18:12:53; TCloseFormThread.Execute.Leave
+20.12.2024; 18:12:53; Finish app
+20.12.2024; 18:22:13; Start app
+20.12.2024; 18:22:23; TCloseFormThread.Execute.Enter
+20.12.2024; 18:22:23; FForm assigned
+20.12.2024; 18:22:23; FForm.ThreadRegistry assigned
+20.12.2024; 18:22:24; TCloseFormThread.Execute.Leave
+20.12.2024; 18:22:24; Finish app
+20.12.2024; 18:22:29; Start app
+20.12.2024; 18:22:51; TCloseFormThread.Execute.Enter
+20.12.2024; 18:22:51; FForm assigned
+20.12.2024; 18:22:51; FForm.ThreadRegistry assigned
+20.12.2024; 18:22:51; TCloseFormThread.Execute.Leave
+20.12.2024; 18:22:51; Finish app
+20.12.2024; 18:22:57; Start app
+20.12.2024; 18:25:43; Start app
+20.12.2024; 18:26:20; Start app
+20.12.2024; 18:26:44; TCloseFormThread.Execute.Enter
+20.12.2024; 18:26:44; FForm assigned
+20.12.2024; 18:26:44; FForm.ThreadRegistry assigned
+20.12.2024; 18:26:45; TCloseFormThread.Execute.Leave
+20.12.2024; 18:26:45; Finish app
+20.12.2024; 18:26:51; Start app
+20.12.2024; 18:27:12; TCloseFormThread.Execute.Enter
+20.12.2024; 18:27:12; FForm assigned
+20.12.2024; 18:27:12; FForm.ThreadRegistry assigned
+20.12.2024; 18:27:13; TCloseFormThread.Execute.Leave
+20.12.2024; 18:27:13; Finish app
+20.12.2024; 18:27:32; Start app
+20.12.2024; 18:28:17; TCloseFormThread.Execute.Enter
+20.12.2024; 18:28:17; FForm assigned
+20.12.2024; 18:28:17; FForm.ThreadRegistry assigned
+20.12.2024; 18:28:18; TCloseFormThread.Execute.Leave
+20.12.2024; 18:28:19; Finish app
+20.12.2024; 18:28:24; Start app
+20.12.2024; 18:29:42; Start app
+20.12.2024; 18:30:08; TCloseFormThread.Execute.Enter
+20.12.2024; 18:30:08; FForm assigned
+20.12.2024; 18:30:08; FForm.ThreadRegistry assigned
+20.12.2024; 18:30:09; TCloseFormThread.Execute.Leave
+20.12.2024; 18:30:09; Finish app
+20.12.2024; 18:32:02; Start app
+20.12.2024; 18:32:26; TCloseFormThread.Execute.Enter
+20.12.2024; 18:32:26; FForm assigned
+20.12.2024; 18:32:26; FForm.ThreadRegistry assigned
+20.12.2024; 18:32:27; TCloseFormThread.Execute.Leave
+20.12.2024; 18:32:27; Finish app
+20.12.2024; 18:32:34; Start app
+20.12.2024; 18:32:45; TCloseFormThread.Execute.Enter
+20.12.2024; 18:32:45; FForm assigned
+20.12.2024; 18:32:45; FForm.ThreadRegistry assigned
+20.12.2024; 18:32:45; TCloseFormThread.Execute.Leave
+20.12.2024; 18:32:45; Finish app
+20.12.2024; 18:32:50; Start app
+20.12.2024; 18:33:24; TCloseFormThread.Execute.Enter
+20.12.2024; 18:33:24; FForm assigned
+20.12.2024; 18:33:24; FForm.ThreadRegistry assigned
+20.12.2024; 18:33:25; TCloseFormThread.Execute.Leave
+20.12.2024; 18:33:25; Finish app
+20.12.2024; 18:33:30; Start app
+20.12.2024; 18:33:49; TCloseFormThread.Execute.Enter
+20.12.2024; 18:33:49; FForm assigned
+20.12.2024; 18:33:49; FForm.ThreadRegistry assigned
+20.12.2024; 18:33:49; TCloseFormThread.Execute.Leave
+20.12.2024; 18:33:50; Finish app
+20.12.2024; 18:33:55; Start app
+20.12.2024; 18:34:45; TCloseFormThread.Execute.Enter
+20.12.2024; 18:34:45; FForm assigned
+20.12.2024; 18:34:45; FForm.ThreadRegistry assigned
+20.12.2024; 18:34:45; TCloseFormThread.Execute.Leave
+20.12.2024; 18:34:46; Finish app
+20.12.2024; 18:34:51; Start app
+20.12.2024; 18:35:21; TCloseFormThread.Execute.Enter
+20.12.2024; 18:35:21; FForm assigned
+20.12.2024; 18:35:21; FForm.ThreadRegistry assigned
+20.12.2024; 18:35:22; TCloseFormThread.Execute.Leave
+20.12.2024; 18:35:22; Finish app
+20.12.2024; 18:36:01; Start app
+20.12.2024; 18:36:17; TCloseFormThread.Execute.Enter
+20.12.2024; 18:36:17; FForm assigned
+20.12.2024; 18:36:17; FForm.ThreadRegistry assigned
+20.12.2024; 18:36:18; TCloseFormThread.Execute.Leave
+20.12.2024; 18:36:18; Finish app
+20.12.2024; 18:36:45; Start app
+20.12.2024; 18:38:30; Start app
+20.12.2024; 18:38:43; TCloseFormThread.Execute.Enter
+20.12.2024; 18:38:43; FForm assigned
+20.12.2024; 18:38:43; FForm.ThreadRegistry assigned
+20.12.2024; 18:38:44; TCloseFormThread.Execute.Leave
+20.12.2024; 18:38:44; Finish app
+20.12.2024; 18:38:49; Start app
+20.12.2024; 18:38:58; TCloseFormThread.Execute.Enter
+20.12.2024; 18:38:58; FForm assigned
+20.12.2024; 18:38:58; FForm.ThreadRegistry assigned
+20.12.2024; 18:38:59; TCloseFormThread.Execute.Leave
+20.12.2024; 18:38:59; Finish app
+20.12.2024; 18:39:06; Start app
+20.12.2024; 18:40:40; Start app
+20.12.2024; 18:41:16; TCloseFormThread.Execute.Enter
+20.12.2024; 18:41:16; FForm assigned
+20.12.2024; 18:41:16; FForm.ThreadRegistry assigned
+20.12.2024; 18:41:17; TCloseFormThread.Execute.Leave
+20.12.2024; 18:41:17; Finish app
+20.12.2024; 18:41:22; Start app
+20.12.2024; 18:42:07; TCloseFormThread.Execute.Enter
+20.12.2024; 18:42:07; FForm assigned
+20.12.2024; 18:42:07; FForm.ThreadRegistry assigned
+20.12.2024; 18:42:08; TCloseFormThread.Execute.Leave
+20.12.2024; 18:42:08; Finish app
+20.12.2024; 18:42:13; Start app
+20.12.2024; 18:42:29; TCloseFormThread.Execute.Enter
+20.12.2024; 18:42:29; FForm assigned
+20.12.2024; 18:42:29; FForm.ThreadRegistry assigned
+20.12.2024; 18:42:29; TCloseFormThread.Execute.Leave
+20.12.2024; 18:42:29; Finish app
+20.12.2024; 18:42:34; Start app
+20.12.2024; 18:44:30; TCloseFormThread.Execute.Enter
+20.12.2024; 18:44:30; FForm assigned
+20.12.2024; 18:44:30; FForm.ThreadRegistry assigned
+20.12.2024; 18:44:30; TCloseFormThread.Execute.Leave
+20.12.2024; 18:44:30; Finish app
+20.12.2024; 18:45:15; Start app
+20.12.2024; 18:47:37; TCloseFormThread.Execute.Enter
+20.12.2024; 18:47:37; FForm assigned
+20.12.2024; 18:47:37; FForm.ThreadRegistry assigned
+20.12.2024; 18:47:37; TCloseFormThread.Execute.Leave
+20.12.2024; 18:47:37; Finish app
+20.12.2024; 18:49:06; Start app
+20.12.2024; 18:49:53; TCloseFormThread.Execute.Enter
+20.12.2024; 18:49:53; FForm assigned
+20.12.2024; 18:49:53; FForm.ThreadRegistry assigned
+20.12.2024; 18:49:54; TCloseFormThread.Execute.Leave
+20.12.2024; 18:49:55; Finish app
+20.12.2024; 18:50:46; Start app
+20.12.2024; 18:51:22; TCloseFormThread.Execute.Enter
+20.12.2024; 18:51:22; FForm assigned
+20.12.2024; 18:51:22; FForm.ThreadRegistry assigned
+20.12.2024; 18:51:22; TCloseFormThread.Execute.Leave
+20.12.2024; 18:51:22; Finish app
+20.12.2024; 18:51:28; Start app
+20.12.2024; 18:51:38; TCloseFormThread.Execute.Enter
+20.12.2024; 18:51:38; FForm assigned
+20.12.2024; 18:51:38; FForm.ThreadRegistry assigned
+20.12.2024; 18:51:39; TCloseFormThread.Execute.Leave
+20.12.2024; 18:51:39; Finish app
+20.12.2024; 18:51:45; Start app
+20.12.2024; 18:51:57; TCloseFormThread.Execute.Enter
+20.12.2024; 18:51:57; FForm assigned
+20.12.2024; 18:51:57; FForm.ThreadRegistry assigned
+20.12.2024; 18:51:58; TCloseFormThread.Execute.Leave
+20.12.2024; 18:51:58; Finish app
+20.12.2024; 18:52:03; Start app
+20.12.2024; 18:52:13; TCloseFormThread.Execute.Enter
+20.12.2024; 18:52:13; FForm assigned
+20.12.2024; 18:52:13; FForm.ThreadRegistry assigned
+20.12.2024; 18:52:13; TCloseFormThread.Execute.Leave
+20.12.2024; 18:52:14; Finish app
+20.12.2024; 18:52:18; Start app
+20.12.2024; 18:52:28; TCloseFormThread.Execute.Enter
+20.12.2024; 18:52:28; FForm assigned
+20.12.2024; 18:52:28; FForm.ThreadRegistry assigned
+20.12.2024; 18:52:29; TCloseFormThread.Execute.Leave
+20.12.2024; 18:52:29; Finish app
+20.12.2024; 18:53:19; Start app
+20.12.2024; 18:53:36; TCloseFormThread.Execute.Enter
+20.12.2024; 18:53:36; FForm assigned
+20.12.2024; 18:53:36; FForm.ThreadRegistry assigned
+20.12.2024; 18:53:37; TCloseFormThread.Execute.Leave
+20.12.2024; 18:53:37; Finish app
+20.12.2024; 18:53:43; Start app
+20.12.2024; 18:53:53; TCloseFormThread.Execute.Enter
+20.12.2024; 18:53:53; FForm assigned
+20.12.2024; 18:53:53; FForm.ThreadRegistry assigned
+20.12.2024; 18:53:54; TCloseFormThread.Execute.Leave
+20.12.2024; 18:53:54; Finish app
+20.12.2024; 18:54:03; Start app
+20.12.2024; 18:54:14; TCloseFormThread.Execute.Enter
+20.12.2024; 18:54:14; FForm assigned
+20.12.2024; 18:54:14; FForm.ThreadRegistry assigned
+20.12.2024; 18:54:15; TCloseFormThread.Execute.Leave
+20.12.2024; 18:54:15; Finish app
+20.12.2024; 18:54:19; Start app
+20.12.2024; 18:54:27; TCloseFormThread.Execute.Enter
+20.12.2024; 18:54:27; FForm assigned
+20.12.2024; 18:54:27; FForm.ThreadRegistry assigned
+20.12.2024; 18:54:28; TCloseFormThread.Execute.Leave
+20.12.2024; 18:54:28; Finish app
+20.12.2024; 19:44:42; Start app
+20.12.2024; 19:45:13; TCloseFormThread.Execute.Enter
+20.12.2024; 19:45:13; FForm assigned
+20.12.2024; 19:45:13; FForm.ThreadRegistry assigned
+20.12.2024; 19:45:15; TCloseFormThread.Execute.Leave
+20.12.2024; 19:45:15; Finish app
+20.12.2024; 19:58:05; Start app
+20.12.2024; 19:58:32; TCloseFormThread.Execute.Enter
+20.12.2024; 19:58:32; FForm assigned
+20.12.2024; 19:58:32; FForm.ThreadRegistry assigned
+20.12.2024; 19:58:34; TCloseFormThread.Execute.Leave
+20.12.2024; 19:58:34; Finish app
+20.12.2024; 20:08:08; Start app
+20.12.2024; 20:08:48; TCloseFormThread.Execute.Enter
+20.12.2024; 20:08:48; FForm assigned
+20.12.2024; 20:08:48; FForm.ThreadRegistry assigned
+20.12.2024; 20:08:49; TCloseFormThread.Execute.Leave
+20.12.2024; 20:08:49; Finish app
+20.12.2024; 20:09:09; Start app
+20.12.2024; 20:09:32; Start app
+20.12.2024; 20:09:39; TCloseFormThread.Execute.Enter
+20.12.2024; 20:09:39; FForm assigned
+20.12.2024; 20:09:39; FForm.ThreadRegistry assigned
+20.12.2024; 20:09:40; TCloseFormThread.Execute.Leave
+20.12.2024; 20:09:40; Finish app
+20.12.2024; 20:10:09; Start app
+20.12.2024; 20:10:19; TCloseFormThread.Execute.Enter
+20.12.2024; 20:10:19; FForm assigned
+20.12.2024; 20:10:19; FForm.ThreadRegistry assigned
+20.12.2024; 20:10:20; TCloseFormThread.Execute.Leave
+20.12.2024; 20:10:20; Finish app
+20.12.2024; 20:10:25; Start app
+20.12.2024; 20:10:33; TCloseFormThread.Execute.Enter
+20.12.2024; 20:10:33; FForm assigned
+20.12.2024; 20:10:33; FForm.ThreadRegistry assigned
+20.12.2024; 20:10:34; TCloseFormThread.Execute.Leave
+20.12.2024; 20:10:34; Finish app
+20.12.2024; 22:45:24; Start app
+20.12.2024; 22:46:13; TCloseFormThread.Execute.Enter
+20.12.2024; 22:46:13; FForm assigned
+20.12.2024; 22:46:13; FForm.ThreadRegistry assigned
+20.12.2024; 22:46:13; TCloseFormThread.Execute.Leave
+20.12.2024; 22:46:13; Finish app
+20.12.2024; 22:46:17; Start app
+20.12.2024; 22:46:37; TCloseFormThread.Execute.Enter
+20.12.2024; 22:46:37; FForm assigned
+20.12.2024; 22:46:37; FForm.ThreadRegistry assigned
+20.12.2024; 22:46:37; TCloseFormThread.Execute.Leave
+20.12.2024; 22:46:37; Finish app
+20.12.2024; 22:46:44; Start app
+20.12.2024; 22:47:15; TCloseFormThread.Execute.Enter
+20.12.2024; 22:47:15; FForm assigned
+20.12.2024; 22:47:15; FForm.ThreadRegistry assigned
+20.12.2024; 22:47:15; TCloseFormThread.Execute.Leave
+20.12.2024; 22:47:15; Finish app
+20.12.2024; 22:47:24; Start app
+20.12.2024; 22:47:56; TCloseFormThread.Execute.Enter
+20.12.2024; 22:47:56; FForm assigned
+20.12.2024; 22:47:56; FForm.ThreadRegistry assigned
+20.12.2024; 22:47:56; TCloseFormThread.Execute.Leave
+20.12.2024; 22:47:57; Finish app
+20.12.2024; 22:48:49; Start app
+20.12.2024; 22:50:06; Start app
+20.12.2024; 22:50:24; TCloseFormThread.Execute.Enter
+20.12.2024; 22:50:24; FForm assigned
+20.12.2024; 22:50:24; FForm.ThreadRegistry assigned
+20.12.2024; 22:50:24; TCloseFormThread.Execute.Leave
+20.12.2024; 22:50:24; Finish app
+20.12.2024; 22:50:40; Start app
+20.12.2024; 22:51:01; TCloseFormThread.Execute.Enter
+20.12.2024; 22:51:01; FForm assigned
+20.12.2024; 22:51:01; FForm.ThreadRegistry assigned
+20.12.2024; 22:51:02; TCloseFormThread.Execute.Leave
+20.12.2024; 22:51:02; Finish app
+20.12.2024; 22:51:10; Start app
+20.12.2024; 22:51:25; TCloseFormThread.Execute.Enter
+20.12.2024; 22:51:25; FForm assigned
+20.12.2024; 22:51:25; FForm.ThreadRegistry assigned
+20.12.2024; 22:51:26; TCloseFormThread.Execute.Leave
+20.12.2024; 22:51:26; Finish app
+20.12.2024; 22:51:36; Start app
+20.12.2024; 22:51:57; TCloseFormThread.Execute.Enter
+20.12.2024; 22:51:57; FForm assigned
+20.12.2024; 22:51:57; FForm.ThreadRegistry assigned
+20.12.2024; 22:51:57; TCloseFormThread.Execute.Leave
+20.12.2024; 22:51:57; Finish app
+20.12.2024; 22:52:02; Start app
+20.12.2024; 22:52:28; TCloseFormThread.Execute.Enter
+20.12.2024; 22:52:28; FForm assigned
+20.12.2024; 22:52:28; FForm.ThreadRegistry assigned
+20.12.2024; 22:52:29; TCloseFormThread.Execute.Leave
+20.12.2024; 22:52:29; Finish app
+20.12.2024; 22:52:40; Start app
+20.12.2024; 22:53:04; TCloseFormThread.Execute.Enter
+20.12.2024; 22:53:04; FForm assigned
+20.12.2024; 22:53:04; FForm.ThreadRegistry assigned
+20.12.2024; 22:53:05; TCloseFormThread.Execute.Leave
+20.12.2024; 22:53:05; Finish app
+20.12.2024; 22:53:13; Start app
+20.12.2024; 22:53:40; TCloseFormThread.Execute.Enter
+20.12.2024; 22:53:40; FForm assigned
+20.12.2024; 22:53:40; FForm.ThreadRegistry assigned
+20.12.2024; 22:53:41; TCloseFormThread.Execute.Leave
+20.12.2024; 22:53:41; Finish app
+20.12.2024; 22:53:47; Start app
+20.12.2024; 22:56:18; TCloseFormThread.Execute.Enter
+20.12.2024; 22:56:18; FForm assigned
+20.12.2024; 22:56:18; FForm.ThreadRegistry assigned
+20.12.2024; 22:56:19; TCloseFormThread.Execute.Leave
+20.12.2024; 22:56:19; Finish app
+20.12.2024; 22:56:29; Start app
+20.12.2024; 22:58:23; TCloseFormThread.Execute.Enter
+20.12.2024; 22:58:23; FForm assigned
+20.12.2024; 22:58:23; FForm.ThreadRegistry assigned
+20.12.2024; 22:58:23; TCloseFormThread.Execute.Leave
+20.12.2024; 22:58:23; Finish app
+20.12.2024; 22:58:27; Start app
+20.12.2024; 22:58:32; TCloseFormThread.Execute.Enter
+20.12.2024; 22:58:32; FForm assigned
+20.12.2024; 22:58:32; FForm.ThreadRegistry assigned
+20.12.2024; 22:58:32; TCloseFormThread.Execute.Leave
+20.12.2024; 22:58:32; Finish app
+20.12.2024; 22:58:34; Start app
+20.12.2024; 22:58:44; TCloseFormThread.Execute.Enter
+20.12.2024; 22:58:44; FForm assigned
+20.12.2024; 22:58:44; FForm.ThreadRegistry assigned
+20.12.2024; 22:58:45; TCloseFormThread.Execute.Leave
+20.12.2024; 22:58:45; Finish app
+20.12.2024; 22:58:47; Start app
+20.12.2024; 22:58:59; TCloseFormThread.Execute.Enter
+20.12.2024; 22:58:59; FForm assigned
+20.12.2024; 22:58:59; FForm.ThreadRegistry assigned
+20.12.2024; 22:58:59; TCloseFormThread.Execute.Leave
+20.12.2024; 22:58:59; Finish app
+20.12.2024; 22:59:02; Start app
+20.12.2024; 23:00:40; TCloseFormThread.Execute.Enter
+20.12.2024; 23:00:40; FForm assigned
+20.12.2024; 23:00:40; FForm.ThreadRegistry assigned
+20.12.2024; 23:00:42; TCloseFormThread.Execute.Leave
+20.12.2024; 23:00:42; Finish app
+20.12.2024; 23:00:43; Start app
+20.12.2024; 23:00:49; TCloseFormThread.Execute.Enter
+20.12.2024; 23:00:49; FForm assigned
+20.12.2024; 23:00:49; FForm.ThreadRegistry assigned
+20.12.2024; 23:00:50; TCloseFormThread.Execute.Leave
+20.12.2024; 23:00:50; Finish app
+20.12.2024; 23:00:52; Start app
+20.12.2024; 23:01:03; TCloseFormThread.Execute.Enter
+20.12.2024; 23:01:03; FForm assigned
+20.12.2024; 23:01:03; FForm.ThreadRegistry assigned
+20.12.2024; 23:01:04; TCloseFormThread.Execute.Leave
+20.12.2024; 23:01:04; Finish app
+20.12.2024; 23:01:06; Start app
+20.12.2024; 23:01:30; TCloseFormThread.Execute.Enter
+20.12.2024; 23:01:30; FForm assigned
+20.12.2024; 23:01:30; FForm.ThreadRegistry assigned
+20.12.2024; 23:01:30; TCloseFormThread.Execute.Leave
+20.12.2024; 23:01:30; Finish app
+20.12.2024; 23:01:32; Start app
+20.12.2024; 23:01:39; TCloseFormThread.Execute.Enter
+20.12.2024; 23:01:39; FForm assigned
+20.12.2024; 23:01:39; FForm.ThreadRegistry assigned
+20.12.2024; 23:01:39; TCloseFormThread.Execute.Leave
+20.12.2024; 23:01:39; Finish app

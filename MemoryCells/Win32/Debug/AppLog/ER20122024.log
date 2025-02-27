@@ -1,0 +1,2 @@
+20.12.2024; 18:33:11; TBaseThread.OnTerminateHandler: TUpdateCellThread.Execute: TDBAccess.DBAParamsFunc: TDBAccess.UpdateCell: ESQLiteNativeException: [FireDAC][Phys][SQLite] ERROR: database table is locked: mc_cells: ekRecordLocked
+20.12.2024; 18:43:26; TBaseThread.OnTerminateHandler: TLoadCatalogThread.Execute: TDBAccess.DBAParamsFunc: TDBAccess.LoadCatalog: ESQLiteNativeException: [FireDAC][Phys][SQLite] ERROR: database table is locked: mc_cells: ekRecordLocked

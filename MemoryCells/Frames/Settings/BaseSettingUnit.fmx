@@ -1,0 +1,49 @@
+object BaseSettingFrame: TBaseSettingFrame
+  Size.Width = 438.000000000000000000
+  Size.Height = 101.000000000000000000
+  Size.PlatformDefault = False
+  object Layout: TLayout
+    Align = Contents
+    Size.Width = 438.000000000000000000
+    Size.Height = 101.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Panel: TPanel
+      Align = Client
+      Size.Width = 438.000000000000000000
+      Size.Height = 101.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object CaptionLayout: TLayout
+        Align = Top
+        Size.Width = 438.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object CaptionLabel: TLabel
+          Align = Left
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Right = 10.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Position.X = 10.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 120.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'CaptionLabel'
+          TabOrder = 0
+        end
+      end
+      object ControlsLayout: TLayout
+        Align = Top
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Position.Y = 50.000000000000000000
+        Size.Width = 438.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+  end
+end

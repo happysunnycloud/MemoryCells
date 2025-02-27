@@ -1,0 +1,24 @@
+08.01.2025; 12:29:12; Start app
+08.01.2025; 12:30:10; TCloseFormThread.Execute.Enter
+08.01.2025; 12:30:10; FForm assigned
+08.01.2025; 12:30:10; FForm.ThreadRegistry assigned
+08.01.2025; 12:30:11; TCloseFormThread.Execute.Leave
+08.01.2025; 12:30:11; Finish app
+08.01.2025; 12:34:45; Start app
+08.01.2025; 12:35:53; TCloseFormThread.Execute.Enter
+08.01.2025; 12:35:53; FForm assigned
+08.01.2025; 12:35:53; FForm.ThreadRegistry assigned
+08.01.2025; 12:35:53; TCloseFormThread.Execute.Leave
+08.01.2025; 12:35:54; Finish app
+08.01.2025; 12:44:38; Start app
+08.01.2025; 12:44:53; TCloseFormThread.Execute.Enter
+08.01.2025; 12:44:53; FForm assigned
+08.01.2025; 12:44:53; FForm.ThreadRegistry assigned
+08.01.2025; 12:44:54; TCloseFormThread.Execute.Leave
+08.01.2025; 12:44:54; Finish app
+08.01.2025; 16:17:01; Start app
+08.01.2025; 16:18:16; TCloseFormThread.Execute.Enter
+08.01.2025; 16:18:16; FForm assigned
+08.01.2025; 16:18:16; FForm.ThreadRegistry assigned
+08.01.2025; 16:18:16; TCloseFormThread.Execute.Leave
+08.01.2025; 16:18:16; Finish app

@@ -1,0 +1,21 @@
+inherited CellMemoFrame: TCellMemoFrame
+  Size.Width = 296.000000000000000000
+  Size.Height = 234.000000000000000000
+  object CellMemo: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    StyledSettings = [Size, Style]
+    TextSettings.Font.Family = 'MS Reference Sans Serif'
+    TextSettings.FontColor = xFFBCBCBC
+    TextSettings.WordWrap = True
+    Align = Contents
+    Margins.Left = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Size.Width = 276.000000000000000000
+    Size.Height = 234.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 276.000000000000000000
+    Viewport.Height = 234.000000000000000000
+  end
+end

@@ -1,0 +1,120 @@
+object DestinationFolderNavigatorFrame: TDestinationFolderNavigatorFrame
+  Size.Width = 378.000000000000000000
+  Size.Height = 390.000000000000000000
+  Size.PlatformDefault = False
+  object BackgroundRectangle: TRectangle
+    Align = Contents
+    Fill.Color = xFF370022
+    Size.Width = 378.000000000000000000
+    Size.Height = 390.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    Stroke.Thickness = 0.000000000000000000
+  end
+  object CurrentFolderLayout: TLayout
+    Align = Top
+    Size.Width = 378.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object CurrentFolderPanel: TPanel
+      Align = Contents
+      Size.Width = 378.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnClick = CurrentFolderPanelClick
+    end
+  end
+  object CurrentFolderContentsLayout: TLayout
+    Align = Client
+    Size.Width = 378.000000000000000000
+    Size.Height = 290.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object CurrentFolderContentsPanel: TPanel
+      Align = Contents
+      Margins.Left = 5.000000000000000000
+      Size.Width = 373.000000000000000000
+      Size.Height = 295.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+      TabOrder = 1
+    end
+    object FoldersScrollBox: TScrollBox
+      Align = Contents
+      Margins.Left = 10.000000000000000000
+      Size.Width = 368.000000000000000000
+      Size.Height = 290.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 368.000000000000000000
+      Viewport.Height = 290.000000000000000000
+      object Rectangle1: TRectangle
+        Align = Contents
+        Fill.Color = xFF3C0067
+        Size.Width = 368.000000000000000000
+        Size.Height = 295.000000000000000000
+        Size.PlatformDefault = False
+        Visible = False
+      end
+    end
+  end
+  object ControlsLayout: TLayout
+    Align = Bottom
+    Position.Y = 340.000000000000000000
+    Size.Width = 378.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object ControlsPanel: TPanel
+      Align = Contents
+      Size.Width = 378.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object CancelButton: TButton
+        Align = Right
+        Hint = 'Close'
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 338.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object MoveCellsButton: TButton
+        Align = Left
+        Hint = 'Move'
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Position.X = 10.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object CopyCellsButton: TButton
+        Align = Left
+        Hint = 'Copy'
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Position.X = 50.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        ParentShowHint = False
+        ShowHint = True
+      end
+    end
+  end
+end

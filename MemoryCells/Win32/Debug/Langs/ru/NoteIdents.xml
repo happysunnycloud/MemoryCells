@@ -1,0 +1,19 @@
+<Data>
+  <IdentList>
+    <SaveCell>
+      <Caption>Сохранение изменений</Caption>
+      <Text>Сохранить текст перед выходом?</Text>
+      <CheckboxText>Запомнить выбранный вариант и 
+больше не показывать это окно</CheckboxText>
+      <ButtonKind>bkYesNo</ButtonKind>
+      <DefaultResult>mrNone</DefaultResult>
+    </SaveCell>
+    <DeleteCell>
+      <Caption>Удаление ячейки</Caption>
+      <Text>Удалить ячейку?</Text>
+      <CheckboxText>Больше не показывать это окно</CheckboxText>
+      <ButtonKind>bkYesNo</ButtonKind>
+      <DefaultResult>mrNone</DefaultResult>
+    </DeleteCell>
+  </IdentList>
+</Data>

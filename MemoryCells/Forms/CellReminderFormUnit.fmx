@@ -1,0 +1,154 @@
+object CellReminderForm: TCellReminderForm
+  Left = 0
+  Top = 0
+  Caption = 'Cell reminder'
+  ClientHeight = 396
+  ClientWidth = 569
+  Fill.Color = xFF370022
+  Fill.Kind = Solid
+  Position = ScreenCenter
+  StyleBook = StyleBook
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object loContent: TLayout
+    Align = Contents
+    Size.Width = 569.000000000000000000
+    Size.Height = 396.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object loScreen: TLayout
+      Align = Client
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Size.Width = 559.000000000000000000
+      Size.Height = 386.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object CellMemoLayout: TLayout
+        Align = Top
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Size.Width = 559.000000000000000000
+        Size.Height = 332.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object CellMemoBackgroundRectangle: TRectangle
+          Align = Contents
+          HitTest = False
+          Size.Width = 559.000000000000000000
+          Size.Height = 332.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Kind = None
+          Stroke.Thickness = 0.000000000000000000
+          object CellMemo: TMemo
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            DataDetectorTypes = []
+            TextSettings.WordWrap = True
+            Align = Contents
+            Margins.Left = 5.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Size.Width = 549.000000000000000000
+            Size.Height = 322.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'CellMemoStyle'
+            TabOrder = 0
+            OnApplyStyleLookup = CellMemoApplyStyleLookup
+            Viewport.Width = 545.000000000000000000
+            Viewport.Height = 318.000000000000000000
+          end
+        end
+      end
+      object ControlButtonsLayout: TLayout
+        Align = Bottom
+        Position.Y = 336.000000000000000000
+        Size.Width = 559.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object CancelButton: TButton
+          Align = Right
+          StyledSettings = [Style, FontColor]
+          Hint = 'Cancel'
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Position.X = 524.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'CancelButtonStyle'
+          TabOrder = 2
+          TextSettings.Font.Family = 'MS Reference Sans Serif'
+          TextSettings.Font.Size = 14.000000000000000000
+          OnClick = CancelButtonClick
+        end
+        object GotoButton: TButton
+          Align = Right
+          StyledSettings = [Style, FontColor]
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Position.X = 454.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'GotoButtonStyle'
+          TabOrder = 1
+          TextSettings.Font.Family = 'MS Reference Sans Serif'
+          TextSettings.Font.Size = 14.000000000000000000
+          Visible = False
+          OnClick = GotoButtonClick
+        end
+        object DeleteButton: TButton
+          Align = Right
+          StyledSettings = [Style, FontColor]
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Position.X = 489.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'DeleteButtonstyle'
+          TabOrder = 0
+          TextSettings.Font.Family = 'MS Reference Sans Serif'
+          TextSettings.Font.Size = 14.000000000000000000
+          OnClick = DeleteButtonClick
+        end
+        object CellRemindButton: TButton
+          Align = Left
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Position.X = 10.000000000000000000
+          Position.Y = 10.000000000000000000
+          Size.Width = 30.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'RemindButtonNormalStyle'
+          TabOrder = 3
+          Text = 'CellRemindButton'
+          OnClick = CellRemindButtonClick
+        end
+      end
+    end
+  end
+  object StyleBook: TStyleBook
+    Styles = <
+      item
+      end
+      item
+        Platform = 'Windows 10 Desktop'
+      end>
+    Left = 22
+    Top = 18
+  end
+end

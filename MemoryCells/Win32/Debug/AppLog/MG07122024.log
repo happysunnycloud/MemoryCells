@@ -1,0 +1,6 @@
+07.12.2024; 0:49:45; Start app
+07.12.2024; 0:50:02; TCloseFormThread.Execute.Enter
+07.12.2024; 0:50:02; FForm assigned
+07.12.2024; 0:50:02; FForm.ThreadRegistry assigned
+07.12.2024; 0:50:03; TCloseFormThread.Execute.Leave
+07.12.2024; 0:50:03; Finish app

@@ -1,0 +1,65 @@
+inherited LaunchSettingFrame: TLaunchSettingFrame
+  Size.Width = 465.000000000000000000
+  Size.Height = 100.000000000000000000
+  inherited Layout: TLayout
+    Size.Width = 465.000000000000000000
+    Size.Height = 100.000000000000000000
+    inherited Panel: TPanel
+      Size.Width = 465.000000000000000000
+      Size.Height = 100.000000000000000000
+      inherited CaptionLayout: TLayout
+        Size.Width = 465.000000000000000000
+        Size.Height = 30.000000000000000000
+        inherited CaptionLabel: TLabel
+          Margins.Top = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 163.000000000000000000
+          Size.Height = 20.000000000000000000
+          Text = 'Launch'
+        end
+      end
+      inherited ControlsLayout: TLayout
+        Position.Y = 30.000000000000000000
+        Size.Width = 465.000000000000000000
+        Size.Height = 69.000000000000000000
+        object LeftControlsLayout: TLayout
+          Align = Left
+          Size.Width = 221.000000000000000000
+          Size.Height = 69.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object RunAtStartupLabel: TLabel
+            Align = Top
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 10.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 201.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Run at startup (OFF / ON)'
+            TabOrder = 2
+          end
+          object Switch: TSwitch
+            Align = Top
+            IsChecked = False
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 100.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 10.000000000000000000
+            Position.Y = 32.000000000000000000
+            Size.Width = 111.000000000000000000
+            Size.Height = 27.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            OnClick = SwitchClick
+          end
+        end
+      end
+    end
+  end
+end

@@ -1,0 +1,64 @@
+-- получить каталог (папки и €чейки)
+with recursive recu(id, folder_id, name)
+as
+    (
+        select 
+            id, folder_id, name
+        from
+            mc_folders
+        where
+            id = :folder_id
+        union all
+        select 
+            mc_folders.id, mc_folders.folder_id, mc_folders.name
+        from
+            mc_folders, recu
+        where
+            mc_folders.id = recu.folder_id
+            and             
+            recu.id > 1 
+        order by folder_id desc
+    )
+select 
+	id,
+	folder_id, 
+             name,
+             (
+                select
+                    group_concat(v_recu.name, ' > ')
+                from
+                    (
+                        select
+                            id, name
+                        from
+                            recu
+                        order by id asc
+                    ) v_recu       
+             ) path,
+	description,
+	content,
+	cell_type_id,
+	0 as is_done,
+	datetime('now', 'localtime') as update_datetime
+from 
+	mc_folders
+where
+	folder_id = :folder_id 
+	or 
+	id = :folder_id
+union all
+select 
+	id,
+	folder_id,
+	name,
+        '' as path,
+	description,
+	content,
+	cell_type_id,
+	is_done,
+	update_datetime
+from 
+	mc_cells
+where
+	folder_id = :folder_id 
+order by description

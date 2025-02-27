@@ -1,0 +1,114 @@
+inherited SearchTextFrame: TSearchTextFrame
+  Size.Width = 886.000000000000000000
+  Size.Height = 52.000000000000000000
+  object Panel: TPanel
+    Align = Contents
+    Size.Width = 886.000000000000000000
+    Size.Height = 52.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object CancelButtonLayout: TLayout
+      Align = Left
+      Position.X = 561.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 52.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object SearchTextOkButton: TButton
+        Align = Center
+        StyledSettings = [Style, FontColor]
+        Padding.Left = 10.000000000000000000
+        Padding.Top = 10.000000000000000000
+        Padding.Right = 10.000000000000000000
+        Padding.Bottom = 10.000000000000000000
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Ok'
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+    object OkButtonLayout: TLayout
+      Align = Left
+      Position.X = 661.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 52.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object SearchTextCancelButton: TButton
+        Align = Center
+        StyledSettings = [Style, FontColor]
+        Size.Width = 80.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 14.000000000000000000
+      end
+    end
+    object TextLayout: TLayout
+      Align = MostLeft
+      Size.Width = 561.000000000000000000
+      Size.Height = 52.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object SearchTextEdit: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Center
+        Anchors = [akLeft, akRight]
+        TabOrder = 0
+        TextSettings.Font.Family = 'MS Reference Sans Serif'
+        TextSettings.Font.Size = 16.000000000000000000
+        Size.Width = 546.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        StyledSettings = [Style]
+      end
+    end
+    object HightlightLayout: TLayout
+      Align = Right
+      Position.X = 767.000000000000000000
+      Size.Width = 108.000000000000000000
+      Size.Height = 52.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+      TabOrder = 3
+      object Layout2: TLayout
+        Align = Left
+        Size.Width = 50.000000000000000000
+        Size.Height = 52.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object PrevHightlightButton: TButton
+          Align = Center
+          Size.Width = 50.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = '<<'
+        end
+      end
+      object Layout3: TLayout
+        Align = Right
+        Position.X = 58.000000000000000000
+        Size.Width = 50.000000000000000000
+        Size.Height = 52.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object NextHightlightButton: TButton
+          Align = Center
+          Size.Width = 50.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = '>>'
+        end
+      end
+    end
+  end
+end

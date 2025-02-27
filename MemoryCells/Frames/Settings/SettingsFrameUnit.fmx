@@ -1,0 +1,138 @@
+object SettingsFrame: TSettingsFrame
+  Size.Width = 728.000000000000000000
+  Size.Height = 525.000000000000000000
+  Size.PlatformDefault = False
+  object Panel: TPanel
+    Align = Contents
+    Size.Width = 728.000000000000000000
+    Size.Height = 525.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Layout: TLayout
+      Align = Contents
+      Size.Width = 728.000000000000000000
+      Size.Height = 525.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object SearchPanel: TPanel
+        Align = Top
+        Size.Width = 728.000000000000000000
+        Size.Height = 57.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object SearchButton: TButton
+          Position.X = 194.000000000000000000
+          Position.Y = 18.000000000000000000
+          TabOrder = 0
+          Text = 'Search'
+          OnClick = SearchButtonClick
+        end
+        object SearchEdit: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          TabOrder = 1
+          Position.X = 10.000000000000000000
+          Position.Y = 18.000000000000000000
+          Size.Width = 165.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+      object ScrollBox: TScrollBox
+        Align = Client
+        Size.Width = 728.000000000000000000
+        Size.Height = 468.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Viewport.Width = 728.000000000000000000
+        Viewport.Height = 468.000000000000000000
+        inline BackupSettingFrame: TBackupSettingFrame
+          Align = Top
+          Size.Width = 728.000000000000000000
+          Size.Height = 88.000000000000000000
+          Size.PlatformDefault = False
+          inherited Layout: TLayout
+            Size.Width = 728.000000000000000000
+            Size.Height = 88.000000000000000000
+            inherited Panel: TPanel
+              Size.Width = 728.000000000000000000
+              Size.Height = 88.000000000000000000
+              inherited CaptionLayout: TLayout
+                Size.Width = 728.000000000000000000
+              end
+              inherited ControlsLayout: TLayout
+                Size.Width = 728.000000000000000000
+                Size.Height = 54.000000000000000000
+                inherited ControlsCaptionsLayout: TLayout
+                  Size.Width = 728.000000000000000000
+                end
+                inherited ControlsControlsLayout: TLayout
+                  Size.Width = 728.000000000000000000
+                end
+              end
+            end
+          end
+        end
+        inline LaunchSettingFrame: TLaunchSettingFrame
+          Align = Top
+          Position.Y = 88.000000000000000000
+          Size.Width = 728.000000000000000000
+          Size.Height = 88.000000000000000000
+          Size.PlatformDefault = False
+          inherited Layout: TLayout
+            Size.Width = 728.000000000000000000
+            Size.Height = 88.000000000000000000
+            inherited Panel: TPanel
+              Align = Top
+              Size.Width = 728.000000000000000000
+              inherited CaptionLayout: TLayout
+                Size.Width = 728.000000000000000000
+              end
+              inherited ControlsLayout: TLayout
+                Size.Width = 728.000000000000000000
+              end
+            end
+          end
+        end
+      end
+    end
+    object ServiceControlsLayout: TLayout
+      Align = Bottom
+      Position.Y = 475.000000000000000000
+      Size.Width = 728.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object SaveButton: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Position.X = 10.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'UpdateButtonstyle'
+        TabOrder = 0
+      end
+      object CancelButton: TButton
+        Align = Right
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 688.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'CancelButtonstyle'
+        TabOrder = 1
+      end
+    end
+  end
+  object StyleBook: TStyleBook
+    Styles = <
+      item
+      end>
+    Left = 24
+    Top = 9
+  end
+end

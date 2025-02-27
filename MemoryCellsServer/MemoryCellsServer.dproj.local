@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.958,=C:\Desktop\DevelopmentsCollection\UTCS\UTCSTypesUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.524,=C:\Desktop\MemoryCells\MemoryCellsServer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.777,=C:\Desktop\MemoryCells\MemoryCellsServer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.841,=C:\Desktop\DevelopmentsCollection\UTCS\PingTimeoutThreadUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.871,=C:\Desktop\MemoryCells\MemoryCellsCommon\ExceptionContainerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.444,=C:\Desktop\DevelopmentsCollection\SQLTemplatesUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.089,C:\Desktop\MemoryCells\MemoryCellsServer\Unit1.pas=C:\Desktop\MemoryCells\MemoryCellsServer\ServerRepliesUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.868,=C:\Desktop\MemoryCells\MemoryCellsCommon\UTClientRequestUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.039,=C:\Desktop\DevelopmentsCollection\DBToolsUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.546,=C:\Desktop\DevelopmentsCollection\ToolsUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.952,=C:\Desktop\DevelopmentsCollection\UTCS\TransportContainerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.724,C:\Desktop\MemoryCells\MemoryCellsCommon\UTServerReplyUnit.pas=C:\Desktop\MemoryCells\MemoryCellsServer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.298,=C:\Desktop\DevelopmentsCollection\AddLogUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.726,=C:\Desktop\MemoryCells\MemoryCellsCommon\DBAccessUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.819,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.323,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.925,=C:\Desktop\MemoryCells\MemoryCellsCommon\ParamsExtUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.550,C:\Users\room_\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Desktop\MemoryCells\MemoryCellsServer\MemoryCellsServer.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.757,C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.fmx=C:\Desktop\MemoryCells\MemoryCellsServer\MemoryCellsServerUnit.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.757,C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Desktop\MemoryCells\MemoryCellsServer\MemoryCellsServerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.013,=C:\Desktop\DevelopmentsCollection\UTCS\UTServerUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.005,=C:\Desktop\MemoryCells\MemoryCellsCommon\CellUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.656,=C:\Desktop\DevelopmentsCollection\ParamsClassUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.749,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.144,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.428,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5" Android64="And" Android="And"/>
+	</ActiveMobileDevice>
+</BorlandProject>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.749,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.428,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.819,=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.512,C:\Users\room_\Desktop\Hook\KeyHook\KeyHook.dproj=C:\Users\room_\Desktop\Hook\KeyHook\KeyHookProject.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.165,C:\Users\room_\Desktop\Hook\KeyHook\KeyHookProject.dproj=C:\Users\room_\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>
