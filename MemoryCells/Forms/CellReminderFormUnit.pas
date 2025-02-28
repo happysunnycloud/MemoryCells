@@ -29,12 +29,14 @@ type
     procedure DeleteButtonClick(Sender: TObject);
     procedure GotoButtonClick(Sender: TObject);
     procedure CellRemindButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   strict private
     FCell: TCell;
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
-    procedure BorderFrameOnCloseHandler(Sender: TObject);
+
+    procedure Cancel;
   private
     { Private declarations }
   public
@@ -73,9 +75,7 @@ end;
 
 procedure TCellReminderForm.CancelButtonClick(Sender: TObject);
 begin
-  FCell.Remind := false;
-
-  ModalResult := mrCancel;
+  Cancel;
 end;
 
 procedure TCellReminderForm.CellMemoApplyStyleLookup(Sender: TObject);
@@ -116,8 +116,8 @@ constructor TCellReminderForm.Create(
   const ACell: TCell);
 const
   SCALE_VALUE = 1;
-var
-  BorderFrame: TBorderFrame;
+//var
+//  BorderFrame: TBorderFrame;
 begin
   if not Assigned(ACell) then
     raise Exception.Create('The cell cannot be nil');
@@ -130,19 +130,19 @@ begin
 
   CellMemo.Text := FCell.Content;
 
-  BorderFrame :=
-    TBorderFrame.Create(
-      Self,
-      loContent,
-      Application.Title,
-      Round(loScreen.Width * SCALE_VALUE) + 50,
-      Round(loScreen.Height * SCALE_VALUE) + 10,
-      $FF2A001A,
-      $FF2A001A,
-      $FF4C002F,
-      $FF9B0060);
-
-  BorderFrame.OnClose := BorderFrameOnCloseHandler;
+//  BorderFrame :=
+  TBorderFrame.Create(
+    Self,
+    loContent,
+    Application.Title,
+    Trunc(loScreen.Width * SCALE_VALUE) + 50,
+    Trunc(loScreen.Height * SCALE_VALUE) + 10,
+    //Round(loScreen.Width * SCALE_VALUE) + 50,
+    //Round(loScreen.Height * SCALE_VALUE) + 10,
+    $FF2A001A,
+    $FF2A001A,
+    $FF4C002F,
+    $FF9B0060);
 
   Self.Fill.Kind := TBrushKind.Solid;
   Self.Fill.Color := TTheme.DarkBackgroundColor;
@@ -156,12 +156,21 @@ begin
 
 //  Self.CancelButton.StyleLookup := 'CancelButtonStyle';
 
-  ModalResult := mrNone;
+  ModalResult := mrCancel;
 end;
 
 destructor TCellReminderForm.Destroy;
 begin
   inherited;
+end;
+
+procedure TCellReminderForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if ModalResult = mrCancel then
+    FCell.Remind := false;
+
+  Action := TCloseAction.caFree;
 end;
 
 procedure TCellReminderForm.GotoButtonClick(Sender: TObject);
@@ -190,10 +199,9 @@ begin
   ModalResult := mrRetry;
 end;
 
-procedure TCellReminderForm.BorderFrameOnCloseHandler(Sender: TObject);
+procedure TCellReminderForm.Cancel;
 begin
-  if ModalResult = mrNone then
-    ModalResult := mrCancel;
+  ModalResult := mrCancel;
 end;
 
 end.

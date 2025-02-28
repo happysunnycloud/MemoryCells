@@ -1145,6 +1145,7 @@ end;
 
 procedure TMainForm.SettingsButtonClick(Sender: TObject);
 begin
+  //test repo
   if Assigned(SettingsFrame) then
     Exit;
 
