@@ -8,7 +8,6 @@ uses
   , FMX.Forms
 
   , ThreadRegistryUnit
-  , DataManagerUnit
   ;
 
 type
