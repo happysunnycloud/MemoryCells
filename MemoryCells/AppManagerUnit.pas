@@ -150,7 +150,7 @@ type
       const AForm: TBaseForm;
       const ACell: TCell;
       const AProcRef: TParamsProcRef): TCellReminderThread;
-
+    { TODO:  Разделить сохранение ячейки и ее ремайндера }
     function CreateUpdateCellReminderThread(
       const AForm: TBaseForm;
       const ACell: TCell;
