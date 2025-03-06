@@ -96,10 +96,6 @@ begin
   FMethodName := AMethodName;
 
   FMessage := AMessage;
-
-  //asd
-  Message := '!' + FMessage + '!';
-  //asd
 end;
 
 constructor TExceptionContainer.Create(
