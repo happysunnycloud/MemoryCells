@@ -980,25 +980,13 @@ begin
     if TOnClickReplacer.HasReplaced then
       TOnClickReplacer.Restore;
   end;
-
-  //asd debug возможно потребуется зачистка FEventsManager после внедрения TOnClickReplacer
-  //FEventsManager.StoreEvents;
-  //asd debug
 end;
-
-//procedure TMainForm.CellMemoExitHandler(Sender: TObject);
-//begin
-//  if Assigned(CellReminderDateTimeFrame) then
-//    CellReminderDateTimeFrame.CancelButton.OnClick(nil);
-//end;
 
 procedure TMainForm.SearchTextOkHandler(Sender: TObject);
 var
   SearchText: String;
 begin
   SearchText := SearchTextFrame.SearchTextEdit.Text;
-
-//  SetCellMemoFrameNullId;
 
   AppManager.CreateSearchThread(Self, SearchText, SearchResult);
 end;
@@ -1982,7 +1970,8 @@ begin
       HomeButton
     ], true);
 
-    //asd debug список эвентов после удаления через окно ремайнреда пуст
+    TOnClickReplacer.Restore;
+    // Сисок эвентов после удаления через окно ремайнреда будет пуст
     FEventsManager.ReStoreEvents;
 
     RestartReminder;
@@ -2270,7 +2259,7 @@ begin
     //      Exit;
 
     Cell.CopyFrom(CellTemp);
-    ModalResult := TCellReminderForm.Show(Cell, Self.StyleBook);
+    ModalResult := TCellReminderForm.Show(Cell);
     if CellMemoFrame.Cell.Id = Cell.Id then
     begin
       CellMemoFrame.Cell.RemindDateTime := Cell.RemindDateTime;

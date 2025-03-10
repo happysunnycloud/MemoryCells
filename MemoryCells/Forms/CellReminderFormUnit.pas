@@ -50,8 +50,7 @@ type
     destructor Destroy; override;
 
     class function Show(
-      const ACell: TCell;
-      const AStyleBook: TStyleBook): TModalResult;
+      const ACell: TCell): TModalResult;
   end;
 
 var
@@ -195,9 +194,7 @@ begin
 end;
 
 class function TCellReminderForm.Show(
-  const ACell: TCell;
-  //asd debug похоже передавать AStyleBook не нужно, видимо не используется
-  const AStyleBook: TStyleBook): TModalResult;
+  const ACell: TCell): TModalResult;
 var
   CellReminderForm: TCellReminderForm;
   VisibleState: Boolean;
