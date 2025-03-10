@@ -12,6 +12,7 @@ object CellReminderForm: TCellReminderForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   DesignerMasterStyle = 0
   object loContent: TLayout
     Align = Contents
@@ -36,32 +37,20 @@ object CellReminderForm: TCellReminderForm
         Size.Height = 332.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
-        object CellMemoBackgroundRectangle: TRectangle
+        object CellMemo: TMemo
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          TextSettings.WordWrap = True
           Align = Contents
-          HitTest = False
+          Margins.Bottom = 5.000000000000000000
           Size.Width = 559.000000000000000000
-          Size.Height = 332.000000000000000000
+          Size.Height = 327.000000000000000000
           Size.PlatformDefault = False
-          Stroke.Kind = None
-          Stroke.Thickness = 0.000000000000000000
-          object CellMemo: TMemo
-            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-            DataDetectorTypes = []
-            TextSettings.WordWrap = True
-            Align = Contents
-            Margins.Left = 5.000000000000000000
-            Margins.Top = 5.000000000000000000
-            Margins.Right = 5.000000000000000000
-            Margins.Bottom = 5.000000000000000000
-            Size.Width = 549.000000000000000000
-            Size.Height = 322.000000000000000000
-            Size.PlatformDefault = False
-            StyleLookup = 'CellMemoStyle'
-            TabOrder = 0
-            OnApplyStyleLookup = CellMemoApplyStyleLookup
-            Viewport.Width = 545.000000000000000000
-            Viewport.Height = 318.000000000000000000
-          end
+          StyleLookup = 'CellMemoStyle'
+          TabOrder = 0
+          OnApplyStyleLookup = CellMemoApplyStyleLookup
+          Viewport.Width = 555.000000000000000000
+          Viewport.Height = 323.000000000000000000
         end
       end
       object ControlButtonsLayout: TLayout
@@ -71,6 +60,14 @@ object CellReminderForm: TCellReminderForm
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
+        object ControlButtonsBackgroundRectangle: TRectangle
+          Align = Contents
+          Fill.Color = claLavender
+          Size.Width = 559.000000000000000000
+          Size.Height = 50.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Thickness = 0.000000000000000000
+        end
         object CancelButton: TButton
           Align = Right
           StyledSettings = [Style, FontColor]

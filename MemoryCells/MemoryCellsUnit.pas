@@ -550,6 +550,8 @@ begin
 
     FCellReminderDateTimeFrame.OnDateTimeChanged := CellReminderOnChangedHandler;
     FCellReminderDateTimeFrame.OnRemindChanged := CellReminderOnChangedHandler;
+
+    Self.Repaint;
   end
 end;
 
@@ -965,6 +967,10 @@ begin
         begin
           ParamsProcRef := TShowStatusExt.ShowCellUpdated;
           DoUpdateCell(ParamsProcRef);
+        end
+        else
+        begin
+          CellMemoFrame.RestoreContent;
         end;
       end
     );
@@ -2277,10 +2283,12 @@ begin
         UpdateCellReminder(Cell);
 
         if CellMemoFrame.CellMemoTextIsChanged then
+        begin
           if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
           begin
             DoUpdateCell(TShowStatusExt.ShowCellUpdated);
           end;
+        end;
 
         GotoFolder(Cell.FolderId, Cell.Id);
       end;

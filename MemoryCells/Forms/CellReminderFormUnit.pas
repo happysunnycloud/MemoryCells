@@ -1,4 +1,4 @@
-unit CellReminderFormUnit;
+﻿unit CellReminderFormUnit;
 
 interface
 
@@ -8,6 +8,7 @@ uses
   FMX.Memo.Types, FMX.Controls.Presentation, FMX.ScrollBox, FMX.Memo,
   CellUnit, FMX.StdCtrls, FMX.Objects
 
+  , BaseFormUnit
   , CellReminderDateTimeFrameUnit
   ;
 
@@ -22,21 +23,23 @@ type
     loContent: TLayout;
     loScreen: TLayout;
     StyleBook: TStyleBook;
-    CellMemoBackgroundRectangle: TRectangle;
     CellRemindButton: TButton;
+    ControlButtonsBackgroundRectangle: TRectangle;
     procedure CellMemoApplyStyleLookup(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure GotoButtonClick(Sender: TObject);
     procedure CellRemindButtonClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-  strict private
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);  strict private
     FCell: TCell;
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
 
     procedure Cancel;
+
+    procedure Repaint;
   private
     { Private declarations }
   public
@@ -59,11 +62,13 @@ implementation
 {$R *.fmx}
 
 uses
-    BorderFrameUnit
+    Winapi.Windows
+  , BorderFrameUnit
   , FMX.ThemeUnit
   , DBAccessUnit
   , FMX.OnClickReplacerUnit
   , FMX.ShowNoteFormUnit
+  , FMX.Platform.Win
   ;
 
 { TCellReminderForm }
@@ -109,6 +114,8 @@ begin
   begin
     FCellReminderDateTimeFrame.HideCellReminderFrame(FCellReminderDateTimeFrame);
   end;
+
+  Repaint;
 end;
 
 constructor TCellReminderForm.Create(
@@ -145,16 +152,17 @@ begin
     $FF9B0060);
 
   Self.Fill.Kind := TBrushKind.Solid;
-  Self.Fill.Color := TTheme.DarkBackgroundColor;
+  Self.Fill.Color := TTheme.LightBackgroundColor;
+  //DarkBackgroundColor;
 
   Self.CellMemo.TextSettings.FontColor := TTheme.TextColor;
   Self.CellMemo.TextSettings.Font.Size := TTheme.TextFontSize;
 //  Self.NoteMemo.TextSettings.Font.Family := 'MS Reference Sans Serif';
   Self.CellMemo.StyledSettings := [];
 
-  Self.CellMemoBackgroundRectangle.Fill.Color := TTheme.LightBackgroundColor;
+  Self.ControlButtonsBackgroundRectangle.Fill.Color := TTheme.DarkBackgroundColor;
 
-//  Self.CancelButton.StyleLookup := 'CancelButtonStyle';
+  //  Self.CancelButton.StyleLookup := 'CancelButtonStyle';
 
   ModalResult := mrCancel;
 end;
@@ -173,6 +181,14 @@ begin
   Action := TCloseAction.caFree;
 end;
 
+procedure TCellReminderForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  CanClose := true;
+
+  Self.OnCloseQuery := nil;
+end;
+
 procedure TCellReminderForm.GotoButtonClick(Sender: TObject);
 begin
   ModalResult := mrContinue;
@@ -180,13 +196,24 @@ end;
 
 class function TCellReminderForm.Show(
   const ACell: TCell;
+  //asd debug похоже передавать AStyleBook не нужно, видимо не используется
   const AStyleBook: TStyleBook): TModalResult;
 var
   CellReminderForm: TCellReminderForm;
+  VisibleState: Boolean;
 begin
   CellReminderForm := TCellReminderForm.Create(nil, ACell);
   try
+    // Если приложение было свернуто в трэй, тогда необходимо его показать
+    VisibleState := IsWindowVisible(ApplicationHwnd);
+    if not VisibleState then
+      ShowWindow(ApplicationHwnd, SW_SHOW);
+
     Result := CellReminderForm.ShowModal;
+
+    // После принудительного показа, возвращаем приложение в исходное состояние
+    if not VisibleState then
+      ShowWindow(ApplicationHwnd, SW_HIDE);
   finally
     CellReminderForm.ReleaseForm;
   end;
@@ -202,6 +229,11 @@ end;
 procedure TCellReminderForm.Cancel;
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TCellReminderForm.Repaint;
+begin
+  Self.PaintRects([Self.ClientRect]);
 end;
 
 end.

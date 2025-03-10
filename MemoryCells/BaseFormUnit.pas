@@ -22,6 +22,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    procedure Repaint;
+
     property CanClose: Boolean read FCanClose write FCanClose;
     property ThreadRegistry: TThreadRegistry<Pointer> read FThreadRegistry;
   end;
@@ -50,6 +52,11 @@ begin
   FreeAndNil(FThreadRegistry);
 
   inherited;
+end;
+
+procedure TBaseForm.Repaint;
+begin
+  Self.PaintRects([Self.ClientRect]);
 end;
 
 procedure TBaseForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);

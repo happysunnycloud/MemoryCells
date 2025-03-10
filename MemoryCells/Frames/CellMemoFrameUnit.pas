@@ -43,6 +43,7 @@ type
     //    property OnCellMemoExit: TNotifyEvent read FOnCellMemoExit write FOnCellMemoExit;
 
     function CellMemoTextIsChanged: Boolean;
+    procedure RestoreContent;
 
     procedure SetCell(const ACell: TCell);
     procedure SetCellReminder(
@@ -139,7 +140,7 @@ begin
 
   FBackupCell.CopyFrom(Cell);
 
-  CellMemo.Text := Cell.Content
+  CellMemo.Text := Cell.Content;
 
 //  Cell.Content := AText;
 //  CellMemo.Text := Cell.Content
@@ -158,6 +159,11 @@ begin
 
   //  if Cell.RemindDateTime <> FBackupCell.RemindDateTime then
   //    Exit(true);
+end;
+
+procedure TCellMemoFrame.RestoreContent;
+begin
+  InsertText(FBackupCell.Content);
 end;
 
 procedure TCellMemoFrame.SetCell(const ACell: TCell);
