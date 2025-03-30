@@ -2843,7 +2843,7 @@ begin
   AppIcon := TIcon.Create;
   AppManager.AppIcon := AppIcon;
   { TODO : Грузить иконку из файла с ресурсами }
-  AppIcon.LoadFromFile('C:\Desktop\MemoryCellsPerository\MemoryCells\Styles\Logo32.ico');
+  AppIcon.LoadFromFile('C:\Desktop\MemoryCells\MemoryCells\Styles\Logo32.ico');
 
   SendMessage(ApplicationHWND, WM_SETICON, 1, AppIcon.Handle);
   SendMessage(WindowHandleToPlatform(Handle).Wnd, WM_SETICON, 1, AppIcon.Handle);
