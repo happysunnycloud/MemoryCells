@@ -78,7 +78,8 @@ uses
   BackupSettingFrameUnit in 'Frames\Settings\BackupSettingFrameUnit.pas' {BackupSettingFrame: TFrame},
   LaunchSettingFrameUnit in 'Frames\Settings\LaunchSettingFrameUnit.pas' {LaunchSettingFrame: TFrame},
   SettingsFrameUnit in 'Frames\Settings\SettingsFrameUnit.pas' {SettingsFrame: TFrame},
-  FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas';
+  FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas',
+  FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas';
 
 begin
   Application.Initialize;

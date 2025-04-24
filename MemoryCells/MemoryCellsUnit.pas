@@ -2499,7 +2499,7 @@ begin
         'Memory cells',
         Round(loScreen.Width * SCALE_VALUE) + 50,
         Round(loScreen.Height * SCALE_VALUE) + 10,
-        $FF2A001A,
+        $FFFFFFFF,
         $FF2A001A,
         $FF4C002F,
         $FF9B0060);
