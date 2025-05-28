@@ -388,7 +388,6 @@
         <DCCReference Include="Forms\CellReminderFormUnit.pas">
             <Form>CellReminderForm</Form>
         </DCCReference>
-        <DCCReference Include="FMX.ThemeUnit.pas"/>
         <DCCReference Include="Threads\UpdateCellReminderThreadUnit.pas"/>
         <DCCReference Include="CommonUnit.pas"/>
         <DCCReference Include="Frames\Settings\BaseSettingUnit.pas">
@@ -413,6 +412,7 @@
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\FileToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.ThemeUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

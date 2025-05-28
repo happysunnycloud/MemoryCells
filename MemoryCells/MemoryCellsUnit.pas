@@ -2531,16 +2531,16 @@ begin
     if not FileExists(NoteIdentsFileName) then
       raise Exception.CreateFmt('File "%s" not found', [NoteIdentsFileName]);
 
-    TTheme.BackgroundColor := InfoRectangle.Fill.Color;
-    TTheme.DarkBackgroundColor := InfoRectangle.Fill.Color;
-    TTheme.LightBackgroundColor := Self.Fill.Color;
-    TTheme.MemoColor := Self.Fill.Color;
-    TTheme.TextColor := FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-    TTheme.TextFontSize := FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
-    TTheme.SaveStyleBook(StyleBook);
+    THelpmate.Theme.BackgroundColor := InfoRectangle.Fill.Color;
+    THelpmate.Theme.DarkBackgroundColor := InfoRectangle.Fill.Color;
+    THelpmate.Theme.LightBackgroundColor := Self.Fill.Color;
+    THelpmate.Theme.MemoColor := Self.Fill.Color;
+    THelpmate.Theme.TextColor := FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
+    THelpmate.Theme.TextFontSize := FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
+    THelpmate.Theme.SaveStyleBookFrom(StyleBook);
 //    LoadStyleBook(StyleBook);
 
-    TNoteForm.Init(NoteIdentsFileName);
+    TNoteForm.Init(NoteIdentsFileName, THelpmate.Theme);
 //    TNoteForm.Theme.BackgroundColor := InfoRectangle.Fill.Color;
 //    TNoteForm.Theme.MemoColor := Self.Fill.Color;
 //    TNoteForm.Theme.TextColor := FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;

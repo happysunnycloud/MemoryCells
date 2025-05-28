@@ -10,6 +10,7 @@ uses
 
   , BaseFormUnit
   , CellReminderDateTimeFrameUnit
+  , FMX.ThemeUnit
   ;
 
 type
@@ -36,21 +37,21 @@ type
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
-
     procedure Cancel;
-
     procedure Repaint;
   private
-    { Private declarations }
+    FTheme: TTheme;
+
+    property Theme: TTheme read FTheme write FTheme;
   public
-    { Public declarations }
     constructor Create(
       AOwner: TComponent;
       const ACell: TCell); reintroduce; overload;
     destructor Destroy; override;
 
     class function Show(
-      const ACell: TCell): TModalResult;
+      const ACell: TCell;
+      const ATheme: TTheme = nil): TModalResult;
   end;
 
 var
@@ -63,7 +64,6 @@ implementation
 uses
     Winapi.Windows
   , BorderFrameUnit
-  , FMX.ThemeUnit
   , DBAccessUnit
   , FMX.OnClickReplacerUnit
   , FMX.ShowNoteFormUnit
@@ -93,7 +93,7 @@ begin
     if FmxObject is TRectangle then
     begin
       Rectangle := TRectangle(FmxObject);
-      Rectangle.Fill.Color := TTheme.MemoColor;
+      Rectangle.Fill.Color := FTheme.MemoColor;
     end;
   end;
 end;
@@ -125,12 +125,14 @@ const
 //var
 //  BorderFrame: TBorderFrame;
 begin
+  FTheme := TTheme.Create;
+
   if not Assigned(ACell) then
     raise Exception.Create('The cell cannot be nil');
 
   inherited Create(AOwner);
 
-  TTheme.LoadStyleBook(Self.StyleBook);
+//  FTheme.LoadStyleBook(Self.StyleBook);
 
   FCell := ACell;
 
@@ -151,15 +153,15 @@ begin
     $FF9B0060);
 
   Self.Fill.Kind := TBrushKind.Solid;
-  Self.Fill.Color := TTheme.LightBackgroundColor;
+  Self.Fill.Color := FTheme.LightBackgroundColor;
   //DarkBackgroundColor;
 
-  Self.CellMemo.TextSettings.FontColor := TTheme.TextColor;
-  Self.CellMemo.TextSettings.Font.Size := TTheme.TextFontSize;
+  Self.CellMemo.TextSettings.FontColor := FTheme.TextColor;
+  Self.CellMemo.TextSettings.Font.Size := FTheme.TextFontSize;
 //  Self.NoteMemo.TextSettings.Font.Family := 'MS Reference Sans Serif';
   Self.CellMemo.StyledSettings := [];
 
-  Self.ControlButtonsBackgroundRectangle.Fill.Color := TTheme.DarkBackgroundColor;
+  Self.ControlButtonsBackgroundRectangle.Fill.Color := FTheme.DarkBackgroundColor;
 
   //  Self.CancelButton.StyleLookup := 'CancelButtonStyle';
 
@@ -168,6 +170,8 @@ end;
 
 destructor TCellReminderForm.Destroy;
 begin
+  FreeAndNil(FTheme);
+
   inherited;
 end;
 
@@ -194,12 +198,17 @@ begin
 end;
 
 class function TCellReminderForm.Show(
-  const ACell: TCell): TModalResult;
+  const ACell: TCell;
+  const ATheme: TTheme = nil): TModalResult;
 var
   CellReminderForm: TCellReminderForm;
   VisibleState: Boolean;
 begin
   CellReminderForm := TCellReminderForm.Create(nil, ACell);
+
+  if Assigned(ATheme) then
+    ATheme.CopyTo(CellReminderForm.Theme);
+
   try
     // Если приложение было свернуто в трэй, тогда необходимо его показать
     VisibleState := IsWindowVisible(ApplicationHwnd);

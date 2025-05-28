@@ -71,7 +71,6 @@ uses
   CellReminderThreadUnit in 'Threads\CellReminderThreadUnit.pas',
   FMX.OnClickReplacerUnit in '..\..\DevelopmentsCollection\FMX.OnClickReplacerUnit.pas',
   CellReminderFormUnit in 'Forms\CellReminderFormUnit.pas' {CellReminderForm},
-  FMX.ThemeUnit in 'FMX.ThemeUnit.pas',
   UpdateCellReminderThreadUnit in 'Threads\UpdateCellReminderThreadUnit.pas',
   CommonUnit in 'CommonUnit.pas',
   BaseSettingUnit in 'Frames\Settings\BaseSettingUnit.pas' {BaseSettingFrame: TFrame},
@@ -79,7 +78,8 @@ uses
   LaunchSettingFrameUnit in 'Frames\Settings\LaunchSettingFrameUnit.pas' {LaunchSettingFrame: TFrame},
   SettingsFrameUnit in 'Frames\Settings\SettingsFrameUnit.pas' {SettingsFrame: TFrame},
   FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas',
-  FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas';
+  FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas',
+  FMX.ThemeUnit in '..\..\DevelopmentsCollection\FMX.ThemeUnit.pas';
 
 begin
   Application.Initialize;

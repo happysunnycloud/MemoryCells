@@ -14,6 +14,7 @@ uses
   , FMX.Memo
   , FMX.Forms
   , FMX.Platform.Win
+  , FMX.ThemeUnit
 
   , CellUnit
   , CellUnitFrameUnit
@@ -65,7 +66,13 @@ type
   end;
 
   THelpmate = class
+  strict private
+    class var
+      FTheme: TTheme;
   public
+    class constructor Create;
+    class destructor Destroy;
+
     class procedure ScrollBoxControls(
       const AScrollBox: TScrollBox;
       const ACallbackControl: TCallbackControlProcRef);
@@ -99,6 +106,8 @@ type
       const AThreadName: String): TBaseThread;
 
     class function IsFormActive(const AForm: TForm): Boolean;
+
+    class property Theme: TTheme read FTheme write FTheme;
   end;
 
   TCurrentMode = (cmCommon, cmSearch);
@@ -338,6 +347,16 @@ end;
 { TEventRecordList. End }
 
 { THelpmate.Begin }
+
+class constructor THelpmate.Create;
+begin
+  FTheme := TTheme.Create;
+end;
+
+class destructor THelpmate.Destroy;
+begin
+  FreeAndNil(FTheme);
+end;
 
 class procedure THelpmate.ScrollBoxControls(
   const AScrollBox: TScrollBox;

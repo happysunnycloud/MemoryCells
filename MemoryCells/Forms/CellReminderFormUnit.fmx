@@ -49,8 +49,8 @@ object CellReminderForm: TCellReminderForm
           StyleLookup = 'CellMemoStyle'
           TabOrder = 0
           OnApplyStyleLookup = CellMemoApplyStyleLookup
-          Viewport.Width = 555.000000000000000000
-          Viewport.Height = 323.000000000000000000
+          Viewport.Width = 559.000000000000000000
+          Viewport.Height = 327.000000000000000000
         end
       end
       object ControlButtonsLayout: TLayout

@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, BaseSettingUnit,
-  BackupSettingFrameUnit, LaunchSettingFrameUnit, FMX.Edit, FMX.Objects;
+  BackupSettingFrameUnit, LaunchSettingFrameUnit, FMX.Edit, FMX.Objects
+  , FMX.ThemeUnit;
 
 type
   TCallbackProc = reference to procedure (const ABaseSettingFrame: TBaseSettingFrame);
@@ -26,10 +27,13 @@ type
     Panel: TPanel;
     procedure SearchButtonClick(Sender: TObject);
   private
-    { Private declarations }
+    FTheme: TTheme;
   public
     constructor Create(
-      AOwner: TComponent); reintroduce;
+      AOwner: TComponent;
+      const ATheme: TTheme = nil); reintroduce;
+    destructor Destroy; override;
+
     procedure FrameEnumerator(const ACallbackProc: TCallbackProc);
   end;
 
@@ -41,19 +45,31 @@ implementation
 {$R *.fmx}
 
 uses
-    FMX.ThemeUnit
-  , SupportUnit;
+  SupportUnit;
 
 constructor TSettingsFrame.Create(
-  AOwner: TComponent);
+  AOwner: TComponent;
+  const ATheme: TTheme = nil);
 begin
   inherited Create(AOwner);
 
+  FTheme := TTheme.Create;
+
+  if Assigned(ATheme) then
+    ATheme.CopyTo(FTheme);
+
 //  TTheme.LoadStyleBook(Self.StyleBook);
-  SearchEdit.TextSettings.FontColor := TTheme.TextColor;
-  BackupSettingFrame.CaptionLabel.TextSettings.FontColor := TTheme.TextColor;
-  BackupSettingFrame.PathLabel.TextSettings.FontColor := TTheme.TextColor;
-  BackupSettingFrame.TimeLabel.TextSettings.FontColor := TTheme.TextColor;
+  SearchEdit.TextSettings.FontColor := FTheme.TextColor;
+  BackupSettingFrame.CaptionLabel.TextSettings.FontColor := FTheme.TextColor;
+  BackupSettingFrame.PathLabel.TextSettings.FontColor := FTheme.TextColor;
+  BackupSettingFrame.TimeLabel.TextSettings.FontColor := FTheme.TextColor;
+end;
+
+destructor TSettingsFrame.Destroy;
+begin
+  FreeAndNil(FTheme);
+
+  inherited;
 end;
 
 procedure TSettingsFrame.FrameEnumerator(const ACallbackProc: TCallbackProc);
