@@ -44,6 +44,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
           end
           object TimeLabel: TLabel
             Align = Left
+            StyledSettings = [Family, Size, Style]
             Margins.Left = 210.000000000000000000
             Margins.Top = 5.000000000000000000
             Margins.Right = 5.000000000000000000

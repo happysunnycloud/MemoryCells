@@ -2394,6 +2394,8 @@ begin
   if TNoteForm.Show(TNoteIdentConst.DeleteCell) <> mrYes then
     Exit;
 
+  TOnClickReplacer.Restore;
+
 //  SetCellMemoFrameNullId;
 
   if ALockInterface then

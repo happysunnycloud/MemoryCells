@@ -134,12 +134,14 @@ end;
 
 procedure TCellMemoFrame.InsertText(const AText: String);
 begin
+  // Сбрасываем отображение скроллера
+  CellMemo.Lines.Clear;
+
   Cell.Content := AText;
   if Cell.Content = '' then
     Cell.RemindDateTime := 0;
 
   FBackupCell.CopyFrom(Cell);
-
   CellMemo.Text := Cell.Content;
 
 //  Cell.Content := AText;

@@ -35,6 +35,7 @@ object SettingsFrame: TSettingsFrame
           Size.Width = 165.000000000000000000
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
+          StyledSettings = [Family, Size, Style]
         end
       end
       object ScrollBox: TScrollBox
@@ -58,12 +59,17 @@ object SettingsFrame: TSettingsFrame
               Size.Height = 88.000000000000000000
               inherited CaptionLayout: TLayout
                 Size.Width = 728.000000000000000000
+                inherited CaptionLabel: TLabel
+                  StyledSettings = [Family, Size, Style]
+                end
               end
               inherited ControlsLayout: TLayout
                 Size.Width = 728.000000000000000000
-                Size.Height = 54.000000000000000000
                 inherited ControlsCaptionsLayout: TLayout
                   Size.Width = 728.000000000000000000
+                  inherited PathLabel: TLabel
+                    StyledSettings = [Family, Size, Style]
+                  end
                 end
                 inherited ControlsControlsLayout: TLayout
                   Size.Width = 728.000000000000000000

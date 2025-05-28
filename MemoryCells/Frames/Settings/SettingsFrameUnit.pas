@@ -50,6 +50,10 @@ begin
   inherited Create(AOwner);
 
 //  TTheme.LoadStyleBook(Self.StyleBook);
+  SearchEdit.TextSettings.FontColor := TTheme.TextColor;
+  BackupSettingFrame.CaptionLabel.TextSettings.FontColor := TTheme.TextColor;
+  BackupSettingFrame.PathLabel.TextSettings.FontColor := TTheme.TextColor;
+  BackupSettingFrame.TimeLabel.TextSettings.FontColor := TTheme.TextColor;
 end;
 
 procedure TSettingsFrame.FrameEnumerator(const ACallbackProc: TCallbackProc);
