@@ -39,19 +39,26 @@ type
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
     procedure Cancel;
     procedure Repaint;
-  private
+  strict private
     FTheme: TTheme;
 
-    property Theme: TTheme read FTheme write FTheme;
+    class var FThemeOfClass: TTheme;
+
+//    property Theme: TTheme read FTheme write FTheme;
+  private
+    class property ThemeOfClass: TTheme read FThemeOfClass write FThemeOfClass;
   public
     constructor Create(
       AOwner: TComponent;
-      const ACell: TCell); reintroduce; overload;
+      const ACell: TCell;
+      const ATheme: TTheme = nil); reintroduce; overload;
     destructor Destroy; override;
 
     class function Show(
-      const ACell: TCell;
-      const ATheme: TTheme = nil): TModalResult;
+      const ACell: TCell): TModalResult;
+
+    class procedure Init(const ATheme: TTheme);
+    class procedure UnInit;
   end;
 
 var
@@ -119,45 +126,45 @@ end;
 
 constructor TCellReminderForm.Create(
   AOwner: TComponent;
-  const ACell: TCell);
+  const ACell: TCell;
+  const ATheme: TTheme = nil);
 const
   SCALE_VALUE = 1;
-//var
-//  BorderFrame: TBorderFrame;
 begin
-  FTheme := TTheme.Create;
-
   if not Assigned(ACell) then
     raise Exception.Create('The cell cannot be nil');
 
   inherited Create(AOwner);
 
-//  FTheme.LoadStyleBook(Self.StyleBook);
+  FTheme := TTheme.Create;
+
+  if Assigned(ATheme) then
+    FTheme.CopyFrom(ATheme);
+
+  FTheme.SaveStyleBookTo(Self.StyleBook);
 
   FCell := ACell;
 
   CellMemo.Text := FCell.Content;
 
-//  BorderFrame :=
   TBorderFrame.Create(
     Self,
     loContent,
-    Application.Title,
+    'Reminder',
     Trunc(loScreen.Width * SCALE_VALUE) + 50,
     Trunc(loScreen.Height * SCALE_VALUE) + 10,
-    //Round(loScreen.Width * SCALE_VALUE) + 50,
-    //Round(loScreen.Height * SCALE_VALUE) + 10,
-    $FF2A001A,
+    TAlphaColorRec.White,
     $FF2A001A,
     $FF4C002F,
     $FF9B0060);
 
   Self.Fill.Kind := TBrushKind.Solid;
   Self.Fill.Color := FTheme.LightBackgroundColor;
-  //DarkBackgroundColor;
 
-  Self.CellMemo.TextSettings.FontColor := FTheme.TextColor;
-  Self.CellMemo.TextSettings.Font.Size := FTheme.TextFontSize;
+  Self.CellMemo.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  Self.CellMemo.TextSettings.Font.Size := FTheme.CommonTextProps.TextSettings.Font.Size;
+//  FTheme.TextFontSize;
 //  Self.NoteMemo.TextSettings.Font.Family := 'MS Reference Sans Serif';
   Self.CellMemo.StyledSettings := [];
 
@@ -197,34 +204,6 @@ begin
   ModalResult := mrContinue;
 end;
 
-class function TCellReminderForm.Show(
-  const ACell: TCell;
-  const ATheme: TTheme = nil): TModalResult;
-var
-  CellReminderForm: TCellReminderForm;
-  VisibleState: Boolean;
-begin
-  CellReminderForm := TCellReminderForm.Create(nil, ACell);
-
-  if Assigned(ATheme) then
-    ATheme.CopyTo(CellReminderForm.Theme);
-
-  try
-    // Если приложение было свернуто в трэй, тогда необходимо его показать
-    VisibleState := IsWindowVisible(ApplicationHwnd);
-    if not VisibleState then
-      ShowWindow(ApplicationHwnd, SW_SHOW);
-
-    Result := CellReminderForm.ShowModal;
-
-    // После принудительного показа, возвращаем приложение в исходное состояние
-    if not VisibleState then
-      ShowWindow(ApplicationHwnd, SW_HIDE);
-  finally
-    CellReminderForm.ReleaseForm;
-  end;
-end;
-
 procedure TCellReminderForm.CellReminderOkButtonClickHandler(Sender: TObject);
 begin
   FCell.CopyFrom(FCellReminderDateTimeFrame.Cell);
@@ -242,6 +221,44 @@ begin
   Self.PaintRects([Self.ClientRect]);
 end;
 
+class function TCellReminderForm.Show(
+  const ACell: TCell): TModalResult;
+var
+  CellReminderForm: TCellReminderForm;
+  VisibleState: Boolean;
+begin
+  CellReminderForm := TCellReminderForm.Create(nil, ACell, ThemeOfClass);
+
+  try
+    // Если приложение было свернуто в трэй, тогда необходимо его показать
+    VisibleState := IsWindowVisible(ApplicationHwnd);
+    if not VisibleState then
+      ShowWindow(ApplicationHwnd, SW_SHOW);
+
+    Result := CellReminderForm.ShowModal;
+
+    // После принудительного показа, возвращаем приложение в исходное состояние
+    if not VisibleState then
+      ShowWindow(ApplicationHwnd, SW_HIDE);
+  finally
+    CellReminderForm.ReleaseForm;
+  end;
+end;
+
+class procedure TCellReminderForm.Init(const ATheme: TTheme);
+begin
+  FThemeOfClass := TTheme.Create;
+
+  FThemeOfClass.CopyFrom(ATheme);
+end;
+
+class procedure TCellReminderForm.UnInit;
+begin
+  if Assigned(FThemeOfClass) then
+    FreeAndNil(FThemeOfClass);
+end;
+
+initialization
+  TCellReminderForm.ThemeOfClass := nil;
+
 end.
-
-

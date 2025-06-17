@@ -2167,7 +2167,7 @@ begin
 //      HomeButton
     ], true);
 
-    DeleteFolderButton.Enabled := true;
+//    DeleteFolderButton.Enabled := true;
     if CurrentFolderFrame.Cell.Id = ROOT_FOLDER_ID then
       DeleteFolderButton.Enabled := false;
   except
@@ -2534,17 +2534,19 @@ begin
     THelpmate.Theme.BackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.DarkBackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.LightBackgroundColor := Self.Fill.Color;
-    THelpmate.Theme.MemoColor := Self.Fill.Color;
-    THelpmate.Theme.TextColor := FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-    THelpmate.Theme.TextFontSize := FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
-    THelpmate.Theme.SaveStyleBookFrom(StyleBook);
-//    LoadStyleBook(StyleBook);
+//    THelpmate.Theme.MemoColor := Self.Fill.Color;
+    //asd debug
+    THelpmate.Theme.CommonTextProps.TextSettings.FontColor :=
+      FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
+    //THelpmate.Theme.TextColor := TAlphaColorRec.Blue;
+    //FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
+    //asd debug
+    THelpmate.Theme.CommonTextProps.TextSettings.Font.Size :=
+      FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
+    THelpmate.Theme.LoadStyleBookFrom(StyleBook);
 
     TNoteForm.Init(NoteIdentsFileName, THelpmate.Theme);
-//    TNoteForm.Theme.BackgroundColor := InfoRectangle.Fill.Color;
-//    TNoteForm.Theme.MemoColor := Self.Fill.Color;
-//    TNoteForm.Theme.TextColor := FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-//    TNoteForm.Theme.TextFontSize := FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
+    TCellReminderForm.Init(THelpmate.Theme);
 
     //C:\Desktop\MemoryCells\MemoryCellsCommon\SQLTemplates\
 
@@ -2647,6 +2649,7 @@ begin
   FreeAndNil(UTClientManager);
 
   TNoteForm.UnInit;
+  TCellReminderForm.UnInit;
 
   TLogger.AddLog('Finish app', MG);
   TLogger.UnInit;

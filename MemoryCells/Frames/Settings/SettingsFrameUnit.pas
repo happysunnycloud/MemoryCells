@@ -59,10 +59,14 @@ begin
     ATheme.CopyTo(FTheme);
 
 //  TTheme.LoadStyleBook(Self.StyleBook);
-  SearchEdit.TextSettings.FontColor := FTheme.TextColor;
-  BackupSettingFrame.CaptionLabel.TextSettings.FontColor := FTheme.TextColor;
-  BackupSettingFrame.PathLabel.TextSettings.FontColor := FTheme.TextColor;
-  BackupSettingFrame.TimeLabel.TextSettings.FontColor := FTheme.TextColor;
+  SearchEdit.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  BackupSettingFrame.CaptionLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  BackupSettingFrame.PathLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  BackupSettingFrame.TimeLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
 end;
 
 destructor TSettingsFrame.Destroy;

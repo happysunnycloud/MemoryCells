@@ -6,7 +6,6 @@ uses
     System.Classes
   , System.UITypes
   , FMX.Controls
-
   ;
 
 type

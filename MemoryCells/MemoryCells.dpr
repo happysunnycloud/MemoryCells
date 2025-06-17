@@ -79,7 +79,8 @@ uses
   SettingsFrameUnit in 'Frames\Settings\SettingsFrameUnit.pas' {SettingsFrame: TFrame},
   FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas',
   FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas',
-  FMX.ThemeUnit in '..\..\DevelopmentsCollection\FMX.ThemeUnit.pas';
+  FMX.ThemeUnit in '..\..\DevelopmentsCollection\FMX.ThemeUnit.pas',
+  FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas';
 
 begin
   Application.Initialize;
