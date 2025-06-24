@@ -12,7 +12,7 @@ uses
 
 const
   NULL_ID = 0;
-  TIME_OUT_SECONDS = 4;
+  TIME_OUT_SECONDS = 40;
   NULL_DATETIME = 0;
 
 type
@@ -253,6 +253,8 @@ begin
       DBTools.Query.AddParameterAsString(':backup_file_name', BackupFileName);
 
       DBTools.ExecuteQuery;
+
+      // Коммит идет в конце скрипта
     finally
       DBTools.FreeQuery;
       FreeAndNil(DBTools);
@@ -761,12 +763,13 @@ begin
         end;
         DBTools.CloseQuery;
 
-       if ReturnedRecordsCount > 1 then
+        if ReturnedRecordsCount > 1 then
           raise Exception.Create('More than one record returned');
 
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally
@@ -835,6 +838,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally
@@ -900,6 +904,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
 
@@ -1015,6 +1020,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally
@@ -1121,6 +1127,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally
@@ -1330,6 +1337,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally
@@ -1393,6 +1401,7 @@ begin
           DBTools.FDConnection.Commit;
         except
           DBTools.FDConnection.Rollback;
+
           raise;
         end;
       finally
@@ -1459,6 +1468,7 @@ begin
           DBTools.FDConnection.Commit;
         except
           DBTools.FDConnection.Rollback;
+
           raise;
         end;
       finally
@@ -1520,6 +1530,7 @@ begin
         DBTools.FDConnection.Commit;
       except
         DBTools.FDConnection.Rollback;
+
         raise;
       end;
     finally

@@ -11,6 +11,7 @@ inherited LaunchSettingFrame: TLaunchSettingFrame
         Size.Width = 465.000000000000000000
         Size.Height = 30.000000000000000000
         inherited CaptionLabel: TLabel
+          StyledSettings = [Family, Size, FontColor]
           Margins.Top = 5.000000000000000000
           Margins.Bottom = 5.000000000000000000
           Position.Y = 5.000000000000000000
@@ -44,16 +45,15 @@ inherited LaunchSettingFrame: TLaunchSettingFrame
             TabOrder = 2
           end
           object Switch: TSwitch
-            Align = Top
+            Align = Left
             IsChecked = False
             Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
-            Margins.Right = 100.000000000000000000
             Margins.Bottom = 5.000000000000000000
             Position.X = 10.000000000000000000
             Position.Y = 32.000000000000000000
-            Size.Width = 111.000000000000000000
-            Size.Height = 27.000000000000000000
+            Size.Width = 147.000000000000000000
+            Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
             OnClick = SwitchClick

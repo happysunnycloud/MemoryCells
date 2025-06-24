@@ -25,9 +25,16 @@ type
     StyleBook: TStyleBook;
     CancelButton: TButton;
     Panel: TPanel;
+    FindParameterLabel: TLabel;
+    BackgroundRectangle: TRectangle;
+    ServiceControlsPanel: TPanel;
     procedure SearchButtonClick(Sender: TObject);
   private
     FTheme: TTheme;
+
+    FBackupPath: String;
+    FBackupTime: TTime;
+    FRunOnStartup: Boolean;
   public
     constructor Create(
       AOwner: TComponent;
@@ -35,6 +42,10 @@ type
     destructor Destroy; override;
 
     procedure FrameEnumerator(const ACallbackProc: TCallbackProc);
+
+    property BackupPath: String read FBackupPath write FBackupPath;
+    property BackupTime: TTime read FBackupTime write FBackupTime;
+    property RunOnStartup: Boolean read FRunOnStartup write FRunOnStartup;
   end;
 
 var
@@ -56,17 +67,37 @@ begin
   FTheme := TTheme.Create;
 
   if Assigned(ATheme) then
-    ATheme.CopyTo(FTheme);
+    FTheme.CopyFrom(ATheme);
 
-//  TTheme.LoadStyleBook(Self.StyleBook);
+  FTheme.SaveStyleBookTo(Self.StyleBook);
+
   SearchEdit.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
+
   BackupSettingFrame.CaptionLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
   BackupSettingFrame.PathLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
   BackupSettingFrame.TimeLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
+
+  BackupSettingFrame.CaptionLabel.TextSettings.Font.Style :=
+    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
+    [TFontStyle.fsBold];
+
+  LaunchSettingFrame.CaptionLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  LaunchSettingFrame.RunAtStartupLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+
+  LaunchSettingFrame.CaptionLabel.TextSettings.Font.Style :=
+    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
+    [TFontStyle.fsBold];
+
+  FindParameterLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+
+  BackgroundRectangle.Fill.Color := FTheme.LightBackgroundColor;
 end;
 
 destructor TSettingsFrame.Destroy;

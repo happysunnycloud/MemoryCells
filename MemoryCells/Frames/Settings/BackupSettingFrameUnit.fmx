@@ -1,12 +1,12 @@
 inherited BackupSettingFrame: TBackupSettingFrame
   Size.Width = 559.000000000000000000
-  Size.Height = 93.000000000000000000
+  Size.Height = 102.000000000000000000
   inherited Layout: TLayout
     Size.Width = 559.000000000000000000
-    Size.Height = 93.000000000000000000
+    Size.Height = 102.000000000000000000
     inherited Panel: TPanel
       Size.Width = 559.000000000000000000
-      Size.Height = 93.000000000000000000
+      Size.Height = 102.000000000000000000
       inherited CaptionLayout: TLayout
         Size.Width = 559.000000000000000000
         Size.Height = 30.000000000000000000
@@ -22,7 +22,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
       inherited ControlsLayout: TLayout
         Position.Y = 30.000000000000000000
         Size.Width = 559.000000000000000000
-        Size.Height = 59.000000000000000000
+        Size.Height = 68.000000000000000000
         object ControlsCaptionsLayout: TLayout
           Align = Top
           Size.Width = 559.000000000000000000
@@ -62,7 +62,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
           Align = Top
           Position.Y = 30.000000000000000000
           Size.Width = 559.000000000000000000
-          Size.Height = 30.000000000000000000
+          Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 3
           object PathEdit: TEdit
@@ -76,7 +76,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Margins.Right = 10.000000000000000000
             Margins.Bottom = 5.000000000000000000
             Size.Width = 209.000000000000000000
-            Size.Height = 20.000000000000000000
+            Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
           end
           object SelectFolderButton: TButton
@@ -87,7 +87,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Position.X = 229.000000000000000000
             Position.Y = 5.000000000000000000
             Size.Width = 80.000000000000000000
-            Size.Height = 20.000000000000000000
+            Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
             Text = 'Select'
@@ -103,7 +103,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Position.X = 329.000000000000000000
             Position.Y = 5.000000000000000000
             Size.Width = 100.000000000000000000
-            Size.Height = 20.000000000000000000
+            Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 5
           end

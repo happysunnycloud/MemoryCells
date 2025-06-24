@@ -1143,7 +1143,7 @@ begin
   if Assigned(SettingsFrame) then
     Exit;
 
-  SettingsFrame := TSettingsFrame.Create(Self);
+  SettingsFrame := TSettingsFrame.Create(Self, THelpmate.Theme);
   SettingsFrame.Parent := Self.loScreen;
   SettingsFrame.Align := TAlignLayout.Contents;
   SettingsFrame.BringToFront;
