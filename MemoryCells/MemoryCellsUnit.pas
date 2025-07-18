@@ -669,6 +669,11 @@ begin
   ], false);
 
   AppManager.CreateLoadCellThread(Self, ACell, OpenCell);
+
+  //asd debug стоит убрать после введения очереди эвентов
+  // Отрестартим ремайндер на тот случай, если был переход из окошка ремайндера
+  RestartReminder;
+  //asd debug
 end;
 
 procedure TMainForm.GotoSearchResultFolder(const ACellIdList: TCellIdList);
@@ -2268,16 +2273,16 @@ begin
     case ModalResult of
       mrContinue{Goto}:
       begin
-        Cell.Remind := false;
-        UpdateCellReminder(Cell);
+        //        Cell.Remind := false;
+        //        UpdateCellReminder(Cell);
 
-        if CellMemoFrame.CellMemoTextIsChanged then
-        begin
-          if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
-          begin
-            DoUpdateCell(TShowStatusExt.ShowCellUpdated);
-          end;
-        end;
+        //        if CellMemoFrame.CellMemoTextIsChanged then
+        //        begin
+        //          if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
+        //          begin
+        //            DoUpdateCell(TShowStatusExt.ShowCellUpdated);
+        //          end;
+        //        end;
 
         GotoFolder(Cell.FolderId, Cell.Id);
       end;
