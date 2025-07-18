@@ -3,7 +3,7 @@ unit MemoryCellsServerRepliesDataUnit;
 interface
 
 uses
-    ParamsExtUnit
+    MCParamsUnit
   , TransportContainerUnit
   ;
 

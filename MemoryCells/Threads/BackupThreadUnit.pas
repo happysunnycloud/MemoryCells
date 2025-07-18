@@ -8,7 +8,7 @@ uses
   , BaseThreadUnit
   , BaseFormUnit
   , DataManagerUnit
-  , ParamsExtUnit
+  , MCParamsUnit
   ;
 
 type

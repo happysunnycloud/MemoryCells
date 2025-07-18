@@ -18,7 +18,7 @@ uses
 
   , CellUnit
   , CellUnitFrameUnit
-  , ParamsExtUnit
+  , MCParamsUnit
   , DBAccessUnit
   , ThreadRegistryUnit
   , BaseThreadUnit

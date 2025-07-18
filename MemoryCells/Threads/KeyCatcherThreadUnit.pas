@@ -7,7 +7,7 @@ uses
   System.SysUtils,
   MemoryFileUnit,
   BaseFormUnit,
-  ParamsExtUnit,
+  MCParamsUnit,
   BaseThreadUnit;
 
 type

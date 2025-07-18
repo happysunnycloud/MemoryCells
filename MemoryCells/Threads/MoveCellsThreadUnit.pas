@@ -10,7 +10,7 @@ uses
   , DataManagerUnit
   , CommonUnit
   , CellUnit
-  , ParamsExtUnit
+  , MCParamsUnit
   ;
 
 type

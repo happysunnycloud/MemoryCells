@@ -10,7 +10,6 @@ uses
   MemoryCellsUnit in 'MemoryCellsUnit.pas' {MainForm},
   ToolsUnit in '..\..\DevelopmentsCollection\ToolsUnit.pas',
   DBToolsUnit in '..\..\DevelopmentsCollection\DBToolsUnit.pas',
-  ParamsClassUnit in '..\..\DevelopmentsCollection\ParamsClassUnit.pas',
   BaseThreadUnit in 'Threads\BaseThreadUnit.pas',
   CloseFormThreadUnit in 'Threads\CloseFormThreadUnit.pas',
   DeleteFolderThreadUnit in 'Threads\DeleteFolderThreadUnit.pas',
@@ -51,7 +50,6 @@ uses
   DBAccessUnit in '..\MemoryCellsCommon\DBAccessUnit.pas',
   CellUnit in '..\MemoryCellsCommon\CellUnit.pas',
   SQLTemplatesUnit in '..\..\DevelopmentsCollection\SQLTemplatesUnit.pas',
-  ParamsExtUnit in '..\MemoryCellsCommon\ParamsExtUnit.pas',
   ExceptionContainerUnit in '..\MemoryCellsCommon\ExceptionContainerUnit.pas',
   ServerRepliesParserUnit in 'ServerRepliesParserUnit.pas',
   UTServerReplyUnit in '..\MemoryCellsCommon\UTServerReplyUnit.pas',
@@ -80,7 +78,9 @@ uses
   FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas',
   FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas',
   FMX.ThemeUnit in '..\..\DevelopmentsCollection\FMX.ThemeUnit.pas',
-  FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas';
+  FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
+  MCParamsUnit in '..\MemoryCellsCommon\MCParamsUnit.pas',
+  ParamsExtUnit in '..\..\DevelopmentsCollection\ParamsExtUnit.pas';
 
 begin
   Application.Initialize;

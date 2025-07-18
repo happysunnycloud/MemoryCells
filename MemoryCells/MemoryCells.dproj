@@ -293,7 +293,6 @@
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\ToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\DBToolsUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\ParamsClassUnit.pas"/>
         <DCCReference Include="Threads\BaseThreadUnit.pas"/>
         <DCCReference Include="Threads\CloseFormThreadUnit.pas"/>
         <DCCReference Include="Threads\DeleteFolderThreadUnit.pas"/>
@@ -361,7 +360,6 @@
         <DCCReference Include="..\MemoryCellsCommon\DBAccessUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\CellUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\SQLTemplatesUnit.pas"/>
-        <DCCReference Include="..\MemoryCellsCommon\ParamsExtUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\ExceptionContainerUnit.pas"/>
         <DCCReference Include="ServerRepliesParserUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\UTServerReplyUnit.pas"/>
@@ -414,6 +412,8 @@
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ThemeUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas"/>
+        <DCCReference Include="..\MemoryCellsCommon\MCParamsUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ParamsExtUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

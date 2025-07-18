@@ -7,7 +7,7 @@ interface
 uses
     System.Classes
   , BaseFormUnit
-  , ParamsExtUnit
+  , MCParamsUnit
   , DBAccessUnit
   ;
 

@@ -6,7 +6,7 @@ uses
     System.SysUtils
 
   , TransportContainerUnit
-  , ParamsExtUnit
+  , MCParamsUnit
   ;
 type
   TServerRepliesParser = class
