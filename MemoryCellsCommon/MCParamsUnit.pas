@@ -1,20 +1,20 @@
-﻿unit ParamsExtUnit;
+﻿unit MCParamsUnit;
 
 interface
 
 uses
-    ParamsClassUnit
+  //  ParamsClassUnit
+    ParamsExtUnit
   , CellUnit
   ;
 
 type
-  TParamsExt = class (TParams)
+  TParamsExt = class (ParamsExtUnit.TParamsExt)
   public
     destructor Destroy; override;
 
     procedure Clear; reintroduce;
-    procedure Add(AValue: Variant); reintroduce; overload;
-    procedure Add(AValue: Pointer); reintroduce; overload;
+    procedure Add(const AValue: Pointer); reintroduce; overload;
     procedure CopyFrom(const AParamsObj: TParamsExt); reintroduce;
   end;
 
@@ -66,12 +66,7 @@ begin
   inherited;
 end;
 
-procedure TParamsExt.Add(AValue: Variant);
-begin
-  inherited;
-end;
-
-procedure TParamsExt.Add(AValue: Pointer);
+procedure TParamsExt.Add(const AValue: Pointer);
 var
   CellIdList: TCellIdList;
   CellList: TCellList;
@@ -101,7 +96,7 @@ begin
     inherited Add(Cell);
   end
   else
-    inherited;
+    inherited Add(AValue);
 end;
 
 procedure TParamsExt.CopyFrom(const AParamsObj: TParamsExt);
@@ -152,12 +147,13 @@ begin
 
         inherited Add(Cell);
       end
-
       else
         inherited Add(p);
     end
     else
-      inherited Add(AParamsObj.Params[i]);
+    begin
+      inherited Add(AParamsObj.Params[i].v, AParamsObj.Params[i].Ident);
+    end;
 
     Inc(i);
   end;
