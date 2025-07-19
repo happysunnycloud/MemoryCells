@@ -59,7 +59,8 @@ type
     function CreateLoadCatalogThread(
       const AForm: TBaseForm;
       const AFolderId: Int64;
-      const ACellId: Int64): TLoadCatalogThread;
+      const ACellId: Int64;
+      const AOpenCellReminderPanel: Boolean): TLoadCatalogThread;
 
     function CreateLoadDestinationCatalogThread(
       const AForm: TBaseForm;
@@ -191,7 +192,8 @@ end;
 function TAppManager.CreateLoadCatalogThread(
   const AForm: TBaseForm;
   const AFolderId: Int64;
-  const ACellId: Int64): TLoadCatalogThread;
+  const ACellId: Int64;
+  const AOpenCellReminderPanel: Boolean): TLoadCatalogThread;
 var
   ParamsObj: TParamsExt;
 begin
@@ -199,6 +201,7 @@ begin
     AFolderId,
     ACellId
   ]);
+  ParamsObj.Add(AOpenCellReminderPanel, 'OpenCellReminderPanel');
   try
     Result := TLoadCatalogThread.Create(AForm, ParamsObj);
   finally

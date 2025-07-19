@@ -160,9 +160,11 @@ var
   FolderId: Int64;
   CellId: Int64;
   InnerParams: TParamsExt;
+  OpenCellReminderPanel: Boolean;
 begin
   FolderId := AInParams.AsInt64[0];
   CellId := AInParams.AsInt64[1];
+  OpenCellReminderPanel := AInParams.AsBooleanByIdent['OpenCellReminderPanel'];
 
   OutParams := TParamsExt.Create;
   try
@@ -191,6 +193,7 @@ begin
 
           InnerParams.Clear;
           InnerParams.CopyFrom(OutParams);
+          InnerParams.Add(OpenCellReminderPanel, 'OpenCellReminderPanel');
 
           ControlParamsProc(FOpenCellProcRef, InnerParams);
         end;

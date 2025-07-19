@@ -60,6 +60,7 @@ begin
 
     Params.Clear;
     Params.CopyFrom(OutParams);
+    Params.Add(false, 'OpenCellReminderPanel');
 
     ControlParamsProc(FProcRef, Params);
   except

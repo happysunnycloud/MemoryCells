@@ -238,7 +238,10 @@ type
     procedure OpenCell(const AParams: TParamsExt);
     procedure StartCellReminder(const AParams: TParamsExt);
 
-    procedure GotoFolder(const AFolderId: Int64; const ACellId: Int64);
+    procedure GotoFolder(
+      const AFolderId: Int64;
+      const ACellId: Int64;
+      const AOpenCellReminderPanel: Boolean = false);
     procedure GotoDestinationFolder(const AFolderId: Int64);
     procedure GotoCell(const ACell: TCell);
     procedure GotoSearchResultFolder(const ACellIdList: TCellIdList);
@@ -631,7 +634,10 @@ begin
   end;
 end;
 
-procedure TMainForm.GotoFolder(const AFolderId: Int64; const ACellId: Int64);
+procedure TMainForm.GotoFolder(
+  const AFolderId: Int64;
+  const ACellId: Int64;
+  const AOpenCellReminderPanel: Boolean = false);
 begin
   TFMXControlTools.EnableControls([
     InsertFolderButton,
@@ -644,7 +650,11 @@ begin
 
   SetCellMemoFrameNullId;
   //CellMemoFrame.CellUnitFrame := nil;
-  AppManager.CreateLoadCatalogThread(Self, AFolderId, ACellId);
+  AppManager.CreateLoadCatalogThread(
+    Self,
+    AFolderId,
+    ACellId,
+    AOpenCellReminderPanel);
 end;
 
 procedure TMainForm.GotoDestinationFolder(const AFolderId: Int64);
@@ -1622,6 +1632,7 @@ var
   CellRemindDateTime: TDateTime;
   CellRemind: Boolean;
   Cell: TCell;
+  OpenCellReminderPanel: Boolean;
 begin
   try
     SetCellMemoFrameNullId;
@@ -1637,6 +1648,7 @@ begin
       //CellUpdateDateTime{5} - здесь не используем
       CellRemindDateTime := ParamsObj.AsDateTime[6];
       CellRemind := ParamsObj.AsBoolean[7];
+      OpenCellReminderPanel := ParamsObj.AsBooleanByIdent['OpenCellReminderPanel'];
     finally
       FreeAndNil(ParamsObj);
     end;
@@ -1683,6 +1695,9 @@ begin
         end;
       end;
     end;
+
+    if OpenCellReminderPanel then
+      CellRemindButton.OnClick(nil);
   except
     on e: Exception do
     begin
@@ -2284,7 +2299,7 @@ begin
         //          end;
         //        end;
 
-        GotoFolder(Cell.FolderId, Cell.Id);
+        GotoFolder(Cell.FolderId, Cell.Id, true);
       end;
       mrRetry{Ok(Reschedule)}:
       begin
