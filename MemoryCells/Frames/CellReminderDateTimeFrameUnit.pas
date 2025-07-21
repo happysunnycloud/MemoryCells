@@ -1,4 +1,4 @@
-unit CellReminderDateTimeFrameUnit;
+﻿unit CellReminderDateTimeFrameUnit;
 
 interface
 
@@ -36,6 +36,7 @@ type
     RemindCheckBox: TCheckBox;
   private
     { Private declarations }
+
     FDateTuning: TDateTuning;
     FTimeTuning: TTimeTuning;
 
@@ -50,11 +51,14 @@ type
     procedure InternalOnRemindChangedHandler(Sender: TObject);
   public
     { Public declarations }
-    constructor Create(AOwner: TComponent; const ACell: TCell); reintroduce; overload;
+    constructor Create(
+      AOwner: TComponent;
+      const ACell: TCell); reintroduce; overload;
     destructor Destroy; override;
 
     class function ShowCellReminderFrame(
-      const AParent: TFmxObject; const ACell: TCell): TCellReminderDateTimeFrame;
+      const AParent: TFmxObject;
+      const ACell: TCell): TCellReminderDateTimeFrame;
     class procedure HideCellReminderFrame(var ACellReminderDateTimeFrame: TCellReminderDateTimeFrame);
 
     //procedure SetOkButtonOnClick(ANotifyEvent: TNotifyEvent);
@@ -79,9 +83,11 @@ uses
   , FMX.ShowNoteFormUnit
   ;
 
-constructor TCellReminderDateTimeFrame.Create(AOwner: TComponent; const ACell: TCell);
+constructor TCellReminderDateTimeFrame.Create(
+  AOwner: TComponent;
+  const ACell: TCell);
 begin
-  inherited;
+  inherited Create(AOwner, ACell);
 
   FDateTuning := TDateTuning.Create;
   FDateTuning.Init(RemindDateEdit, DayEdit, MonthEdit, YearEdit);
@@ -110,7 +116,8 @@ begin
 end;
 
 class function TCellReminderDateTimeFrame.ShowCellReminderFrame(
-  const AParent: TFmxObject; const ACell: TCell): TCellReminderDateTimeFrame;
+  const AParent: TFmxObject;
+  const ACell: TCell): TCellReminderDateTimeFrame;
 begin
   Result := TCellReminderDateTimeFrame.Create(AParent, ACell);
 
@@ -192,7 +199,6 @@ procedure TCellReminderDateTimeFrame.InternalOnDateTimeChangedHandler(Sender: TO
 var
   CellRemindDateString: String;
   CellRemindTimeString: String;
-
 begin
   CellRemindDateString := RemindDateEdit.Text;
   if CellRemindDateString.Length  = 0 then

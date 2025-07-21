@@ -112,7 +112,9 @@ begin
     CellRemindButton.StyleLookup := 'RemindButtonPressedStyle';
 
     FCellReminderDateTimeFrame :=
-      TCellReminderDateTimeFrame.ShowCellReminderFrame(CellMemoLayout, FCell);
+      TCellReminderDateTimeFrame.ShowCellReminderFrame(
+        CellMemoLayout,
+        FCell);
 
     FCellReminderDateTimeFrame.OkButton.OnClick := CellReminderOkButtonClickHandler;
   end

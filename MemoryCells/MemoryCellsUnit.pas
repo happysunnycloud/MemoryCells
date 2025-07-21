@@ -159,6 +159,7 @@ type
     procedure BuildDestinationFolderCatalog(const AParams: TParamsExt);
     procedure UpdateCell(const AParams: TParamsExt);
     procedure UpdateCellIsDone(const AParams: TParamsExt);
+    procedure CellUpdated(const AParams: TParamsExt);
     procedure InsertCell(const AParams: TParamsExt);
     procedure DeleteCell(const AParams: TParamsExt);
     procedure UpdateFolder(const AParams: TParamsExt);
@@ -548,7 +549,9 @@ begin
     CellRemindButton.StyleLookup := 'RemindButtonPressedStyle';
 
     FCellReminderDateTimeFrame :=
-      TCellReminderDateTimeFrame.ShowCellReminderFrame(CellMemoLayout, CellMemoFrame.Cell);
+      TCellReminderDateTimeFrame.ShowCellReminderFrame(
+        CellMemoLayout,
+        CellMemoFrame.Cell);
     FCellReminderDateTimeFrame.OkButton.OnClick := CellReminderOkButtonClickHandler;
 
     FCellReminderDateTimeFrame.OnDateTimeChanged := CellReminderOnChangedHandler;
@@ -679,11 +682,6 @@ begin
   ], false);
 
   AppManager.CreateLoadCellThread(Self, ACell, OpenCell);
-
-  //asd debug стоит убрать после введения очереди эвентов
-  // Отрестартим ремайндер на тот случай, если был переход из окошка ремайндера
-  RestartReminder;
-  //asd debug
 end;
 
 procedure TMainForm.GotoSearchResultFolder(const ACellIdList: TCellIdList);
@@ -1891,6 +1889,13 @@ begin
   end;
 end;
 
+procedure TMainForm.CellUpdated(const AParams: TParamsExt);
+begin
+  UpdateCell(AParams);
+
+  RestartReminder;
+end;
+
 procedure TMainForm.InsertCell(const AParams: TParamsExt);
 const
   METHOD = 'TMainForm.InsertCell';
@@ -2474,7 +2479,7 @@ begin
     HomeButton
   ], false);
 
-  DoUpdateCell(UpdateCell);
+  DoUpdateCell(CellUpdated);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);

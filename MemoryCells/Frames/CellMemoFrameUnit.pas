@@ -159,8 +159,11 @@ begin
   if String.Compare(CellMemo.Text, FBackupCell.Content) <> 0 then
     Exit(true);
 
-  //  if Cell.RemindDateTime <> FBackupCell.RemindDateTime then
-  //    Exit(true);
+  if Cell.RemindDateTime <> FBackupCell.RemindDateTime then
+    Exit(true);
+
+  if Cell.Remind <> FBackupCell.Remind then
+    Exit(true);
 end;
 
 procedure TCellMemoFrame.RestoreContent;
@@ -187,7 +190,7 @@ begin
   Cell.RemindDateTime := ACellRemindDateTime;
   Cell.Remind := ACellRemind;
 
-//  OnCellMemoChangeTrackingHandler(nil);
+  OnCellMemoChangeTrackingHandler(nil);
 end;
 
 end.
