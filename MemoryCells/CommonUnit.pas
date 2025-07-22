@@ -25,7 +25,7 @@ uses
   ;
 
 const
-  VERSION = '0.1';
+  VERSION = '0.2';
   ROOT_FOLDER_ID = 1;
   EVENT_ONCLICK = 'OnClick';
   SETTINGS_FILE_NAME = 'Settings.mcs';

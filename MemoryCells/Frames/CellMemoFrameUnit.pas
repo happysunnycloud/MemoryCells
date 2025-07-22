@@ -45,6 +45,13 @@ type
     function CellMemoTextIsChanged: Boolean;
     procedure RestoreContent;
 
+    // Присвыеваем текущее значение ремайндера к значению в бэкапе,
+    // Нужно выполнить после сохранения значений ремайндера по кнопке Ок,
+    // отдельно без сохранения всей ячейки
+    // Таким образом CellMemoTextIsChanged будет решать, что ячейка не изменилась
+    // и не будет предлагать сохранить ее заново
+    procedure ResetBackupReminder;
+
     procedure SetCell(const ACell: TCell);
     procedure SetCellReminder(
       const ACellRemindDateTime: TDateTime;
@@ -169,6 +176,12 @@ end;
 procedure TCellMemoFrame.RestoreContent;
 begin
   InsertText(FBackupCell.Content);
+end;
+
+procedure TCellMemoFrame.ResetBackupReminder;
+begin
+  FBackupCell.RemindDateTime := Cell.RemindDateTime;
+  FBackupCell.Remind := Cell.Remind;
 end;
 
 procedure TCellMemoFrame.SetCell(const ACell: TCell);

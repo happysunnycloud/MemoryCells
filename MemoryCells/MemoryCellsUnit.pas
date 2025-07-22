@@ -520,7 +520,7 @@ end;
 
 procedure TMainForm.CellReminderOkButtonClickHandler(Sender: TObject);
 begin
-  CellReminderOnChangedHandler(Sender);
+  CellReminderOnChangedHandler(nil);
 
   UpdateCellReminder(CellMemoFrame.Cell);
 
@@ -735,8 +735,20 @@ begin
 end;
 
 procedure TMainForm.CellReminderUpdated(const AParams: TParamsExt);
+var
+  CellId: Int64;
 begin
   TShowStatusExt.ShowCellReminderUpdated;
+
+  CellId := AParams.AsInt64ByIdent['CellId'];
+  if CellMemoFrame.Cell.Id = CellId then
+  begin
+    CellMemoFrame.ResetBackupReminder;
+
+    TOnClickReplacer.Restore;
+
+    CellMemoChangeTrackingHandler(nil);
+  end;
 
   RestartReminder;
 end;
@@ -948,6 +960,8 @@ begin
 end;
 
 procedure TMainForm.CellMemoChangeTrackingHandler(Sender: TObject);
+var
+  ExcludedControl: TArray<TControl>;
 begin
   TFMXControlTools.EnableControls([
     DeleteFolderButton,
@@ -961,15 +975,33 @@ begin
 
   if CellMemoFrame.CellMemoTextIsChanged then
   begin
+//    TOnClickReplacer.Restore;
     if TOnClickReplacer.HasReplaced then
       Exit;
 
+    //asd debug ExcludedControl
+    if not Assigned(FCellReminderDateTimeFrame) then
+    begin
+      ExcludedControl := [
+        UpdateCellButton,
+        DeleteCellButton,
+        CellRemindButton,
+        HideFoldersButton,
+        FBorderFrame.RolldownButtonRectangle];
+    end
+    else
+    begin
+      ExcludedControl := [
+        UpdateCellButton,
+        DeleteCellButton,
+        CellRemindButton,
+        HideFoldersButton,
+        FBorderFrame.RolldownButtonRectangle,
+        FCellReminderDateTimeFrame.OkButton];
+    end;
+
     TOnClickReplacer.Replace(Self,
-      [UpdateCellButton,
-       DeleteCellButton,
-       CellRemindButton,
-       HideFoldersButton,
-       FBorderFrame.RolldownButtonRectangle],
+      ExcludedControl,
       procedure
       var
         ParamsProcRef: TParamsProcRef;
@@ -1455,6 +1487,8 @@ begin
   begin
     HideCellReminderFrame;
   end;
+
+//  CellMemoChangeTrackingHandler(nil);
 end;
 
 procedure TMainForm.BuildDestinationFolderCatalog(const AParams: TParamsExt);

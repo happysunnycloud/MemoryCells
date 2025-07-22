@@ -251,7 +251,7 @@ var
 begin
   ParamsObj := TParamsExt.Create;
   try
-    ParamsObj.Add(ACell.Id);
+    ParamsObj.Add(ACell.Id, 'CellId');
     ParamsObj.Add(ACell.Content);
     ParamsObj.Add(ACell.Desc);
     ParamsObj.Add(ACell.RemindDateTime);
