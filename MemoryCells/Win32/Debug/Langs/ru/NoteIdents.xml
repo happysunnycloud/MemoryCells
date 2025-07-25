@@ -2,7 +2,7 @@
   <IdentList>
     <SaveCell>
       <Caption>Сохранение изменений</Caption>
-      <Text>Сохранить текст перед выходом?</Text>
+      <Text>Сохранить ячейку перед выходом?</Text>
       <CheckboxText>Запомнить выбранный вариант и 
 больше не показывать это окно</CheckboxText>
       <ButtonKind>bkYesNo</ButtonKind>

@@ -45,8 +45,12 @@ type
     class var FThemeOfClass: TTheme;
 
 //    property Theme: TTheme read FTheme write FTheme;
+
+    procedure OnDateTimeChangedHandler(Sender: TObject);
+    procedure OnRemindChangedHandler(Sender: TObject);
   private
     class property ThemeOfClass: TTheme read FThemeOfClass write FThemeOfClass;
+    property CellReminderDateTimeFrame: TCellReminderDateTimeFrame read FCellReminderDateTimeFrame;
   public
     constructor Create(
       AOwner: TComponent;
@@ -55,7 +59,8 @@ type
     destructor Destroy; override;
 
     class function Show(
-      const ACell: TCell): TModalResult;
+      const ACell: TCell;
+      var AOpenCellReminderPanel: Boolean): TModalResult;
 
     class procedure Init(const ATheme: TTheme);
     class procedure UnInit;
@@ -69,7 +74,8 @@ implementation
 {$R *.fmx}
 
 uses
-    Winapi.Windows
+    System.DateUtils
+  , Winapi.Windows
   , BorderFrameUnit
   , DBAccessUnit
   , FMX.OnClickReplacerUnit
@@ -116,6 +122,9 @@ begin
         CellMemoLayout,
         FCell);
 
+    FCellReminderDateTimeFrame.OnDateTimeChanged := OnDateTimeChangedHandler;
+    FCellReminderDateTimeFrame.OnRemindChanged := OnRemindChangedHandler;
+
     FCellReminderDateTimeFrame.OkButton.OnClick := CellReminderOkButtonClickHandler;
   end
   else
@@ -124,6 +133,27 @@ begin
   end;
 
   Repaint;
+end;
+
+procedure TCellReminderForm.OnDateTimeChangedHandler(Sender: TObject);
+var
+  DD, MM, YY: Word;
+  Hour, Min: Word;
+  DateTime: TDateTime;
+begin
+  DD := FCellReminderDateTimeFrame.DayEdit.Text.ToInteger;
+  MM := FCellReminderDateTimeFrame.MonthEdit.Text.ToInteger;
+  YY := FCellReminderDateTimeFrame.YearEdit.Text.ToInteger;
+  Hour := FCellReminderDateTimeFrame.HourEdit.Text.ToInteger;
+  Min  := FCellReminderDateTimeFrame.MinuteEdit.Text.ToInteger;
+
+  DateTime := EncodeDateTime(YY, MM, DD, Hour, Min, 00, 00);
+  FCell.RemindDateTime := DateTime;
+end;
+
+procedure TCellReminderForm.OnRemindChangedHandler(Sender: TObject);
+begin
+  FCell.Remind := FCellReminderDateTimeFrame.RemindCheckBox.IsChecked;
 end;
 
 constructor TCellReminderForm.Create(
@@ -146,6 +176,7 @@ begin
   FTheme.SaveStyleBookTo(Self.StyleBook);
 
   FCell := ACell;
+  FCellReminderDateTimeFrame := nil;
 
   CellMemo.Text := FCell.Content;
 
@@ -224,10 +255,12 @@ begin
 end;
 
 class function TCellReminderForm.Show(
-  const ACell: TCell): TModalResult;
+  const ACell: TCell;
+  var AOpenCellReminderPanel: Boolean): TModalResult;
 var
   CellReminderForm: TCellReminderForm;
   VisibleState: Boolean;
+  OpenCellReminderPanel: Boolean;
 begin
   CellReminderForm := TCellReminderForm.Create(nil, ACell, ThemeOfClass);
 
@@ -238,6 +271,9 @@ begin
       ShowWindow(ApplicationHwnd, SW_SHOW);
 
     Result := CellReminderForm.ShowModal;
+
+    OpenCellReminderPanel := Assigned(CellReminderForm.CellReminderDateTimeFrame);
+    AOpenCellReminderPanel := OpenCellReminderPanel;
 
     // После принудительного показа, возвращаем приложение в исходное состояние
     if not VisibleState then

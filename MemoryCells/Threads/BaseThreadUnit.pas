@@ -15,6 +15,7 @@ const
   TIME_OUT_SECONDS = 4;
 
 type
+  TProcRef = reference to procedure;
   TParamsProcRef = reference to procedure(const AParams: TParamsExt);
   TParamIdProcRef = reference to procedure(const AId: Int64);
 
@@ -47,8 +48,8 @@ type
 
     procedure LoadCatalog(
       const AInParams: TParamsExt;
-      const FBuildCatalogProcRef: TParamsProcRef;
-      const FOpenCellProcRef: TParamsProcRef);
+      const ABuildCatalogProcRef: TParamsProcRef;
+      const AOpenCellProcRef: TParamsProcRef);
   public
     constructor Create(const AForm: TBaseForm); virtual;
     destructor Destroy; override;
@@ -150,8 +151,8 @@ end;
 
 procedure TBaseThread.LoadCatalog(
   const AInParams: TParamsExt;
-  const FBuildCatalogProcRef: TParamsProcRef;
-  const FOpenCellProcRef: TParamsProcRef);
+  const ABuildCatalogProcRef: TParamsProcRef;
+  const AOpenCellProcRef: TParamsProcRef);
 const
   METHOD = 'TBaseThread.LoadCatalog';
 var
@@ -160,11 +161,12 @@ var
   FolderId: Int64;
   CellId: Int64;
   InnerParams: TParamsExt;
-  OpenCellReminderPanel: Boolean;
+  MustRestartReminder: Boolean;
 begin
   FolderId := AInParams.AsInt64[0];
   CellId := AInParams.AsInt64[1];
-  OpenCellReminderPanel := AInParams.AsBooleanByIdent['OpenCellReminderPanel'];
+  MustRestartReminder :=
+    AInParams.IfAsBooleanByIdent(PARAM_IDENT_RestartReminder, true);
 
   OutParams := TParamsExt.Create;
   try
@@ -179,10 +181,22 @@ begin
       InnerParams.Clear;
       InnerParams.Add(FolderId);
       InnerParams.Add(CellList);
+      // Если CellId <= 0, тогда после прорисовки каталога папок, будет перезапущен ремайндер
+      // Если CellId > 0, тогда ремайндер перезапуститься после прорисовки ячейки
+      // После прорисовки ячейки ремайндер всегда перезапускается
+      if MustRestartReminder then
+      begin
+        if CellId <= 0 then
+          InnerParams.Add(true, PARAM_IDENT_RestartReminder)
+        else
+          InnerParams.Add(false, PARAM_IDENT_RestartReminder);
+      end
+      else
+        InnerParams.Add(false, PARAM_IDENT_RestartReminder);
 
-      ControlParamsProc(FBuildCatalogProcRef, InnerParams);
+      ControlParamsProc(ABuildCatalogProcRef, InnerParams);
 
-      if Assigned(FOpenCellProcRef) then
+      if Assigned(AOpenCellProcRef) then
       begin
         if CellId > 0 then
         begin
@@ -193,9 +207,11 @@ begin
 
           InnerParams.Clear;
           InnerParams.CopyFrom(OutParams);
-          InnerParams.Add(OpenCellReminderPanel, 'OpenCellReminderPanel');
+          InnerParams.AddFrom(AInParams);
 
-          ControlParamsProc(FOpenCellProcRef, InnerParams);
+          InnerParams.Add(MustRestartReminder, PARAM_IDENT_RestartReminder);
+
+          ControlParamsProc(AOpenCellProcRef, InnerParams);
         end;
       end;
     finally

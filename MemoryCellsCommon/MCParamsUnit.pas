@@ -8,6 +8,12 @@ uses
   , CellUnit
   ;
 
+const
+  PARAM_IDENT_CellReminderFormRemindDateTime = 'CellReminderFormRemindDateTime';
+  PARAM_IDENT_CellReminderFormRemind = 'CellReminderFormRemind';
+  PARAM_IDENT_CellReminderFormOpenReminderPanel = 'CellReminderFormOpenReminderPanel';
+  PARAM_IDENT_RestartReminder = 'RestartReminder';
+
 type
   TParamsExt = class (ParamsExtUnit.TParamsExt)
   public

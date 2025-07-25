@@ -45,12 +45,21 @@ end;
 procedure TLoadCatalogThread.Execute;
 const
   METHOD = 'TLoadCatalogThread.Execute';
+//var
+//  RestartReminderProcRef: TProcRef;
 begin
   try
     Params.Clear;
     Params.CopyFrom(InParams);
 
-    LoadCatalog(Params, TMainForm(Form).BuildFolderCatalog, TMainForm(Form).OpenCell);
+//    RestartReminderProcRef := nil;
+//    if Params.IfAsBooleanByIdent('RestartReminder', true) then
+//      RestartReminderProcRef := TMainForm(Form).RestartReminder;
+
+    LoadCatalog(
+      Params,
+      TMainForm(Form).BuildFolderCatalog,
+      TMainForm(Form).OpenCell);
   except
     on e: Exception do
     begin

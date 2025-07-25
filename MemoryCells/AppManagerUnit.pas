@@ -59,8 +59,14 @@ type
     function CreateLoadCatalogThread(
       const AForm: TBaseForm;
       const AFolderId: Int64;
+      const ACellId: Int64): TLoadCatalogThread; overload;
+    function CreateLoadCatalogThread(
+      const AForm: TBaseForm;
+      const AFolderId: Int64;
       const ACellId: Int64;
-      const AOpenCellReminderPanel: Boolean): TLoadCatalogThread;
+      const ACellRemindDateTime: TDateTime;
+      const ACellRemind: Boolean;
+      const AOpenCellReminderPanel: Boolean): TLoadCatalogThread; overload;
 
     function CreateLoadDestinationCatalogThread(
       const AForm: TBaseForm;
@@ -192,7 +198,27 @@ end;
 function TAppManager.CreateLoadCatalogThread(
   const AForm: TBaseForm;
   const AFolderId: Int64;
+  const ACellId: Int64): TLoadCatalogThread;
+var
+  ParamsObj: TParamsExt;
+begin
+  ParamsObj := TParamsExt.Create([
+    AFolderId,
+    ACellId
+  ]);
+  try
+    Result := TLoadCatalogThread.Create(AForm, ParamsObj);
+  finally
+    FreeAndNil(ParamsObj);
+  end;
+end;
+
+function TAppManager.CreateLoadCatalogThread(
+  const AForm: TBaseForm;
+  const AFolderId: Int64;
   const ACellId: Int64;
+  const ACellRemindDateTime: TDateTime;
+  const ACellRemind: Boolean;
   const AOpenCellReminderPanel: Boolean): TLoadCatalogThread;
 var
   ParamsObj: TParamsExt;
@@ -201,7 +227,10 @@ begin
     AFolderId,
     ACellId
   ]);
-  ParamsObj.Add(AOpenCellReminderPanel, 'OpenCellReminderPanel');
+  ParamsObj.Add(ACellRemindDateTime, PARAM_IDENT_CellReminderFormRemindDateTime);
+  ParamsObj.Add(ACellRemind, PARAM_IDENT_CellReminderFormRemind);
+  ParamsObj.Add(AOpenCellReminderPanel, PARAM_IDENT_CellReminderFormOpenReminderPanel);
+  ParamsObj.Add(false, PARAM_IDENT_RestartReminder);
   try
     Result := TLoadCatalogThread.Create(AForm, ParamsObj);
   finally

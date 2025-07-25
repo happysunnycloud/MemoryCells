@@ -86,7 +86,6 @@ begin
     Params.Add(CellId);
 
     LoadCatalog(Params, TMainForm(Form).BuildFolderCatalog, nil);
-
   except
     on e: Exception do
     begin

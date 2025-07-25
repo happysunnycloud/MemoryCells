@@ -241,8 +241,13 @@ type
 
     procedure GotoFolder(
       const AFolderId: Int64;
+      const ACellId: Int64); overload;
+    procedure GotoFolder(
+      const AFolderId: Int64;
       const ACellId: Int64;
-      const AOpenCellReminderPanel: Boolean = false);
+      const ACellRemindDateTime: TDateTime;
+      const ACellRemind: Boolean;
+      const AOpenCellReminderPanel: Boolean); overload;
     procedure GotoDestinationFolder(const AFolderId: Int64);
     procedure GotoCell(const ACell: TCell);
     procedure GotoSearchResultFolder(const ACellIdList: TCellIdList);
@@ -639,8 +644,7 @@ end;
 
 procedure TMainForm.GotoFolder(
   const AFolderId: Int64;
-  const ACellId: Int64;
-  const AOpenCellReminderPanel: Boolean = false);
+  const ACellId: Int64);
 begin
   TFMXControlTools.EnableControls([
     InsertFolderButton,
@@ -652,11 +656,37 @@ begin
   ], false);
 
   SetCellMemoFrameNullId;
-  //CellMemoFrame.CellUnitFrame := nil;
+
+  AppManager.CreateLoadCatalogThread(
+    Self,
+    AFolderId,
+    ACellId);
+end;
+
+procedure TMainForm.GotoFolder(
+  const AFolderId: Int64;
+  const ACellId: Int64;
+  const ACellRemindDateTime: TDateTime;
+  const ACellRemind: Boolean;
+  const AOpenCellReminderPanel: Boolean);
+begin
+  TFMXControlTools.EnableControls([
+    InsertFolderButton,
+    RenameFolderButton,
+    DeleteFolderButton,
+    InsertCellButton,
+    SearchButton,
+    HomeButton
+  ], false);
+
+  SetCellMemoFrameNullId;
+
   AppManager.CreateLoadCatalogThread(
     Self,
     AFolderId,
     ACellId,
+    ACellRemindDateTime,
+    ACellRemind,
     AOpenCellReminderPanel);
 end;
 
@@ -963,23 +993,16 @@ procedure TMainForm.CellMemoChangeTrackingHandler(Sender: TObject);
 var
   ExcludedControl: TArray<TControl>;
 begin
-  TFMXControlTools.EnableControls([
-    DeleteFolderButton,
-    InsertCellButton
-  ], false);
-
-  TFMXControlTools.EnableControls([
-    UpdateCellButton,
-    CellRemindButton
-  ], true);
-
   if CellMemoFrame.CellMemoTextIsChanged then
   begin
+    TFMXControlTools.EnableControls([
+      UpdateCellButton
+    ], true);
+
 //    TOnClickReplacer.Restore;
     if TOnClickReplacer.HasReplaced then
       Exit;
 
-    //asd debug ExcludedControl
     if not Assigned(FCellReminderDateTimeFrame) then
     begin
       ExcludedControl := [
@@ -1022,6 +1045,10 @@ begin
   end
   else
   begin
+    TFMXControlTools.EnableControls([
+      UpdateCellButton
+    ], false);
+
     if TOnClickReplacer.HasReplaced then
       TOnClickReplacer.Restore;
   end;
@@ -1388,6 +1415,7 @@ var
   Cell: TCell;
   ParamsObj: TParamsExt;
   FolderId: Int64;
+  MustRestartReminder: Boolean;
 begin
   SetCellMemoFrameNullId;
 
@@ -1402,6 +1430,8 @@ begin
         OuterCellList := ParamsObj.AsPointer[1];
         CellList.CopyFrom(OuterCellList);
         CellList.FolderParentId := FolderId;
+
+        MustRestartReminder := ParamsObj.AsBooleanByIdent[PARAM_IDENT_RestartReminder];
       finally
         FreeAndNil(ParamsObj);
       end;
@@ -1466,6 +1496,9 @@ begin
     DeleteFolderButton.Enabled := true;
     if CurrentFolderFrame.Cell.Id = ROOT_FOLDER_ID then
       DeleteFolderButton.Enabled := false;
+
+    if MustRestartReminder then
+      RestartReminder;
   except
     on e: Exception do
     begin
@@ -1664,7 +1697,8 @@ var
   CellRemindDateTime: TDateTime;
   CellRemind: Boolean;
   Cell: TCell;
-  OpenCellReminderPanel: Boolean;
+  OpenReminderPanel: Boolean;
+  MustRestartReminder: Boolean;
 begin
   try
     SetCellMemoFrameNullId;
@@ -1678,9 +1712,18 @@ begin
       CellTypeId := ParamsObj.AsInteger[3];
       CellIsDone := ParamsObj.AsBoolean[4];
       //CellUpdateDateTime{5} - здесь не используем
-      CellRemindDateTime := ParamsObj.AsDateTime[6];
-      CellRemind := ParamsObj.AsBoolean[7];
-      OpenCellReminderPanel := ParamsObj.AsBooleanByIdent['OpenCellReminderPanel'];
+      CellRemindDateTime :=
+        ParamsObj.IfAsDateTimeByIdent(PARAM_IDENT_CellReminderFormRemindDateTime,
+          ParamsObj.AsDateTime[6]);
+      CellRemind :=
+        ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_CellReminderFormRemind,
+          ParamsObj.AsBoolean[7]);
+
+      OpenReminderPanel :=
+        ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_CellReminderFormOpenReminderPanel, false);
+
+      MustRestartReminder :=
+        ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_RestartReminder, true);
     finally
       FreeAndNil(ParamsObj);
     end;
@@ -1728,8 +1771,11 @@ begin
       end;
     end;
 
-    if OpenCellReminderPanel then
+    if OpenReminderPanel then
       CellRemindButton.OnClick(nil);
+
+    if MustRestartReminder then
+      RestartReminder;
   except
     on e: Exception do
     begin
@@ -2310,6 +2356,7 @@ var
   Cell: TCell;
   CellTemp: TCell;
   ModalResult: TModalResult;
+  OpenCellReminderPanel: Boolean;
 begin
   Cell := TCell.Create;
   try
@@ -2318,7 +2365,7 @@ begin
     //      Exit;
 
     Cell.CopyFrom(CellTemp);
-    ModalResult := TCellReminderForm.Show(Cell);
+    ModalResult := TCellReminderForm.Show(Cell, OpenCellReminderPanel);
     if CellMemoFrame.Cell.Id = Cell.Id then
     begin
       CellMemoFrame.Cell.RemindDateTime := Cell.RemindDateTime;
@@ -2338,7 +2385,12 @@ begin
         //          end;
         //        end;
 
-        GotoFolder(Cell.FolderId, Cell.Id, true);
+        GotoFolder(
+          Cell.FolderId,
+          Cell.Id,
+          Cell.RemindDateTime,
+          Cell.Remind,
+          OpenCellReminderPanel);
       end;
       mrRetry{Ok(Reschedule)}:
       begin
@@ -2677,7 +2729,7 @@ begin
       ShowFavoriteCells(true);
     end;
 
-    RestartReminder;
+//    RestartReminder;
   except
     on e: Exception do
       RaiseAppException(METHOD, e);
