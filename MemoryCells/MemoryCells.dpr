@@ -57,7 +57,6 @@ uses
   AddLogUnit in '..\..\DevelopmentsCollection\AddLogUnit.pas',
   FMX.ShowNoteFormUnit in '..\..\DevelopmentsCollection\FMX.ShowNoteFormUnit\FMX.ShowNoteFormUnit.pas' {NoteForm},
   FMX.ShowStatusUnit in 'FMX.ShowStatusUnit.pas',
-  SupportUnit in '..\..\DevelopmentsCollection\SupportUnit.pas',
   FMX.TrayIcon.Win in '..\..\DevelopmentsCollection\FMX.TrayIcon.Win.pas',
   CustomThreadUnit in '..\..\DevelopmentsCollection\CustomThreadUnit.pas',
   FMX.Craft.PopupMenu.Structures in '..\..\DevelopmentsCollection\FMX.Craft.PopupMenu\FMX.Craft.PopupMenu.Structures.pas',
@@ -78,9 +77,10 @@ uses
   FileToolsUnit in '..\..\DevelopmentsCollection\FileToolsUnit.pas',
   FMX.ImageToolsUnit in '..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas',
   FMX.ThemeUnit in '..\..\DevelopmentsCollection\FMX.ThemeUnit.pas',
-  FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
   MCParamsUnit in '..\MemoryCellsCommon\MCParamsUnit.pas',
-  ParamsExtUnit in '..\..\DevelopmentsCollection\ParamsExtUnit.pas';
+  ParamsExtUnit in '..\..\DevelopmentsCollection\ParamsExtUnit.pas',
+  FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
+  DateTimeToolsUnit in '..\..\DevelopmentsCollection\DateTimeToolsUnit.pas';
 
 begin
   Application.Initialize;

@@ -1,4 +1,4 @@
-unit SettingsFrameUnit;
+﻿unit SettingsFrameUnit;
 
 interface
 
@@ -56,7 +56,7 @@ implementation
 {$R *.fmx}
 
 uses
-  SupportUnit;
+  FMX.ControlToolsUnit;
 
 constructor TSettingsFrame.Create(
   AOwner: TComponent;
@@ -154,17 +154,20 @@ begin
         ContainsKey := false;
 
         BaseSettingFrame := TBaseSettingFrame(FrameControl);
-        BaseSettingFrame.ControlEnumerator(
+        TControlTools.ControlEnumerator(
+          BaseSettingFrame,
           procedure (const AControl: TControl)
           var
             _Control: TControl absolute AControl;
+            a: String;
           begin
-            if not TComponentFunctions.
-              IsDesiredComponent(_Control, TProperties.Text)
+            a := _Control.Name;
+            if not TControlTools.HasProperty(_Control, TProperties.Text)
             then
               Exit;
 
-            TextValue := TComponentFunctions.GetTextProperty(_Control);
+            TextValue :=
+              TControlTools.GetPropertyAsString(_Control, TProperties.Text);
             if UpperCase(TextValue).Contains(Key) then
               ContainsKey := true;
           end

@@ -369,7 +369,6 @@
             <Form>NoteForm</Form>
         </DCCReference>
         <DCCReference Include="FMX.ShowStatusUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\SupportUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.TrayIcon.Win.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\CustomThreadUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.Craft.PopupMenu\FMX.Craft.PopupMenu.Structures.pas"/>
@@ -411,9 +410,10 @@
         <DCCReference Include="..\..\DevelopmentsCollection\FileToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ThemeUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\MCParamsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\ParamsExtUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\DateTimeToolsUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

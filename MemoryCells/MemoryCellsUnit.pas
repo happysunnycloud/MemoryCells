@@ -317,7 +317,7 @@ uses
   , FMX.Platform.Win
   , VCL.Graphics
   , Winapi.Messages
-  , SupportUnit
+  , FMX.ControlToolsUnit
   , AddLogUnit
   , CellReminderFormUnit
   , FMX.ThemeUnit
@@ -347,7 +347,7 @@ end;
 
 class procedure TShowStatusExt.Init(const ATextControl: TControl; const ATimeout: Word);
 begin
-  TComponentFunctions.CheckHasComponentProperty(ATextControl, 'Text');
+  TControlTools.CheckHasProperty(ATextControl, TProperties.Text);
 
   FTextControl := ATextControl;
   FTimeout := ATimeout;

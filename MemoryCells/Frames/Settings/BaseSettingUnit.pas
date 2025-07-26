@@ -25,7 +25,7 @@ type
   public
     property Caption: String read GetCaption write SetCaption;
 
-    procedure ControlEnumerator(const ACallbackProc: TCallbackProc);
+//    procedure ControlEnumerator(const ACallbackProc: TCallbackProc);
 
     procedure WriteValues(const AApplicationSettings: TApplicationSettings); virtual;
     procedure ReadValues(const AApplicationSettings: TApplicationSettings); virtual;
@@ -47,17 +47,17 @@ begin
   Result := FCaption;
 end;
 
-procedure TBaseSettingFrame.ControlEnumerator(const ACallbackProc: TCallbackProc);
-var
-  i: Integer;
-  Control: TControl;
-begin
-  for i := 0 to Pred(Panel.ControlsCount) do
-  begin
-    Control := Panel.Controls[i];
-    ACallbackProc(Control);
-  end;
-end;
+//procedure TBaseSettingFrame.ControlEnumerator(const ACallbackProc: TCallbackProc);
+//var
+//  i: Integer;
+//  Control: TControl;
+//begin
+//  for i := 0 to Pred(Panel.ControlsCount) do
+//  begin
+//    Control := Panel.Controls[i];
+//    ACallbackProc(Control);
+//  end;
+//end;
 
 procedure TBaseSettingFrame.WriteValues(const AApplicationSettings: TApplicationSettings);
 begin

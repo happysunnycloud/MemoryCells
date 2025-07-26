@@ -36,8 +36,8 @@ implementation
 {$R *.fmx}
 
 uses
-  Vcl.FileCtrl,
-  SupportUnit;
+    DateTimeToolsUnit
+  , FMX.ControlToolsUnit;
 
 constructor TBackupSettingFrame.Create(AOwner: TComponent);
 begin
@@ -65,14 +65,14 @@ begin
 end;
 
 procedure TBackupSettingFrame.ReadValues(const AApplicationSettings: TApplicationSettings);
-var
-  a: String;
+//var
+//  a: String;
 begin
   AApplicationSettings.BackupsPath := PathEdit.Text;
-  TDateTimeFunctions.ChangeTime(FLastBackupDateTime, TimeEdit.Time);
+  TDateTimeTools.ChangeTime(FLastBackupDateTime, TimeEdit.Time);
   AApplicationSettings.LastBackupDateTime := FLastBackupDateTime;
 
-  a := DateTimeToStr(AApplicationSettings.LastBackupDateTime);
+//  a := DateTimeToStr(AApplicationSettings.LastBackupDateTime);
 end;
 
 end.

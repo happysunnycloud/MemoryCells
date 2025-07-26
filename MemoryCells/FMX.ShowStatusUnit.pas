@@ -40,7 +40,7 @@ type
 implementation
 
 uses
-  SupportUnit;
+  FMX.ControlToolsUnit;
 
 { TCountdownTimer }
 
@@ -49,7 +49,7 @@ constructor TCountdownTimer.Create(
   const AText: String;
   const ATimeout: Word);
 begin
-  TComponentFunctions.CheckHasComponentProperty(ATextControl, 'Text');
+  TControlTools.CheckHasProperty(ATextControl, TProperties.Text);
 
   FTextControl := ATextControl;
   FText := AText;
@@ -66,7 +66,7 @@ begin
     procedure
     begin
       FTextControl.Visible := true;
-      TComponentFunctions.SetTextProperty(FTextControl, FText);
+      TControlTools.SetTextProperty(FTextControl, FText);
     end);
 
   i := FTimeout div 100;
