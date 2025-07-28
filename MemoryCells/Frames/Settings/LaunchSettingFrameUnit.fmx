@@ -30,7 +30,7 @@ inherited LaunchSettingFrame: TLaunchSettingFrame
           Size.Height = 69.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
-          object RunAtStartupLabel: TLabel
+          object RunAppAtStartupLabel: TLabel
             Align = Top
             Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
@@ -44,7 +44,7 @@ inherited LaunchSettingFrame: TLaunchSettingFrame
             Text = 'Run at startup (OFF / ON)'
             TabOrder = 2
           end
-          object Switch: TSwitch
+          object RunAppAtStartupSwitch: TSwitch
             Align = Left
             IsChecked = False
             Margins.Left = 10.000000000000000000
@@ -52,11 +52,44 @@ inherited LaunchSettingFrame: TLaunchSettingFrame
             Margins.Bottom = 5.000000000000000000
             Position.X = 10.000000000000000000
             Position.Y = 32.000000000000000000
-            Size.Width = 147.000000000000000000
+            Size.Width = 80.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
-            OnClick = SwitchClick
+          end
+        end
+        object RightControlsLayout: TLayout
+          Align = Client
+          Size.Width = 244.000000000000000000
+          Size.Height = 69.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          object CollapsAppAtStartupLabel: TLabel
+            Align = Top
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 10.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 224.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Collaps appication at startup'
+            TabOrder = 0
+          end
+          object CollapsAppAtStartupSwitch: TSwitch
+            Align = Left
+            IsChecked = False
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 10.000000000000000000
+            Position.Y = 32.000000000000000000
+            Size.Width = 80.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
           end
         end
       end

@@ -1,14 +1,14 @@
 inherited BackupSettingFrame: TBackupSettingFrame
-  Size.Width = 559.000000000000000000
+  Size.Width = 830.000000000000000000
   Size.Height = 102.000000000000000000
   inherited Layout: TLayout
-    Size.Width = 559.000000000000000000
+    Size.Width = 830.000000000000000000
     Size.Height = 102.000000000000000000
     inherited Panel: TPanel
-      Size.Width = 559.000000000000000000
+      Size.Width = 830.000000000000000000
       Size.Height = 102.000000000000000000
       inherited CaptionLayout: TLayout
-        Size.Width = 559.000000000000000000
+        Size.Width = 830.000000000000000000
         Size.Height = 30.000000000000000000
         inherited CaptionLabel: TLabel
           Margins.Top = 5.000000000000000000
@@ -21,11 +21,11 @@ inherited BackupSettingFrame: TBackupSettingFrame
       end
       inherited ControlsLayout: TLayout
         Position.Y = 30.000000000000000000
-        Size.Width = 559.000000000000000000
+        Size.Width = 830.000000000000000000
         Size.Height = 68.000000000000000000
         object ControlsCaptionsLayout: TLayout
           Align = Top
-          Size.Width = 559.000000000000000000
+          Size.Width = 830.000000000000000000
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 2
@@ -36,7 +36,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Margins.Bottom = 5.000000000000000000
             Position.X = 10.000000000000000000
             Position.Y = 5.000000000000000000
-            Size.Width = 107.000000000000000000
+            Size.Width = 551.000000000000000000
             Size.Height = 20.000000000000000000
             Size.PlatformDefault = False
             Text = 'Path'
@@ -45,23 +45,36 @@ inherited BackupSettingFrame: TBackupSettingFrame
           object TimeLabel: TLabel
             Align = Left
             StyledSettings = [Family, Size, Style]
-            Margins.Left = 210.000000000000000000
+            Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
             Margins.Right = 5.000000000000000000
             Margins.Bottom = 5.000000000000000000
-            Position.X = 327.000000000000000000
+            Position.X = 701.000000000000000000
             Position.Y = 5.000000000000000000
-            Size.Width = 120.000000000000000000
+            Size.Width = 100.000000000000000000
             Size.Height = 20.000000000000000000
             Size.PlatformDefault = False
             Text = 'Time'
             TabOrder = 4
           end
+          object DateLabel: TLabel
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 571.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Date'
+            TabOrder = 5
+          end
         end
         object ControlsControlsLayout: TLayout
           Align = Top
           Position.Y = 30.000000000000000000
-          Size.Width = 559.000000000000000000
+          Size.Width = 830.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 3
@@ -73,18 +86,17 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Position.Y = 5.000000000000000000
             Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
-            Margins.Right = 10.000000000000000000
             Margins.Bottom = 5.000000000000000000
-            Size.Width = 209.000000000000000000
+            Size.Width = 461.000000000000000000
             Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
           end
           object SelectFolderButton: TButton
             Align = Left
+            Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
-            Margins.Right = 10.000000000000000000
             Margins.Bottom = 5.000000000000000000
-            Position.X = 229.000000000000000000
+            Position.X = 481.000000000000000000
             Position.Y = 5.000000000000000000
             Size.Width = 80.000000000000000000
             Size.Height = 30.000000000000000000
@@ -100,12 +112,25 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Margins.Top = 5.000000000000000000
             Margins.Right = 10.000000000000000000
             Margins.Bottom = 5.000000000000000000
-            Position.X = 329.000000000000000000
+            Position.X = 701.000000000000000000
             Position.Y = 5.000000000000000000
             Size.Width = 100.000000000000000000
             Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 5
+          end
+          object DateEdit: TDateEdit
+            Date = 45866.000000000000000000
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 571.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 6
           end
         end
       end

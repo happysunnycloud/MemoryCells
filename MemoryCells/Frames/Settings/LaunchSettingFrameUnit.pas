@@ -1,4 +1,4 @@
-unit LaunchSettingFrameUnit;
+﻿unit LaunchSettingFrameUnit;
 
 interface
 
@@ -8,15 +8,14 @@ uses
   BaseSettingUnit, FMX.Controls.Presentation, FMX.Layouts,
   CommonUnit;
 
-const
-  APP_NAME = 'MemoryCells';
-
 type
   TLaunchSettingFrame = class(TBaseSettingFrame)
-    Switch: TSwitch;
-    RunAtStartupLabel: TLabel;
+    RunAppAtStartupSwitch: TSwitch;
+    RunAppAtStartupLabel: TLabel;
     LeftControlsLayout: TLayout;
-    procedure SwitchClick(Sender: TObject);
+    RightControlsLayout: TLayout;
+    CollapsAppAtStartupLabel: TLabel;
+    CollapsAppAtStartupSwitch: TSwitch;
   private
     { Private declarations }
   public
@@ -33,10 +32,6 @@ implementation
 
 {$R *.fmx}
 
-uses
-    ToolsUnit
-  ;
-
 constructor TLaunchSettingFrame.Create(AOwner: TComponent);
 begin
   inherited;
@@ -45,26 +40,23 @@ begin
 end;
 
 procedure TLaunchSettingFrame.WriteValues(const AApplicationSettings: TApplicationSettings);
-var
-  NotifyEvent: TNotifyEvent;
 begin
-  NotifyEvent := Switch.OnClick;
-  Switch.OnClick := nil;
-  Switch.IsChecked := TRegistryTools.KeyExists(APP_NAME);
-  Switch.OnClick := NotifyEvent;
+  RunAppAtStartupSwitch.IsChecked :=
+    AApplicationSettings.RunAppAtStartup.ToBoolean;
+
+  CollapsAppAtStartupSwitch.IsChecked :=
+    AApplicationSettings.CollapseAppAtStartup.ToBoolean;
 end;
 
 procedure TLaunchSettingFrame.ReadValues(const AApplicationSettings: TApplicationSettings);
 begin
-  // void
-end;
+  AApplicationSettings.RunAppAtStartup := raFalse;
+  if RunAppAtStartupSwitch.IsChecked then
+    AApplicationSettings.RunAppAtStartup := raTrue;
 
-procedure TLaunchSettingFrame.SwitchClick(Sender: TObject);
-begin
-  if Switch.IsChecked then
-    TRegistryTools.AddAppAutoRun(APP_NAME, ParamStr(0))
-  else
-    TRegistryTools.DeleteAppAutoRun(APP_NAME);
+  AApplicationSettings.CollapseAppAtStartup := caFalse;
+  if CollapsAppAtStartupSwitch.IsChecked then
+    AApplicationSettings.CollapseAppAtStartup := caTrue
 end;
 
 end.

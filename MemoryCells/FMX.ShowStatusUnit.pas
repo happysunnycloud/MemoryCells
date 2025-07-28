@@ -35,6 +35,8 @@ type
       const ATextControl: TControl;
       const AText: String;
       const ATimeout: Word);
+
+    class procedure Stop;
   end;
 
 implementation
@@ -66,7 +68,7 @@ begin
     procedure
     begin
       FTextControl.Visible := true;
-      TControlTools.SetTextProperty(FTextControl, FText);
+      TControlTools.SetPropertyAsString(FTextControl, TProperties.Text, FText);
     end);
 
   i := FTimeout div 100;
@@ -109,6 +111,11 @@ begin
       ATextControl,
       AText,
       ATimeout);
+end;
+
+class procedure TShowStatus.Stop;
+begin
+  StopTimer;
 end;
 
 initialization

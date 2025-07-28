@@ -1,30 +1,30 @@
 object SettingsFrame: TSettingsFrame
-  Size.Width = 728.000000000000000000
+  Size.Width = 890.000000000000000000
   Size.Height = 541.000000000000000000
   Size.PlatformDefault = False
   object Panel: TPanel
     Align = Contents
-    Size.Width = 728.000000000000000000
+    Size.Width = 890.000000000000000000
     Size.Height = 541.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object BackgroundRectangle: TRectangle
       Align = Contents
-      Size.Width = 728.000000000000000000
+      Size.Width = 890.000000000000000000
       Size.Height = 541.000000000000000000
       Size.PlatformDefault = False
       Stroke.Kind = None
       Stroke.Thickness = 0.000000000000000000
       object Layout: TLayout
         Align = Contents
-        Size.Width = 728.000000000000000000
+        Size.Width = 890.000000000000000000
         Size.Height = 541.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object SearchPanel: TPanel
           Align = Top
           Margins.Bottom = 5.000000000000000000
-          Size.Width = 728.000000000000000000
+          Size.Width = 890.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
@@ -74,91 +74,24 @@ object SettingsFrame: TSettingsFrame
         end
         object ScrollBox: TScrollBox
           Align = Client
-          Size.Width = 728.000000000000000000
+          Size.Width = 890.000000000000000000
           Size.Height = 496.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
-          Viewport.Width = 728.000000000000000000
+          Viewport.Width = 890.000000000000000000
           Viewport.Height = 496.000000000000000000
-          inline BackupSettingFrame: TBackupSettingFrame
-            Align = Top
-            Size.Width = 728.000000000000000000
-            Size.Height = 103.000000000000000000
-            Size.PlatformDefault = False
-            inherited Layout: TLayout
-              Size.Width = 728.000000000000000000
-              Size.Height = 103.000000000000000000
-              inherited Panel: TPanel
-                Size.Width = 728.000000000000000000
-                Size.Height = 103.000000000000000000
-                inherited CaptionLayout: TLayout
-                  Size.Width = 728.000000000000000000
-                  inherited CaptionLabel: TLabel
-                    StyledSettings = [Family, Size]
-                  end
-                end
-                inherited ControlsLayout: TLayout
-                  Size.Width = 728.000000000000000000
-                  Size.Height = 74.000000000000000000
-                  inherited ControlsCaptionsLayout: TLayout
-                    Size.Width = 728.000000000000000000
-                    inherited PathLabel: TLabel
-                      StyledSettings = [Family, Size, Style]
-                    end
-                  end
-                  inherited ControlsControlsLayout: TLayout
-                    Size.Width = 728.000000000000000000
-                  end
-                end
-              end
-            end
-          end
-          inline LaunchSettingFrame: TLaunchSettingFrame
-            Align = Top
-            Position.Y = 103.000000000000000000
-            Size.Width = 728.000000000000000000
-            Size.Height = 88.000000000000000000
-            Size.PlatformDefault = False
-            inherited Layout: TLayout
-              Size.Width = 728.000000000000000000
-              Size.Height = 88.000000000000000000
-              inherited Panel: TPanel
-                Align = Top
-                Size.Width = 728.000000000000000000
-                inherited CaptionLayout: TLayout
-                  Size.Width = 728.000000000000000000
-                  inherited CaptionLabel: TLabel
-                    StyledSettings = [Family, Size]
-                  end
-                end
-                inherited ControlsLayout: TLayout
-                  Size.Width = 728.000000000000000000
-                  inherited LeftControlsLayout: TLayout
-                    Size.Width = 279.000000000000000000
-                    inherited RunAtStartupLabel: TLabel
-                      StyledSettings = [Family, Size, Style]
-                      Size.Width = 259.000000000000000000
-                    end
-                    inherited Switch: TSwitch
-                      Size.Width = 169.000000000000000000
-                    end
-                  end
-                end
-              end
-            end
-          end
         end
       end
       object ServiceControlsLayout: TLayout
         Align = Bottom
         Position.Y = 491.000000000000000000
-        Size.Width = 728.000000000000000000
+        Size.Width = 890.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
         object ServiceControlsPanel: TPanel
           Align = Contents
-          Size.Width = 728.000000000000000000
+          Size.Width = 890.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
@@ -175,16 +108,29 @@ object SettingsFrame: TSettingsFrame
             TabOrder = 0
           end
           object CancelButton: TButton
-            Align = Right
+            Align = Left
+            Margins.Left = 10.000000000000000000
             Margins.Top = 10.000000000000000000
             Margins.Right = 10.000000000000000000
-            Position.X = 688.000000000000000000
+            Position.X = 50.000000000000000000
             Position.Y = 10.000000000000000000
             Size.Width = 30.000000000000000000
             Size.Height = 40.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'CancelButtonstyle'
             TabOrder = 1
+          end
+          object StatusLabel: TLabel
+            Align = Right
+            StyledSettings = [Family, Size, Style]
+            Margins.Right = 10.000000000000000000
+            Position.X = 626.000000000000000000
+            Size.Width = 254.000000000000000000
+            Size.Height = 50.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.HorzAlign = Trailing
+            Text = 'StatusLabel'
+            TabOrder = 2
           end
         end
       end

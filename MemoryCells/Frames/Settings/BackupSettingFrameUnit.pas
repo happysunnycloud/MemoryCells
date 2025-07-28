@@ -1,4 +1,4 @@
-unit BackupSettingFrameUnit;
+п»їunit BackupSettingFrameUnit;
 
 interface
 
@@ -18,6 +18,8 @@ type
     TimeEdit: TTimeEdit;
     ControlsCaptionsLayout: TLayout;
     ControlsControlsLayout: TLayout;
+    DateLabel: TLabel;
+    DateEdit: TDateEdit;
     procedure SelectFolderButtonClick(Sender: TObject);
   private
     FLastBackupDateTime: TDateTime;
@@ -52,7 +54,7 @@ var
 begin
   inherited;
 
-  SelectDirectory('Выберите директорию', '', SelectedFolder);
+  SelectDirectory('Р’С‹Р±РµСЂРёС‚Рµ РґРёСЂРµРєС‚РѕСЂРёСЋ', '', SelectedFolder);
 
   PathEdit.Text := Trim(SelectedFolder);
 end;
@@ -61,18 +63,15 @@ procedure TBackupSettingFrame.WriteValues(const AApplicationSettings: TApplicati
 begin
   PathEdit.Text := AApplicationSettings.BackupsPath;
   FLastBackupDateTime := AApplicationSettings.LastBackupDateTime;
+  DateEdit.Date := FLastBackupDateTime;
   TimeEdit.Time := FLastBackupDateTime;
 end;
 
 procedure TBackupSettingFrame.ReadValues(const AApplicationSettings: TApplicationSettings);
-//var
-//  a: String;
 begin
   AApplicationSettings.BackupsPath := PathEdit.Text;
   TDateTimeTools.ChangeTime(FLastBackupDateTime, TimeEdit.Time);
   AApplicationSettings.LastBackupDateTime := FLastBackupDateTime;
-
-//  a := DateTimeToStr(AApplicationSettings.LastBackupDateTime);
 end;
 
 end.

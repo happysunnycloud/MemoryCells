@@ -36,6 +36,7 @@ const
   SQL_TEMPLATES_PATH = 'SQLTemplates\';
   SQL_TEMPLATES_DEBUG_PATH = '..\..\..\MemoryCellsCommon\SQLTemplates';
   KEY_HOOK_FILE_NAME = 'KeyHook.dll';
+  APP_NAME = 'MemoryCells';
 
 type
   TParamIdFuncRef = function(const AId: Int64): TDBAResultCode of object;
@@ -113,6 +114,8 @@ type
   TCurrentMode = (cmCommon, cmSearch);
   TSelectMode = (smFalse, smTrue);
   TOnlineMode = (omFalse, omTrue);
+  TRunAppAtStartup = (raFalse, raTrue);
+  TCollapseAppAtStartup = (caFalse, caTrue);
 
   TSelectModeHelper = record helper for TSelectMode
   public
@@ -120,6 +123,18 @@ type
   end;
 
   TOnlineModeHelper = record helper for TOnlineMode
+  public
+    function ToBoolean: Boolean;
+    procedure FromBoolean(const ABoolean: Boolean);
+  end;
+
+  TRunAppAtStartupHelper = record helper for TRunAppAtStartup
+  public
+    function ToBoolean: Boolean;
+    procedure FromBoolean(const ABoolean: Boolean);
+  end;
+
+  TCollapseAppAtStartupHelper = record helper for TCollapseAppAtStartup
   public
     function ToBoolean: Boolean;
     procedure FromBoolean(const ABoolean: Boolean);
@@ -161,6 +176,8 @@ type
     FCurrentCellId: Int64;
     FSelectedCellIdList: TCellIdList;
     FOnlineMode: TOnlineMode;
+    FRunAppAtStartup: TRunAppAtStartup;
+    FCollapseAppAtStartup: TCollapseAppAtStartup;
 
     procedure SetMainFormHeight(const AMainFormHeight: Integer);
     procedure SetMainFormWidth(const AMainFormWidth: Integer);
@@ -181,6 +198,14 @@ type
 
     procedure SetOnlineMode(const AOnlineMode: TOnlineMode);
     function  GeOnlineMode: TOnlineMode;
+
+    procedure SetCollapseAppAtStartup(
+      const ACollapseAppAtStartup: TCollapseAppAtStartup);
+    function GetCollapseAppAtStartup: TCollapseAppAtStartup;
+
+    procedure SetRunAppAtStartup(
+      const ARunAppAtStartup: TRunAppAtStartup);
+    function GetRunAppAtStartup: TRunAppAtStartup;
   public
     property MainFormHeight: Integer read FMainFormHeight write SetMainFormHeight;
     property MainFormWidth: Integer read FMainFormWidth write SetMainFormWidth;
@@ -206,6 +231,13 @@ type
 
     property OnlineMode: TOnlineMode read GeOnlineMode write SetOnlineMode;
 
+    property CollapseAppAtStartup: TCollapseAppAtStartup
+      read GetCollapseAppAtStartup
+      write SetCollapseAppAtStartup;
+    property RunAppAtStartup: TRunAppAtStartup
+      read GetRunAppAtStartup
+      write SetRunAppAtStartup;
+
     procedure SaveApplicationSettings;
     procedure LoadApplicationSettings;
 
@@ -230,6 +262,7 @@ uses
   , Xml.XMLIntf
   , FMX.StdCtrls
   , FMX.Styles
+  , ToolsUnit
   ;
 
 function TSelectModeHelper.ToBoolean: Boolean;
@@ -259,6 +292,42 @@ begin
   Self := omFalse;
   if ABoolean then
     Self := omTrue;
+end;
+
+function TRunAppAtStartupHelper.ToBoolean: Boolean;
+begin
+  Result := false;
+
+  if Self = raFalse then
+    Result := false
+  else
+  if Self = raTrue then
+    Result := true;
+end;
+
+procedure TRunAppAtStartupHelper.FromBoolean(const ABoolean: Boolean);
+begin
+  Self := raFalse;
+  if ABoolean then
+    Self := raTrue;
+end;
+
+function TCollapseAppAtStartupHelper.ToBoolean: Boolean;
+begin
+  Result := false;
+
+  if Self = caFalse then
+    Result := false
+  else
+  if Self = caTrue then
+    Result := true;
+end;
+
+procedure TCollapseAppAtStartupHelper.FromBoolean(const ABoolean: Boolean);
+begin
+  Self := caFalse;
+  if ABoolean then
+    Self := caTrue;
 end;
 
 { TEventRecordList. Begin }
@@ -636,6 +705,9 @@ begin
 
   Dest.FOnlineMode := omFalse;
 
+  Dest.FRunAppAtStartup := raTrue;
+  Dest.FCollapseAppAtStartup := caFalse;
+
   Dest.FBackupsPath := ExtractFilePath(ParamStr(0)) + DB_BACKUP_PATH;
 
   try
@@ -737,6 +809,15 @@ begin
   RootNode := XMLDoc.AddChild('Data');
   ApplicationSettingsNode := RootNode.AddChild('ApplicationSettings');
   ApplicationSettingsNode.SetAttribute('OnlineMode', FOnlineMode.ToBoolean);
+  // Сохраняем в реестре
+  if FRunAppAtStartup.ToBoolean then
+    TRegistryTools.AddAppAutoRun(APP_NAME, ParamStr(0))
+  else
+    TRegistryTools.DeleteAppAutoRun(APP_NAME);
+//    TRegistryTools.AutoRunKeyExists(APP_NAME);
+
+  ApplicationSettingsNode.SetAttribute(
+    'CollapseAppAtStartup', FCollapseAppAtStartup.ToBoolean);
 
   MainFormNode := ApplicationSettingsNode.AddChild('MainForm');
 
@@ -866,6 +947,7 @@ var
   CurrentValuesNode: IXMLNode;
 
   OnlineModeBoolean: Boolean;
+  CollapseAppAtStartupBoolean: Boolean;
 begin
   ApplicationSettingsFileName := ExtractFilePath(ParamStr(0)) + SETTINGS_FILE_NAME;
 
@@ -900,8 +982,15 @@ begin
     raise Exception.CreateFmt('ApplicationSettings node is nil in %s', [SETTINGS_FILE_NAME]);
   end;
 
+  // Читаем из реестра
+  FRunAppAtStartup.FromBoolean(TRegistryTools.AutoRunKeyExists(APP_NAME));
+
   OnlineModeBoolean := IfNullAttribute(ApplicationSettingsNode, 'OnlineMode', false);
   FOnlineMode.FromBoolean(OnlineModeBoolean);
+
+  CollapseAppAtStartupBoolean :=
+    IfNullAttribute(ApplicationSettingsNode, 'CollapseAppAtStartup', false);
+  FCollapseAppAtStartup.FromBoolean(CollapseAppAtStartupBoolean);
 
   MainFormNode := ApplicationSettingsNode.ChildNodes.FindNode('MainForm');
   if ApplicationSettingsNode = nil then
@@ -959,6 +1048,28 @@ end;
 function TApplicationSettings.GeOnlineMode: TOnlineMode;
 begin
   Result := FOnlineMode;
+end;
+
+procedure TApplicationSettings.SetRunAppAtStartup(
+  const ARunAppAtStartup: TRunAppAtStartup);
+begin
+  FRunAppAtStartup := ARunAppAtStartup;
+end;
+
+function TApplicationSettings.GetRunAppAtStartup: TRunAppAtStartup;
+begin
+  Result := FRunAppAtStartup;
+end;
+
+procedure TApplicationSettings.SetCollapseAppAtStartup(
+  const ACollapseAppAtStartup: TCollapseAppAtStartup);
+begin
+  FCollapseAppAtStartup := ACollapseAppAtStartup;
+end;
+
+function TApplicationSettings.GetCollapseAppAtStartup: TCollapseAppAtStartup;
+begin
+  Result := FCollapseAppAtStartup;
 end;
 
 { TApplicationSettings.End }

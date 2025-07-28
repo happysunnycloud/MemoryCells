@@ -228,6 +228,7 @@ type
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
     procedure CellReminderOnChangedHandler(Sender: TObject);
 
+    procedure SettingsFrameSaveButtonClickHandler(Sender: TObject);
     procedure SettingsFrameCancelButtonClickHandler(Sender: TObject);
 
     procedure ShowCellReminderFrame;
@@ -332,8 +333,12 @@ type
       FTimeout: Word;
   public
     class procedure Init(const ATextControl: TControl; const ATimeout: Word);
+    class procedure Uninit;
     class procedure ShowCellUpdated(const AParams: TParamsExt);
     class procedure ShowCellReminderUpdated;
+    class procedure ShowSettingsSaved;
+
+    class procedure Stop;
   end;
 
 //function KeyHook(Code: Integer; wParam: Word; lParam: Longint): Longint;
@@ -353,6 +358,11 @@ begin
   FTimeout := ATimeout;
 end;
 
+class procedure TShowStatusExt.Uninit;
+begin
+  TShowStatus.Stop;
+end;
+
 class procedure TShowStatusExt.ShowCellUpdated(const AParams: TParamsExt);
 begin
   TShowStatus.ShowStatus(FTextControl, 'Cell saved', FTimeout);
@@ -361,6 +371,16 @@ end;
 class procedure TShowStatusExt.ShowCellReminderUpdated;
 begin
   TShowStatus.ShowStatus(FTextControl, 'Cell reminder updated', FTimeout);
+end;
+
+class procedure TShowStatusExt.ShowSettingsSaved;
+begin
+  TShowStatus.ShowStatus(SettingsFrame.StatusLabel, 'Settings saved', FTimeout);
+end;
+
+class procedure TShowStatusExt.Stop;
+begin
+  TShowStatus.Stop;
 end;
 
 procedure TMainForm.DeleteCellButtonClick(Sender: TObject);
@@ -539,8 +559,17 @@ begin
     FCellReminderDateTimeFrame.Cell.Remind);
 end;
 
+procedure TMainForm.SettingsFrameSaveButtonClickHandler(Sender: TObject);
+begin
+  SettingsFrame.Save;
+
+  TShowStatusExt.ShowSettingsSaved;
+end;
+
 procedure TMainForm.SettingsFrameCancelButtonClickHandler(Sender: TObject);
 begin
+  TShowStatusExt.Stop;
+
   FreeAndNil(SettingsFrame);
 end;
 
@@ -1219,6 +1248,7 @@ begin
   SettingsFrame.Parent := Self.loScreen;
   SettingsFrame.Align := TAlignLayout.Contents;
   SettingsFrame.BringToFront;
+  SettingsFrame.SaveButton.OnClick := SettingsFrameSaveButtonClickHandler;
   SettingsFrame.CancelButton.OnClick := SettingsFrameCancelButtonClickHandler;
 end;
 
@@ -2621,7 +2651,15 @@ begin
     FTrayPopupMenu := TCraftPopupMenu.Create('>>', 1000);
     FTrayPopupMenu.MenuItems.AddItem('Close', 'Close', true, CloseApp);
     FTrayPopupMenu.BuildMenu;
-
+    //asd
+    if AppManager.Settings.CollapseAppAtStartup.ToBoolean then
+      TThread.ForceQueue(nil,
+        procedure
+        begin
+          Hide;
+          ShowWindow(ApplicationHwnd, SW_HIDE);
+        end);
+    //asd
     FEventsManager := TEventsManager.Create(Self);
 
     FCurrentFolderFrame := TCurrentFolderFrame.Create(Self);
@@ -2738,6 +2776,8 @@ end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
+  TShowStatusExt.Uninit;
+
   if Assigned(@HookSwitchProc) then
     HookSwitchProc(false);
   if KeyHookHandle > 0 then

@@ -28,13 +28,14 @@ type
     FindParameterLabel: TLabel;
     BackgroundRectangle: TRectangle;
     ServiceControlsPanel: TPanel;
+    StatusLabel: TLabel;
     procedure SearchButtonClick(Sender: TObject);
   private
     FTheme: TTheme;
 
-    FBackupPath: String;
-    FBackupTime: TTime;
-    FRunOnStartup: Boolean;
+//    FBackupPath: String;
+//    FBackupTime: TTime;
+//    FRunOnStartup: Boolean;
   public
     constructor Create(
       AOwner: TComponent;
@@ -43,9 +44,11 @@ type
 
     procedure FrameEnumerator(const ACallbackProc: TCallbackProc);
 
-    property BackupPath: String read FBackupPath write FBackupPath;
-    property BackupTime: TTime read FBackupTime write FBackupTime;
-    property RunOnStartup: Boolean read FRunOnStartup write FRunOnStartup;
+    procedure Save;
+
+//    property BackupPath: String read FBackupPath write FBackupPath;
+//    property BackupTime: TTime read FBackupTime write FBackupTime;
+//    property RunOnStartup: Boolean read FRunOnStartup write FRunOnStartup;
   end;
 
 var
@@ -56,7 +59,10 @@ implementation
 {$R *.fmx}
 
 uses
-  FMX.ControlToolsUnit;
+    ToolsUnit
+  , AppManagerUnit
+  , CommonUnit
+  , FMX.ControlToolsUnit;
 
 constructor TSettingsFrame.Create(
   AOwner: TComponent;
@@ -64,10 +70,15 @@ constructor TSettingsFrame.Create(
 begin
   inherited Create(AOwner);
 
+  StatusLabel.Text := '';
+  StatusLabel.Visible := false;
+
   FTheme := TTheme.Create;
 
   if Assigned(ATheme) then
     FTheme.CopyFrom(ATheme);
+
+  FTheme.CommonTextProps.Align := TAlignLayout.Left;
 
   FTheme.SaveStyleBookTo(Self.StyleBook);
 
@@ -76,28 +87,48 @@ begin
 
   BackupSettingFrame.CaptionLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
+  BackupSettingFrame.CaptionLabel.TextSettings.Font.Style :=
+    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
+    [TFontStyle.fsBold];
   BackupSettingFrame.PathLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
   BackupSettingFrame.TimeLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
-
-  BackupSettingFrame.CaptionLabel.TextSettings.Font.Style :=
-    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
-    [TFontStyle.fsBold];
+  BackupSettingFrame.DateLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+  BackupSettingFrame.PathEdit.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
 
   LaunchSettingFrame.CaptionLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
-  LaunchSettingFrame.RunAtStartupLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-
   LaunchSettingFrame.CaptionLabel.TextSettings.Font.Style :=
     BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
     [TFontStyle.fsBold];
 
+  LaunchSettingFrame.RunAppAtStartupLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+
+  LaunchSettingFrame.CollapsAppAtStartupLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+
   FindParameterLabel.TextSettings.FontColor :=
     FTheme.CommonTextProps.TextSettings.FontColor;
 
+  StatusLabel.TextSettings.FontColor :=
+    FTheme.CommonTextProps.TextSettings.FontColor;
+
   BackgroundRectangle.Fill.Color := FTheme.LightBackgroundColor;
+
+  // Убрать комменты, если хотим автозапуск запускать под правами админа
+  //  LaunchSettingFrame.RunAppAtStartupSwitch.Enabled :=
+  //    TPrivilegeTools.HasPrivilege('SeDebugPrivilege');
+
+  FrameEnumerator(
+    procedure (const ABaseSettingFrame: TBaseSettingFrame)
+    begin
+      ABaseSettingFrame.WriteValues(AppManager.Settings);
+    end
+  );
 end;
 
 destructor TSettingsFrame.Destroy;
@@ -122,6 +153,18 @@ begin
       ACallbackProc(BaseSettingFrame);
     end;
   end;
+end;
+
+procedure TSettingsFrame.Save;
+begin
+  FrameEnumerator(
+    procedure (const ABaseSettingFrame: TBaseSettingFrame)
+    begin
+      ABaseSettingFrame.ReadValues(AppManager.Settings);
+    end
+  );
+
+  AppManager.Settings.SaveApplicationSettings;
 end;
 
 procedure TSettingsFrame.SearchButtonClick(Sender: TObject);
@@ -159,9 +202,7 @@ begin
           procedure (const AControl: TControl)
           var
             _Control: TControl absolute AControl;
-            a: String;
           begin
-            a := _Control.Name;
             if not TControlTools.HasProperty(_Control, TProperties.Text)
             then
               Exit;
