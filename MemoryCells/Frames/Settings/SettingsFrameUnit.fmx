@@ -80,6 +80,61 @@ object SettingsFrame: TSettingsFrame
           TabOrder = 1
           Viewport.Width = 890.000000000000000000
           Viewport.Height = 496.000000000000000000
+          inline BackupSettingEmbeddedFrame: TBackupSettingFrame
+            Align = Top
+            Size.Width = 890.000000000000000000
+            Size.Height = 102.000000000000000000
+            Size.PlatformDefault = False
+            inherited Layout: TLayout
+              Size.Width = 890.000000000000000000
+              inherited Panel: TPanel
+                Size.Width = 890.000000000000000000
+                inherited CaptionLayout: TLayout
+                  Size.Width = 890.000000000000000000
+                end
+                inherited ControlsLayout: TLayout
+                  Size.Width = 890.000000000000000000
+                  inherited ControlsCaptionsLayout: TLayout
+                    Size.Width = 890.000000000000000000
+                  end
+                  inherited ControlsControlsLayout: TLayout
+                    Size.Width = 890.000000000000000000
+                  end
+                end
+              end
+            end
+          end
+          inline LaunchSettingEmbeddedFrame: TLaunchSettingFrame
+            Align = Top
+            Position.Y = 102.000000000000000000
+            Size.Width = 890.000000000000000000
+            Size.Height = 100.000000000000000000
+            Size.PlatformDefault = False
+            inherited Layout: TLayout
+              Size.Width = 890.000000000000000000
+              inherited Panel: TPanel
+                Size.Width = 890.000000000000000000
+                inherited CaptionLayout: TLayout
+                  Size.Width = 890.000000000000000000
+                end
+                inherited ControlsLayout: TLayout
+                  Size.Width = 890.000000000000000000
+                  inherited LeftControlsLayout: TLayout
+                    Size.Width = 400.000000000000000000
+                    inherited RunAppAtStartupLabel: TLabel
+                      Size.Width = 380.000000000000000000
+                    end
+                  end
+                  inherited RightControlsLayout: TLayout
+                    Size.Width = 490.000000000000000000
+                    inherited CollapsAppAtStartupLabel: TLabel
+                      Size.Width = 470.000000000000000000
+                    end
+                  end
+                end
+              end
+            end
+          end
         end
       end
       object ServiceControlsLayout: TLayout

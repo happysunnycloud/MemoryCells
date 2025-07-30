@@ -6,8 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, BaseSettingUnit,
-  BackupSettingFrameUnit, LaunchSettingFrameUnit, FMX.Edit, FMX.Objects
-  , FMX.ThemeUnit;
+  FMX.Edit, FMX.Objects
+  , FMX.ThemeUnit, BackupSettingFrameUnit, LaunchSettingFrameUnit;
 
 type
   TCallbackProc = reference to procedure (const ABaseSettingFrame: TBaseSettingFrame);
@@ -16,8 +16,6 @@ type
     Layout: TLayout;
     SearchPanel: TPanel;
     ScrollBox: TScrollBox;
-    BackupSettingFrame: TBackupSettingFrame;
-    LaunchSettingFrame: TLaunchSettingFrame;
     SearchButton: TButton;
     SearchEdit: TEdit;
     ServiceControlsLayout: TLayout;
@@ -29,6 +27,8 @@ type
     BackgroundRectangle: TRectangle;
     ServiceControlsPanel: TPanel;
     StatusLabel: TLabel;
+    BackupSettingEmbeddedFrame: TBackupSettingFrame;
+    LaunchSettingEmbeddedFrame: TLaunchSettingFrame;
     procedure SearchButtonClick(Sender: TObject);
   private
     FTheme: TTheme;
@@ -67,6 +67,10 @@ uses
 constructor TSettingsFrame.Create(
   AOwner: TComponent;
   const ATheme: TTheme = nil);
+var
+  TextSettingsFontColorControlsArray: TArray<TControl>;
+  _Control: TControl;
+  _TextSettings: TTextSettings;
 begin
   inherited Create(AOwner);
 
@@ -82,40 +86,53 @@ begin
 
   FTheme.SaveStyleBookTo(Self.StyleBook);
 
-  SearchEdit.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
+  TControlTools.ControlEnumerator(ScrollBox,
+    procedure (const AControl: TControl)
+    begin
+      if TControlTools.HasProperty(AControl, TProperties.TextSettings) then
+      begin
+        TControlTools.SetPropertyAsSet(
+          AControl,
+          TProperties.StyledSettings,
+          '[Family, Size, Style]'
+          );
+      end;
+    end);
 
-  BackupSettingFrame.CaptionLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  BackupSettingFrame.CaptionLabel.TextSettings.Font.Style :=
-    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
+  TextSettingsFontColorControlsArray :=
+    [ SearchEdit,
+      FindParameterLabel,
+      StatusLabel,
+
+      BackupSettingEmbeddedFrame.CaptionLabel,
+      BackupSettingEmbeddedFrame.PathLabel,
+      BackupSettingEmbeddedFrame.PathEdit,
+      BackupSettingEmbeddedFrame.DateLabel,
+      BackupSettingEmbeddedFrame.DateEdit,
+      BackupSettingEmbeddedFrame.TimeLabel,
+      BackupSettingEmbeddedFrame.TimeEdit,
+      BackupSettingEmbeddedFrame.SelectFolderButton,
+
+      LaunchSettingEmbeddedFrame.CaptionLabel,
+      LaunchSettingEmbeddedFrame.RunAppAtStartupLabel,
+      LaunchSettingEmbeddedFrame.CollapsAppAtStartupLabel
+    ];
+
+  for _Control in TextSettingsFontColorControlsArray do
+  begin
+    _TextSettings := TTextSettings(
+      TControlTools.GetPropertyAsObject(_Control, TProperties.TextSettings));
+
+    _TextSettings.FontColor := FTheme.CommonTextProps.TextSettings.FontColor;
+  end;
+
+  BackupSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style :=
+    BackupSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style +
     [TFontStyle.fsBold];
-  BackupSettingFrame.PathLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  BackupSettingFrame.TimeLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  BackupSettingFrame.DateLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  BackupSettingFrame.PathEdit.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
 
-  LaunchSettingFrame.CaptionLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  LaunchSettingFrame.CaptionLabel.TextSettings.Font.Style :=
-    BackupSettingFrame.CaptionLabel.TextSettings.Font.Style +
+  LaunchSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style :=
+    LaunchSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style +
     [TFontStyle.fsBold];
-
-  LaunchSettingFrame.RunAppAtStartupLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-
-  LaunchSettingFrame.CollapsAppAtStartupLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-
-  FindParameterLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-
-  StatusLabel.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
 
   BackgroundRectangle.Fill.Color := FTheme.LightBackgroundColor;
 

@@ -296,7 +296,8 @@ implementation
 uses
     System.Generics.Collections
   , System.Generics.Defaults
-  , ToolsUnit
+//  , ToolsUnit
+  , FMX.ControlToolsUnit
   , FileToolsUnit
   , AppManagerUnit
   , LoadCatalogThreadUnit
@@ -318,7 +319,6 @@ uses
   , FMX.Platform.Win
   , VCL.Graphics
   , Winapi.Messages
-  , FMX.ControlToolsUnit
   , AddLogUnit
   , CellReminderFormUnit
   , FMX.ThemeUnit
@@ -640,7 +640,7 @@ begin
     ShowFoldersLayout(false);
     FolderNameLayout.Visible := false;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       HideFoldersButton,
       SearchButton,
       HomeButton,
@@ -658,7 +658,7 @@ begin
     ShowFoldersLayout(true);
     FolderNameLayout.Visible := true;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       HideFoldersButton,
       SearchButton,
       HomeButton,
@@ -675,7 +675,7 @@ procedure TMainForm.GotoFolder(
   const AFolderId: Int64;
   const ACellId: Int64);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -699,7 +699,7 @@ procedure TMainForm.GotoFolder(
   const ACellRemind: Boolean;
   const AOpenCellReminderPanel: Boolean);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -735,7 +735,7 @@ end;
 
 procedure TMainForm.GotoCell(const ACell: TCell);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     UpdateCellButton,
     CellRemindButton
   ], false);
@@ -827,7 +827,7 @@ end;
 
 procedure TMainForm.InsertCellButtonClick(Sender: TObject);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     DeleteCellButton,
     InsertCellButton,
     UpdateCellButton,
@@ -904,7 +904,7 @@ var
   FolderId: Int64;
   FolderName: String;
 begin
-  Frame := TFMXControlTools.FindParentFrame(TControl(Sender));
+  Frame := TControlTools.FindParentFrame(TControl(Sender));
   EditFolderNameFrame := TEditFolderNameFrame(Frame);
 
   FolderId := EditFolderNameFrame.Params.AsInt64[0];
@@ -923,7 +923,7 @@ procedure TMainForm.EditFolderNameCancelHandler(Sender: TObject);
 begin
   FreeAndNil(EditFolderNameFrame);
 
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -941,7 +941,7 @@ var
   FolderId: Int64;
   FolderName: String;
 begin
-  Frame := TFMXControlTools.FindParentFrame(TControl(Sender));
+  Frame := TControlTools.FindParentFrame(TControl(Sender));
   EditFolderNameFrame := TEditFolderNameFrame(Frame);
 
   FolderName := EditFolderNameFrame.FolderNameEdit.Text;
@@ -985,7 +985,7 @@ end;
 
 procedure TMainForm.SearchButtonClick(Sender: TObject);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -1024,7 +1024,7 @@ var
 begin
   if CellMemoFrame.CellMemoTextIsChanged then
   begin
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       UpdateCellButton
     ], true);
 
@@ -1074,7 +1074,7 @@ begin
   end
   else
   begin
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       UpdateCellButton
     ], false);
 
@@ -1240,7 +1240,6 @@ end;
 
 procedure TMainForm.SettingsButtonClick(Sender: TObject);
 begin
-  //test repo
   if Assigned(SettingsFrame) then
     Exit;
 
@@ -1271,7 +1270,7 @@ begin
 
   FreeAndNil(SearchTextFrame);
 
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -1334,7 +1333,7 @@ var
   Cell: TCell;
   CellId: Int64;
 begin
-  Frame := TFMXControlTools.FindParentFrame(TControl(Sender));
+  Frame := TControlTools.FindParentFrame(TControl(Sender));
   Cell := TCellUnitFrame(Frame).Cell;
   CellId := Cell.Id;
 
@@ -1507,14 +1506,14 @@ begin
       FreeAndNil(CellList);
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       UpdateCellButton,
       DeleteCellButton,
       CellRemindButton
     ], false);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton,
@@ -1643,14 +1642,14 @@ begin
       FreeAndNil(CellList);
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       UpdateCellButton,
       DeleteCellButton,
       CellRemindButton
     ], false);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton,
@@ -1682,7 +1681,7 @@ procedure TMainForm.InsertFolderButtonClick(Sender: TObject);
 var
   Cell: TCell;
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -1777,7 +1776,7 @@ begin
     //    SilentTextInsertIntoCellMemo(CellMemoFrame.Cell.Content);
     THelpmate.SetMemoCellDefaultSettings(CellMemo);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       DeleteCellButton,
       CellRemindButton
@@ -1892,7 +1891,7 @@ procedure TMainForm.RenameFolderButtonClick(Sender: TObject);
 var
   Cell: TCell;
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -1935,7 +1934,7 @@ begin
     CellMemoFrame.CellUnitFrame.Cell.Desc := CellMemoFrame.Cell.Desc;
     CellMemo.SetFocus;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       DeleteFolderButton,
       CellMemo,
       CellRemindButton,
@@ -2041,7 +2040,7 @@ begin
 
     THelpmate.SetMemoCellDefaultSettings(CellMemo);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       InsertCellButton,
       UpdateCellButton,
@@ -2099,7 +2098,7 @@ begin
       end;
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertCellButton,
       SearchButton,
       HomeButton
@@ -2144,7 +2143,7 @@ begin
       CurrentFolderFrame.FolderNameText.Text := FolderPath;
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton
@@ -2193,7 +2192,7 @@ begin
       FreeAndNil(Cell);
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton
@@ -2227,7 +2226,7 @@ begin
       raise Exception.Create('The folder is not empty');
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton,
@@ -2286,14 +2285,14 @@ begin
       FreeAndNil(FolderList);
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       UpdateCellButton,
       DeleteCellButton,
       CellRemindButton
     ], false);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton
@@ -2356,14 +2355,14 @@ begin
       FreeAndNil(CellList);
     end;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       UpdateCellButton,
       DeleteCellButton,
       CellRemindButton
     ], false);
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       InsertFolderButton,
       RenameFolderButton,
       DeleteFolderButton
@@ -2488,7 +2487,7 @@ begin
   AppManager.Settings.SaveApplicationSettings;
   RunBackupStarter;
 
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     DeleteCellButton,
     InsertCellButton,
     UpdateCellButton,
@@ -2503,7 +2502,7 @@ procedure TMainForm.StartBackup(const AParams: TParamsExt);
 var
   DBFullName: String;
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     DeleteCellButton,
     InsertCellButton,
     UpdateCellButton,
@@ -2543,7 +2542,7 @@ begin
   begin
     FEventsManager.StoreEvents;
 
-    TFMXControlTools.EnableControls([
+    TControlTools.EnableControls([
       CellMemo,
       InsertCellButton,
       UpdateCellButton,
@@ -2562,7 +2561,7 @@ var
   FolderId: Int64;
   ParentFolderId: Int64;
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
     DeleteFolderButton,
@@ -2586,7 +2585,7 @@ end;
 
 procedure TMainForm.UpdateCellButtonClick(Sender: TObject);
 begin
-  TFMXControlTools.EnableControls([
+  TControlTools.EnableControls([
     InsertCellButton,
     UpdateCellButton,
     DeleteCellButton,

@@ -25,8 +25,8 @@ type
     procedure ReadValues(const AApplicationSettings: TApplicationSettings); override;
   end;
 
-var
-  LaunchSettingFrame: TLaunchSettingFrame;
+//var
+//  LaunchSettingFrame: TLaunchSettingFrame;
 
 implementation
 

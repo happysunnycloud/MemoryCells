@@ -30,8 +30,8 @@ type
     procedure ReadValues(const AApplicationSettings: TApplicationSettings); override;
   end;
 
-var
-  BackupSettingFrame: TBackupSettingFrame;
+//var
+//  BackupSettingFrame: TBackupSettingFrame;
 
 implementation
 
