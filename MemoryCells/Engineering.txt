@@ -1,6 +1,0 @@
-﻿Потоки будем регистрировать в глобальном классе 
-ThreadRegistry = class
-private strict
-  FThreadList: TThreadList;
-function 
-  procedure RegisterThread(): Boolean;
