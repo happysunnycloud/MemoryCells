@@ -2607,10 +2607,14 @@ var
   DBDirName: String;
   DBBackupDirName: String;
   SQLTemplatesDirName: String;
+  CurrentDir: String;
 begin
   ReportMemoryLeaksOnShutdown := true;
 
   try
+    CurrentDir := ExtractFilePath(ParamStr(0));
+    SetCurrentDir(CurrentDir);
+
     TLogger.Init('AppLog', 1000, true, true);
     TLogger.AddLog('Start app', MG);
 
