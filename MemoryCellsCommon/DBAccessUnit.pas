@@ -3,11 +3,11 @@
 interface
 
 uses
-    CellUnit
+    System.SyncObjs
+  , CellUnit
   , DBToolsUnit
   , SQLTemplatesUnit
   , MCParamsUnit
-//  , CommonUnit
   ;
 
 const
@@ -27,6 +27,7 @@ type
 
   TDBAccess = class
   strict private
+    class var FCriticalSection: TCriticalSection;
     class var FDBFileName: String;
 
     class var FSQLTemplates: TSQLTemplates;
@@ -82,6 +83,7 @@ uses
   , FireDAC.Stan.Error
   , FireDAC.Phys.SQLiteWrapper
   , ExceptionContainerUnit
+  , AddLogUnit
   ;
 
 
@@ -148,71 +150,79 @@ var
   TimeOutCount: Byte;
   MessageString: String;
 begin
-  Result := rcFault;
-
-  InParams := TParamsExt.Create;
-  OutParams := TParamsExt.Create;
   try
-    InParams.CopyFrom(AInParams);
+    FCriticalSection.Enter;
 
-    TimeOutCount := TIME_OUT_SECONDS;
+    Result := rcFault;
 
-    DoExit := false;
-    while not DoExit do
-    begin
-      try
-        Result := ParamsFuncRef(InParams, OutParams);
+    InParams := TParamsExt.Create;
+    OutParams := TParamsExt.Create;
+    try
+      InParams.CopyFrom(AInParams);
 
-        if Assigned(AOutParams) then
-        begin
-          AOutParams.Clear;
-          AOutParams.CopyFrom(OutParams);
-        end;
+      TimeOutCount := TIME_OUT_SECONDS;
 
-        DoExit := true;
-      except
-        on e: TExceptionContainer do
-        begin
-          MessageString :=
-            Concat(METHOD, ': ', e._MethodName, ': ', e.ExceptionClass.ClassName, ': ', e._Message);
-          if e.ExceptionClass = ESQLiteNativeException then
+      DoExit := false;
+      while not DoExit do
+      begin
+        try
+          Result := ParamsFuncRef(InParams, OutParams);
+
+          if Assigned(AOutParams) then
           begin
-            FDCommandExceptionKind := e.Kind;
-            MessageString := Concat(MessageString, ': ', FDCommandExceptionKind.ToString);
-            if FDCommandExceptionKind = ekRecordLocked then
-            begin
-              Dec(TimeOutCount);
-
-              if TimeOutCount = 0 then
-              begin
-                raise Exception.Create(MessageString);
-              end;
-
-              Sleep(1000);
-            end;
+            AOutParams.Clear;
+            AOutParams.CopyFrom(OutParams);
           end;
-          raise Exception.Create(MessageString);
-        end;
-        on e: Exception do
-        begin
-          MessageString := Concat(METHOD, ': ', e.ClassName, ': ', e.Message);
-          raise Exception.Create(MessageString);
-        end
-        else
-        begin
-          MessageString := Concat(METHOD, ': ', 'Unknown exception');
-          raise Exception.Create(MessageString);
+
+          DoExit := true;
+        except
+          on e: TExceptionContainer do
+          begin
+            MessageString :=
+              Concat(METHOD, ': ', e._MethodName, ': ', e.ExceptionClass.ClassName, ': ', e._Message);
+            if e.ExceptionClass = ESQLiteNativeException then
+            begin
+              FDCommandExceptionKind := e.Kind;
+              MessageString := Concat(MessageString, ': ', FDCommandExceptionKind.ToString);
+              if FDCommandExceptionKind = ekRecordLocked then
+              begin
+                Dec(TimeOutCount);
+
+                if TimeOutCount = 0 then
+                begin
+                  raise Exception.Create(MessageString);
+                end;
+
+                Sleep(1000);
+              end;
+            end;
+            raise Exception.Create(MessageString);
+          end;
+          on e: Exception do
+          begin
+            MessageString := Concat(METHOD, ': ', e.ClassName, ': ', e.Message);
+            raise Exception.Create(MessageString);
+          end
+          else
+          begin
+            MessageString := Concat(METHOD, ': ', 'Unknown exception');
+            raise Exception.Create(MessageString);
+          end;
         end;
       end;
+    finally
+      FreeAndNil(InParams);
+      FreeAndNil(OutParams);
     end;
   finally
-    FreeAndNil(InParams);
-    FreeAndNil(OutParams);
+    FCriticalSection.Leave;
   end;
 end;
 
 class procedure TDBAccess.Init(const ADBFileName: String; const ATemplatesDir: String);
 begin
+  FCriticalSection := TCriticalSection.Create;
+
   FDBFileName := ADBFileName;
 
   FSQLTemplates := TSQLTemplates.Create(ATemplatesDir);
@@ -220,6 +230,7 @@ end;
 
 class procedure TDBAccess.UnInit;
 begin
+  FreeAndNil(FCriticalSection);
   FreeAndNil(FSQLTemplates);
 end;
 
@@ -232,6 +243,7 @@ var
   SQLTemplate: String;
   BackupFileName: String;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'backup';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -267,6 +279,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.LoadCatalog(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -283,6 +296,7 @@ var
   FolderId: Int64;
   Id: Int64;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_catalog';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -349,6 +363,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.LoadDestinationCatalog(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -365,6 +380,7 @@ var
   FolderId: Int64;
   Id: Int64;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_destination_catalog';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -428,6 +444,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.LoadCell(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -449,6 +466,7 @@ var
   CellRemindDateTime: TDateTime;
   CellRemind: Boolean;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_cell';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -533,6 +551,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.LoadCellReminder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -554,6 +573,7 @@ var
   CellRemindDateTime: TDateTime;
   CellRemind: Boolean;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_cell_reminder';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -635,6 +655,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.UpdateCell(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -651,6 +672,7 @@ var
   CellRemindDateTime: TDateTime;
   CellRemind: Boolean;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'update_cell';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -682,12 +704,12 @@ begin
         TSQLiteHelpmate.DateTimeToStr(CellRemindDateTime));
       DBTools.Query.AddParameterAsBoolean(':remind', CellRemind);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
         raise;
       end;
     finally
@@ -702,6 +724,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.InsertCell(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -718,6 +741,7 @@ var
   CellId: Int64;
   CellTypeId: Integer;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'insert_cell';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -740,7 +764,7 @@ begin
         DBTools.Query.AddQuery(SQLTemplate);
         DBTools.Query.AddParameterAsLargeInt(':folder_id', FolderId);
 
-        DBTools.FDConnection.StartTransaction;
+        DBTools.StartTransaction;
         DBTools.ExecuteQuery;
 
         DBTools.Query.ClearQuery;
@@ -766,9 +790,9 @@ begin
         if ReturnedRecordsCount > 1 then
           raise Exception.Create('More than one record returned');
 
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -799,6 +823,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.DeleteCell(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -810,6 +835,7 @@ var
   SQLTemplateIdent: String;
   SQLTemplate: String;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'delete_cell';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -832,12 +858,12 @@ begin
 
       DBTools.Query.AddParameterAsLargeInt(':id', CellId);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -853,6 +879,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.UpdateFolder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -869,6 +896,7 @@ var
   FolderId: Int64;
   FolderName: String;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'update_folder';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -898,12 +926,12 @@ begin
       DBTools.Query.AddParameterAsLargeInt(':id', FolderId);
       DBTools.Query.AddParameterAsString(':name', FolderName);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -950,6 +978,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.InsertFolder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -967,6 +996,7 @@ var
   FolderId: Int64;
   CellTypeId: Integer;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'insert_folder';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -990,7 +1020,7 @@ begin
       DBTools.Query.AddParameterAsLargeInt(':folder_id', ParentFolderId);
       DBTools.Query.AddParameterAsString(':name', FolderName);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
 
@@ -1017,9 +1047,9 @@ begin
         if ReturnedRecordsCount > 1 then
           raise Exception.Create('More than one record returned');
 
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -1051,6 +1081,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.DeleteFolder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1066,6 +1097,7 @@ var
   QueryResult: TDBQuery;
   FolderContentsCount: Word;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_folder_contents_count';
     SQLGetFolderContentsCountTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1121,12 +1153,12 @@ begin
 
       DBTools.Query.AddParameterAsLargeInt(':id', FolderId);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -1142,6 +1174,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.Search(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1159,6 +1192,7 @@ var
   Folder: TCell;
   SearchText: String;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'search';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1222,6 +1256,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.CellsByIdList(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1237,6 +1272,7 @@ var
   QueryResult: TDBQuery;
   CellIdListString: String;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'get_cells_by_id_list';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1294,6 +1330,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.UpdateCellAttributes(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1307,6 +1344,7 @@ var
   CellId: Int64;
   CellIsDone: Boolean;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'update_cell_attributes';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1331,12 +1369,12 @@ begin
       DBTools.Query.AddParameterAsLargeInt(':id', CellId);
       DBTools.Query.AddParameterAsBoolean(':is_done', CellIsDone);
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -1352,6 +1390,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.UpdateCellDestinationFolder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1366,6 +1405,7 @@ var
   CellId: Int64;
   FolderId: Int64;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'update_cell_destination_folder';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1386,7 +1426,7 @@ begin
       try
         DBTools.CreateQuery;
 
-        DBTools.FDConnection.StartTransaction;
+        DBTools.StartTransaction;
         try
           for CellId in IdList do
           begin
@@ -1398,9 +1438,9 @@ begin
 
             DBTools.ExecuteQuery;
           end;
-          DBTools.FDConnection.Commit;
+          DBTools.Commit;
         except
-          DBTools.FDConnection.Rollback;
+          DBTools.Rollback;
 
           raise;
         end;
@@ -1419,6 +1459,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.InsertDestinationCell(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1433,6 +1474,7 @@ var
   CellId: Int64;
   FolderId: Int64;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'insert_destination_cell';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1453,7 +1495,7 @@ begin
       try
         DBTools.CreateQuery;
 
-        DBTools.FDConnection.StartTransaction;
+        DBTools.StartTransaction;
         try
           for CellId in IdList do
           begin
@@ -1465,9 +1507,9 @@ begin
 
             DBTools.ExecuteQuery;
           end;
-          DBTools.FDConnection.Commit;
+          DBTools.Commit;
         except
-          DBTools.FDConnection.Rollback;
+          DBTools.Rollback;
 
           raise;
         end;
@@ -1486,6 +1528,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.UpdateCellReminder(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -1499,6 +1542,7 @@ var
   CellId: Int64;
   CellRemidDateTime: TDateTime;
 begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
   try
     SQLTemplateIdent := 'update_cell_reminder';
     SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
@@ -1524,12 +1568,12 @@ begin
       DBTools.Query.AddParameterAsString(':remind_datetime',
         TSQLiteHelpmate.DateTimeToStr(CellRemidDateTime));
 
-      DBTools.FDConnection.StartTransaction;
+      DBTools.StartTransaction;
       try
         DBTools.ExecuteQuery;
-        DBTools.FDConnection.Commit;
+        DBTools.Commit;
       except
-        DBTools.FDConnection.Rollback;
+        DBTools.Rollback;
 
         raise;
       end;
@@ -1545,6 +1589,7 @@ begin
   end;
 
   Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 end.
