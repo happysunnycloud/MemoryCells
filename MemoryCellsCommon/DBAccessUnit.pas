@@ -686,11 +686,11 @@ begin
     end;
 
     try
-      CellId := AInParams.AsInt64[0];
-      CellContent := AInParams.AsString[1];
-      CellDesc := AInParams.AsString[2];
-      CellRemindDateTime := AInParams.AsDateTime[3];
-      CellRemind := AInParams.AsBoolean[4];
+      CellId := AInParams.AsInt64ByIdent['CellId'];
+      CellContent := AInParams.AsStringByIdent['Content'];
+      CellDesc := AInParams.AsStringByIdent['Desc'];
+      CellRemindDateTime := AInParams.AsDateTimeByIdent['RemindDateTime'];
+      CellRemind := AInParams.AsBooleanByIdent['Remind'];
 
       DBTools.CreateQuery;
 

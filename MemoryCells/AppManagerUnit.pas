@@ -281,10 +281,10 @@ begin
   ParamsObj := TParamsExt.Create;
   try
     ParamsObj.Add(ACell.Id, 'CellId');
-    ParamsObj.Add(ACell.Content);
-    ParamsObj.Add(ACell.Desc);
-    ParamsObj.Add(ACell.RemindDateTime);
-    ParamsObj.Add(ACell.Remind);
+    ParamsObj.Add(ACell.Content, 'Content');
+    ParamsObj.Add(ACell.Desc, 'Desc');
+    ParamsObj.Add(ACell.RemindDateTime, 'RemindDateTime');
+    ParamsObj.Add(ACell.Remind, 'Remind');
     // Обновление (Update) ячейки идет через событие TCell.OnContentChanged
     Result := TUpdateCellThread.Create(AForm, ParamsObj, AProcRef);
   finally
