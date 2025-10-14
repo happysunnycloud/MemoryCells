@@ -150,9 +150,8 @@ var
   TimeOutCount: Byte;
   MessageString: String;
 begin
+  FCriticalSection.Enter;
   try
-    FCriticalSection.Enter;
-
     Result := rcFault;
 
     InParams := TParamsExt.Create;

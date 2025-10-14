@@ -98,6 +98,12 @@ type
     class procedure IfDirNotExists(const ADirName: String; const AProc: TProc);
     class procedure IfFileNotExists(const AFileName: String; const AProc: TProc);
 
+    class procedure ShowFormIfHidden(const AForm: TForm);
+    class procedure HideFormIfShowing(const AForm: TForm);
+
+    class procedure ShowAppIfHidden;
+    class procedure HideAppIfShowing;
+
 //    class procedure StyleAssign(
 //      const AStyleTo: TStyleBook;
 //      const AStyleFrom: TStyleBook);
@@ -571,6 +577,53 @@ begin
   if not FileExists(AFileName) then
     AProc;
 end;
+
+class procedure THelpmate.ShowFormIfHidden(const AForm: TForm);
+var
+  VisibleState: Boolean;
+begin
+  VisibleState := IsWindowVisible(ApplicationHwnd);
+  if not VisibleState then
+  begin
+    AForm.Show;
+    ShowWindow(ApplicationHwnd, SW_SHOW);
+  end;
+end;
+
+class procedure THelpmate.HideFormIfShowing(const AForm: TForm);
+var
+  VisibleState: Boolean;
+begin
+  VisibleState := IsWindowVisible(ApplicationHwnd);
+  if not VisibleState then
+  begin
+    AForm.Hide;
+    ShowWindow(ApplicationHwnd, SW_HIDE);
+  end;
+end;
+
+class procedure THelpmate.ShowAppIfHidden;
+var
+  VisibleState: Boolean;
+begin
+  VisibleState := IsWindowVisible(ApplicationHwnd);
+  if not VisibleState then
+  begin
+    ShowWindow(ApplicationHwnd, SW_SHOW);
+  end;
+end;
+
+class procedure THelpmate.HideAppIfShowing;
+var
+  VisibleState: Boolean;
+begin
+  VisibleState := IsWindowVisible(ApplicationHwnd);
+  if not VisibleState then
+  begin
+    ShowWindow(ApplicationHwnd, SW_HIDE);
+  end;
+end;
+
 
 //class procedure THelpmate.StyleAssign(
 //  const AStyleTo: TStyleBook;

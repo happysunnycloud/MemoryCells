@@ -9,7 +9,6 @@ uses
   FMX.Forms,
   MemoryCellsUnit in 'MemoryCellsUnit.pas' {MainForm},
   ToolsUnit in '..\..\DevelopmentsCollection\ToolsUnit.pas',
-  DBToolsUnit in '..\..\DevelopmentsCollection\DBToolsUnit.pas',
   BaseThreadUnit in 'Threads\BaseThreadUnit.pas',
   CloseFormThreadUnit in 'Threads\CloseFormThreadUnit.pas',
   DeleteFolderThreadUnit in 'Threads\DeleteFolderThreadUnit.pas',
@@ -80,7 +79,8 @@ uses
   MCParamsUnit in '..\MemoryCellsCommon\MCParamsUnit.pas',
   ParamsExtUnit in '..\..\DevelopmentsCollection\ParamsExtUnit.pas',
   FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
-  DateTimeToolsUnit in '..\..\DevelopmentsCollection\DateTimeToolsUnit.pas';
+  DateTimeToolsUnit in '..\..\DevelopmentsCollection\DateTimeToolsUnit.pas',
+  DBToolsUnit in '..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas';
 
 begin
   Application.Initialize;

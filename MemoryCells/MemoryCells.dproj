@@ -292,7 +292,6 @@
             <Form>MainForm</Form>
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\ToolsUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\DBToolsUnit.pas"/>
         <DCCReference Include="Threads\BaseThreadUnit.pas"/>
         <DCCReference Include="Threads\CloseFormThreadUnit.pas"/>
         <DCCReference Include="Threads\DeleteFolderThreadUnit.pas"/>
@@ -414,6 +413,7 @@
         <DCCReference Include="..\..\DevelopmentsCollection\ParamsExtUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\DateTimeToolsUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

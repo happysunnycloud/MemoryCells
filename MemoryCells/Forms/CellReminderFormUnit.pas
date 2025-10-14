@@ -81,6 +81,7 @@ uses
   , FMX.OnClickReplacerUnit
   , FMX.ShowNoteFormUnit
   , FMX.Platform.Win
+  , CommonUnit
   ;
 
 { TCellReminderForm }

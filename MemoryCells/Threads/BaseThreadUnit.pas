@@ -11,8 +11,8 @@ uses
   , DBAccessUnit
   ;
 
-const
-  TIME_OUT_SECONDS = 4;
+//const
+//  TIME_OUT_SECONDS = 4;
 
 type
   TProcRef = reference to procedure;
@@ -97,11 +97,11 @@ begin
   FForm.ThreadRegistry.UnRegisterThread(Self);
   if Length(Trim(ExceptionMessage)) > 0 then
   begin
-    TLogger.AddLog('TBaseThread.OnTerminateHandler: ' + ExceptionMessage, ER);
+    TLogger.AddLog('TBaseThread.Destroy: ' + ExceptionMessage, ER);
     TThread.ForceQueue(nil,
       procedure
       begin
-        ShowMessage('TBaseThread.OnTerminateHandler: ' + ExceptionMessage);
+        ShowMessage('TBaseThread.Destroy: ' + ExceptionMessage);
       end);
   end;
 

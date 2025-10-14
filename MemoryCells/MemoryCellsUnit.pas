@@ -1923,14 +1923,13 @@ begin
     ParamsObj := TParamsExt.Create;
     try
       ParamsObj.CopyFrom(AParams);
-      CellContent := ParamsObj.AsString[1];
-      CellDesc := ParamsObj.AsString[2];
+      CellContent := ParamsObj.AsStringByIdent['Content'];
+      CellDesc := ParamsObj.AsStringByIdent['Desc'];
     finally
       FreeAndNil(ParamsObj);
     end;
 
-    CellMemoFrame.Cell.Content := CellContent;
-    CellMemo.Text := CellMemoFrame.Cell.Content;
+    CellMemoFrame.InsertText(CellContent);
     CellMemoFrame.CellUnitFrame.Cell.Desc := CellMemoFrame.Cell.Desc;
     CellMemo.SetFocus;
 
@@ -2420,6 +2419,8 @@ begin
           Cell.RemindDateTime,
           Cell.Remind,
           OpenCellReminderPanel);
+
+        THelpmate.ShowFormIfHidden(Self);
       end;
       mrRetry{Ok(Reschedule)}:
       begin
