@@ -83,6 +83,7 @@ type
     CellsControlRectangle: TRectangle;
     CellControlRectangle: TRectangle;
     SettingsButton: TButton;
+    ShowRemindCellsButton: TButton;
     procedure UpdateCellButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -111,6 +112,7 @@ type
     procedure LoadCatalogButtonClick(Sender: TObject);
     procedure CellRemindButtonClick(Sender: TObject);
     procedure SettingsButtonClick(Sender: TObject);
+    procedure ShowRemindCellsButtonClick(Sender: TObject);
   strict private
     FBorderFrame: TBorderFrame;
 
@@ -183,6 +185,7 @@ type
 
     procedure ShowFoldersLayout(const AShow: Boolean);
     procedure ShowFavoriteCells(const AShow: Boolean);
+    procedure ShowRemindCells(const AShow: Boolean);
 
     // Handlers.Begin
     procedure TrayIconMouseRightButtonDown(
@@ -580,7 +583,7 @@ begin
 
   if not Assigned(FCellReminderDateTimeFrame) then
   begin
-    CellRemindButton.StyleLookup := 'RemindButtonPressedStyle';
+    CellRemindButton.StyleLookup := 'BellOnButtonStyle';
 
     FCellReminderDateTimeFrame :=
       TCellReminderDateTimeFrame.ShowCellReminderFrame(
@@ -597,7 +600,7 @@ end;
 
 procedure TMainForm.HideCellReminderFrame;
 begin
-  CellRemindButton.StyleLookup := 'RemindButtonNormalStyle';
+  CellRemindButton.StyleLookup := 'BellOffButtonStyle';
 
   TCellReminderDateTimeFrame.HideCellReminderFrame(FCellReminderDateTimeFrame);
 end;
@@ -631,7 +634,6 @@ end;
 procedure TMainForm.ShowFavoriteCells(const AShow: Boolean);
 begin
   SetCellMemoFrameNullId;
-  //CellMemoFrame.CellUnitFrame := nil;
 
   if AShow then
   begin
@@ -648,6 +650,7 @@ begin
     ], false);
 
     AppManager.Settings.IsFavoriteCellsShowing := 1;
+    ShowRemindCellsButton.Visible := false;
 
     AppManager.CreateLoadCellsByIdListThread(Self, AppManager.Settings.FavoriteCellIdList, CellsSearchResult);
   end
@@ -666,6 +669,51 @@ begin
     ], true);
 
     AppManager.Settings.IsFavoriteCellsShowing := 0;
+    ShowRemindCellsButton.Visible := true;
+
+    GotoFolder(ROOT_FOLDER_ID, NULL_ID);
+  end;
+end;
+
+procedure TMainForm.ShowRemindCells(const AShow: Boolean);
+begin
+  SetCellMemoFrameNullId;
+
+  if AShow then
+  begin
+    ShowRemindCellsButton.StyleLookup := 'BellOnButtonStyle';
+
+    ShowFoldersLayout(false);
+    FolderNameLayout.Visible := false;
+
+    TControlTools.EnableControls([
+      HideFoldersButton,
+      SearchButton,
+      HomeButton,
+      InsertCellButton
+    ], false);
+
+    AppManager.Settings.IsRemindCellsShowing := 1;
+    ShowFavoriteCellsButton.Visible := false;
+
+    AppManager.CreateLoadRemindCellsThread(Self, CellsSearchResult);
+  end
+  else
+  begin
+    ShowRemindCellsButton.StyleLookup := 'BellOffButtonStyle';
+
+    ShowFoldersLayout(true);
+    FolderNameLayout.Visible := true;
+
+    TControlTools.EnableControls([
+      HideFoldersButton,
+      SearchButton,
+      HomeButton,
+      InsertCellButton
+    ], true);
+
+    AppManager.Settings.IsRemindCellsShowing := 0;
+    ShowFavoriteCellsButton.Visible := true;
 
     GotoFolder(ROOT_FOLDER_ID, NULL_ID);
   end;
@@ -882,9 +930,9 @@ begin
   CellUnitFrame.CellUnitButton.Text := '';
   CellUnitFrame.CellUnitNameText.TextSettings.FontColor := $FFBCBCBC;
   CellUnitFrame.CellUnitNameText.TextSettings.Font.Size := TEXT_FONT_SIZE;
-  CellUnitFrame.Padding.Left := 10;
+  CellUnitFrame.Padding.Left := 0;
   CellUnitFrame.UpdateDateText.TextSettings.FontColor := $FFBCBCBC;
-  CellUnitFrame.UpdateDateText.TextSettings.Font.Size := 10;
+  CellUnitFrame.UpdateDateText.TextSettings.Font.Size := 12;
   CellUnitFrame.FavoriteCellButton.StyleLookup := 'PinOffButtonstyle';
   if AppManager.Settings.FavoriteCellIdList.Contains(CellUnitFrame.Cell.Id) then
     CellUnitFrame.FavoriteCellButton.StyleLookup := 'PinOnButtonstyle';
@@ -1542,13 +1590,9 @@ begin
     Exit;
 
   if not Assigned(FCellReminderDateTimeFrame) then
-  begin
-    ShowCellReminderFrame;
-  end
+    ShowCellReminderFrame
   else
-  begin
-    HideCellReminderFrame;
-  end;
+    HideCellReminderFrame
 
 //  CellMemoChangeTrackingHandler(nil);
 end;
@@ -1675,6 +1719,14 @@ var
 begin
   DoShowFavoriteCells := AppManager.Settings.IsFavoriteCellsShowing = 1;
   ShowFavoriteCells(not DoShowFavoriteCells);
+end;
+
+procedure TMainForm.ShowRemindCellsButtonClick(Sender: TObject);
+var
+  DoShowRemindCells: Boolean;
+begin
+  DoShowRemindCells := AppManager.Settings.IsRemindCellsShowing = 1;
+  ShowRemindCells(not DoShowRemindCells);
 end;
 
 procedure TMainForm.InsertFolderButtonClick(Sender: TObject);
@@ -2759,17 +2811,13 @@ begin
 
     RunBackupStarter;
 
-    if AppManager.Settings.IsFavoriteCellsShowing = 0 then
-    begin
-      ShowFoldersLayout(AppManager.Settings.IsFoldersLayoutShowing = 1);
-
-      GotoFolder(AppManager.Settings.CurrentFolderId, AppManager.Settings.CurrentCellId);
-    end
-    else
     if AppManager.Settings.IsFavoriteCellsShowing = 1 then
-    begin
-      ShowFavoriteCells(true);
-    end;
+      ShowFavoriteCells(true)
+    else
+    if AppManager.Settings.IsRemindCellsShowing = 1 then
+      ShowRemindCells(true)
+    else
+      GotoFolder(AppManager.Settings.CurrentFolderId, AppManager.Settings.CurrentCellId);
 
 //    RestartReminder;
   except

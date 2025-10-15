@@ -1,4 +1,4 @@
-﻿unit LoadCellsByIdListThreadUnit;
+unit LoadRemindCellsThreadUnit;
 
 interface
 
@@ -8,12 +8,11 @@ uses
   , BaseThreadUnit
   , BaseFormUnit
   , DataManagerUnit
-//  , CommonUnit
   , MCParamsUnit
   ;
 
 type
-  TLoadCellsByIdListThread = class(TBaseThread)
+  TLoadRemindCellsThread = class(TBaseThread)
   strict private
     FProcRef: TParamsProcRef;
   protected
@@ -34,9 +33,9 @@ uses
   , CellUnit
   ;
 
-{ TLoadCellsByIdListThread }
+{ TLoadRemindCellsThread }
 
-constructor TLoadCellsByIdListThread.Create(
+constructor TLoadRemindCellsThread.Create(
   const AForm: TBaseForm;
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
@@ -47,9 +46,9 @@ begin
   FProcRef := AProcRef;
 end;
 
-procedure TLoadCellsByIdListThread.Execute;
+procedure TLoadRemindCellsThread.Execute;
 const
-  METHOD = 'TLoadCellsByIdListThread.Execute';
+  METHOD = 'TLoadRemindCellsThread.Execute';
 begin
   try
     Params.Clear;
@@ -57,7 +56,7 @@ begin
 
     OutParams.Clear;
 
-    TDBAccess.DBAParamsFunc(TDBAccess.CellsByIdList, Params, OutParams);
+    TDBAccess.DBAParamsFunc(TDBAccess.RemindCells, Params, OutParams);
 
     Params.Clear;
     Params.Add(OutParams);

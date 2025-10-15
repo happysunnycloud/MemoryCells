@@ -80,7 +80,8 @@ uses
   ParamsExtUnit in '..\..\DevelopmentsCollection\ParamsExtUnit.pas',
   FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
   DateTimeToolsUnit in '..\..\DevelopmentsCollection\DateTimeToolsUnit.pas',
-  DBToolsUnit in '..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas';
+  DBToolsUnit in '..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas',
+  LoadRemindCellsThreadUnit in 'Threads\LoadRemindCellsThreadUnit.pas';
 
 begin
   Application.Initialize;

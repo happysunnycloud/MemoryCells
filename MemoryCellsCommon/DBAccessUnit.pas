@@ -60,6 +60,7 @@ type
 
     class function Search(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
     class function CellsByIdList(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
+    class function RemindCells(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
 
     class function UpdateCellAttributes(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
 
@@ -1306,6 +1307,79 @@ begin
           Cell.Name := QueryResult.FindField('name').AsString;
           Cell.Desc := QueryResult.FindField('description').AsString;
           Cell.IsDone := QueryResult.FindField('is_done').AsBoolean;
+          Cell.UpdateDateTime :=
+            TSQLiteHelpmate.StrToDateTime(QueryResult.FindField('update_datetime').AsString);
+
+          List.Add(Cell);
+
+          QueryResult.Next;
+        end;
+        DBTools.CloseQuery;
+      finally
+        CellList.UnLockList;
+        DBTools.FreeQuery;
+        FreeAndNil(DBTools);
+      end;
+      AOutParams.Clear;
+      AOutParams.Add(CellList);
+    finally
+      FreeAndNil(CellList);
+    end;
+  except
+    on e: Exception do
+    begin
+      raise TExceptionContainer.CreateExceptionContainer(e, METHOD);
+    end;
+  end;
+
+  Result := rcOk;
+  TLogger.AddLog(Format('%s out', [METHOD]));
+end;
+
+class function TDBAccess.RemindCells(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
+const
+  METHOD = 'TDBAccess.RemindCells';
+var
+  DBTools: TDBTools;
+  CellList: TCellList;
+  Cell: TCell;
+  List: TInnerCellList;
+  SQLTemplateIdent: String;
+  SQLTemplate: String;
+  QueryResult: TDBQuery;
+begin
+  TLogger.AddLog(Format('%s in', [METHOD]));
+  try
+    SQLTemplateIdent := 'get_remind_cells';
+    SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
+    if Length(Trim(SQLTemplate)) = 0 then
+      raise Exception.Create(Format('SQL template "%s" not found or empty', [SQLTemplateIdent]));
+
+    try
+      DBTools := TDBTools.Create(FDBFileName);
+    except
+      raise;
+    end;
+
+    CellList := TCellList.Create;
+    try
+      List := CellList.LockList;
+      try
+        DBTools.CreateQuery;
+        DBTools.Query.AddQuery(SQLTemplate);
+
+        QueryResult := DBTools.OpenQuery;
+        while not QueryResult.Eof do
+        begin
+          Cell := TCell.Create(
+            QueryResult.FindField('id').AsLargeInt,
+            QueryResult.FindField('folder_id').AsLargeInt,
+            QueryResult.FindField('cell_type_id').AsInteger);
+          Cell.Name := QueryResult.FindField('name').AsString;
+          Cell.Desc := QueryResult.FindField('description').AsString;
+          Cell.IsDone := QueryResult.FindField('is_done').AsBoolean;
+          Cell.UpdateDateTime :=
+            TSQLiteHelpmate.StrToDateTime(QueryResult.FindField('remind_datetime').AsString);
           List.Add(Cell);
 
           QueryResult.Next;

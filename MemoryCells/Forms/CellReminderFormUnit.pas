@@ -116,7 +116,7 @@ procedure TCellReminderForm.CellRemindButtonClick(Sender: TObject);
 begin
   if not Assigned(FCellReminderDateTimeFrame) then
   begin
-    CellRemindButton.StyleLookup := 'RemindButtonPressedStyle';
+    CellRemindButton.StyleLookup := 'BellOnButtonStyle';
 
     FCellReminderDateTimeFrame :=
       TCellReminderDateTimeFrame.ShowCellReminderFrame(
@@ -130,6 +130,8 @@ begin
   end
   else
   begin
+    CellRemindButton.StyleLookup := 'BellOffButtonStyle';
+
     FCellReminderDateTimeFrame.HideCellReminderFrame(FCellReminderDateTimeFrame);
   end;
 

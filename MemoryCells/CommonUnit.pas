@@ -44,6 +44,11 @@ type
   TInOutParamsFuncRef = function(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode of object;
 
   TActionType = (atMove = 0, atCopy = 1);
+  TCurrentMode = (cmCommon, cmSearch);
+  TSelectMode = (smFalse, smTrue);
+  TOnlineMode = (omFalse, omTrue);
+  TRunAppAtStartup = (raFalse, raTrue);
+  TCollapseAppAtStartup = (caFalse, caTrue);
 
   TCallbackControlProcRef = reference to procedure(const AControl: TControl);
 
@@ -117,12 +122,6 @@ type
     class property Theme: TTheme read FTheme write FTheme;
   end;
 
-  TCurrentMode = (cmCommon, cmSearch);
-  TSelectMode = (smFalse, smTrue);
-  TOnlineMode = (omFalse, omTrue);
-  TRunAppAtStartup = (raFalse, raTrue);
-  TCollapseAppAtStartup = (caFalse, caTrue);
-
   TSelectModeHelper = record helper for TSelectMode
   public
     function ToBoolean: Boolean;
@@ -175,6 +174,7 @@ type
     FCellsLayoutWidth: Integer;
     FIsFoldersLayoutShowing: Byte;
     FIsFavoriteCellsShowing: Byte;
+    FIsRemindCellsShowing: Byte;
     FBackupsPath: String;
     FLastBackupDateTime: TDateTime;
     FFavoriteCellIdList: TCellIdList;
@@ -195,6 +195,7 @@ type
 
     procedure SetIsFoldersLayoutShowing(const AIsFoldersLayoutShowing: Byte);
     procedure SetIsFavoriteCellsShowing(const AIsFavoriteCellsShowing: Byte);
+    procedure SetIsRemindCellsShowing(const AIsRemindCellsShowing: Byte);
 
     procedure SetBackupsPath(const ABackupsPath: String);
     procedure SetLastBackupDateTime(const ALastBackupDateTime: TDateTime);
@@ -223,6 +224,7 @@ type
 
     property IsFoldersLayoutShowing: Byte read FIsFoldersLayoutShowing write SetIsFoldersLayoutShowing;
     property IsFavoriteCellsShowing: Byte read FIsFavoriteCellsShowing write SetIsFavoriteCellsShowing;
+    property IsRemindCellsShowing: Byte read FIsRemindCellsShowing write SetIsRemindCellsShowing;
 
     property BackupsPath: String read FBackupsPath write SetBackupsPath;
     property LastBackupDateTime: TDateTime read FLastBackupDateTime write SetLastBackupDateTime;
@@ -624,7 +626,6 @@ begin
   end;
 end;
 
-
 //class procedure THelpmate.StyleAssign(
 //  const AStyleTo: TStyleBook;
 //  const AStyleFrom: TStyleBook);
@@ -749,6 +750,11 @@ begin
   Dest.FCellLayoutWidth := 300;
   Dest.FCellsLayoutWidth :=  300;
   Dest.FIsFoldersLayoutShowing := 1;
+  Dest.FIsFavoriteCellsShowing := 0;
+  Dest.FIsRemindCellsShowing := 0;
+
+  Dest.FBackupsPath := ExtractFilePath(ParamStr(0)) + DB_BACKUP_PATH;
+  Dest.FLastBackupDateTime := Now;
 
   Dest.FFavoriteCellIdList := TCellIdList.Create;
   Dest.FCurrentFolderId := 1;
@@ -760,8 +766,6 @@ begin
 
   Dest.FRunAppAtStartup := raTrue;
   Dest.FCollapseAppAtStartup := caFalse;
-
-  Dest.FBackupsPath := ExtractFilePath(ParamStr(0)) + DB_BACKUP_PATH;
 
   try
     Dest.LoadApplicationSettings;
@@ -814,6 +818,11 @@ end;
 procedure TApplicationSettings.SetIsFavoriteCellsShowing(const AIsFavoriteCellsShowing: Byte);
 begin
   FIsFavoriteCellsShowing := AIsFavoriteCellsShowing;
+end;
+
+procedure TApplicationSettings.SetIsRemindCellsShowing(const AIsRemindCellsShowing: Byte);
+begin
+  FIsRemindCellsShowing := AIsRemindCellsShowing;
 end;
 
 procedure TApplicationSettings.SetBackupsPath(const ABackupsPath: String);
@@ -880,6 +889,7 @@ begin
   MainFormNode.AddChild('Left').Text := IntToStr(FMainFormLeft);
   MainFormNode.AddChild('IsFoldersLayoutShowing').Text := IntToStr(FIsFoldersLayoutShowing);
   MainFormNode.AddChild('IsFavoriteCellsShowing').Text := IntToStr(FIsFavoriteCellsShowing);
+  MainFormNode.AddChild('IsRemindCellsShowing').Text := IntToStr(FIsRemindCellsShowing);
 
   LayoutsWidthNode := ApplicationSettingsNode.AddChild('LayoutsWidth');
   LayoutsWidthNode.AddChild('CellLayoutWidth').Text := IntToStr(FCellLayoutWidth);
@@ -1057,6 +1067,7 @@ begin
   FMainFormLeft := IfEmpty(MainFormNode, 'Left', 0);
   FIsFoldersLayoutShowing := IfEmpty(MainFormNode, 'IsFoldersLayoutShowing', 0);
   FIsFavoriteCellsShowing := IfEmpty(MainFormNode, 'IsFavoriteCellsShowing', 0);
+  FIsRemindCellsShowing   := IfEmpty(MainFormNode, 'IsRemindCellsShowing',   0);
 
   LayoutsWidthNode := ApplicationSettingsNode.ChildNodes.FindNode('LayoutsWidth');
   if ApplicationSettingsNode = nil then

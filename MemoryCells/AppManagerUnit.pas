@@ -24,7 +24,7 @@ uses
   , KeyCatcherThreadUnit
   , CellReminderThreadUnit
   , UpdateCellReminderThreadUnit
-
+  , LoadRemindCellsThreadUnit
   , BaseThreadUnit
   , BaseFormUnit
   , DBAccessUnit
@@ -121,6 +121,10 @@ type
       const AForm: TBaseForm;
       const ACellIdList: TCellIdList;
       const AProcRef: TParamsProcRef): TLoadCellsByIdListThread;
+
+    function CreateLoadRemindCellsThread(
+      const AForm: TBaseForm;
+      const AProcRef: TParamsProcRef): TLoadRemindCellsThread;
 
     function CreateBackupThread(
       const AForm: TBaseForm;
@@ -408,6 +412,20 @@ begin
     ParamsObj.Add(ACellIdList);
 
     Result := TLoadCellsByIdListThread.Create(AForm, ParamsObj, AProcRef);
+  finally
+    FreeAndNil(ParamsObj);
+  end;
+end;
+
+function TAppManager.CreateLoadRemindCellsThread(
+  const AForm: TBaseForm;
+  const AProcRef: TParamsProcRef): TLoadRemindCellsThread;
+var
+  ParamsObj: TParamsExt;
+begin
+  ParamsObj := TParamsExt.Create;
+  try
+    Result := TLoadRemindCellsThread.Create(AForm, ParamsObj, AProcRef);
   finally
     FreeAndNil(ParamsObj);
   end;
