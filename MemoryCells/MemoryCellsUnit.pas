@@ -924,7 +924,8 @@ begin
   CellUnitFrame.Align := TAlignLayout.Top;
   CellUnitFrame.Repaint;
   CellUnitFrame.CellUnitNameText.Text := Cell.Desc;
-  CellUnitFrame.UpdateDateText.Text := DateTimeToStr(Cell.UpdateDateTime);
+  CellUnitFrame.UpdateDateText.Text :=
+    FormatDateTime('dd.mm.yyyy hh:mm', Cell.UpdateDateTime);
   CellUnitFrame.UpdateDateText.Hint := CellUnitFrame.UpdateDateText.Text;
   CellUnitFrame.CellUnitButton.StyleLookup := 'CellUnitButtonStyle';
   CellUnitFrame.CellUnitButton.Text := '';

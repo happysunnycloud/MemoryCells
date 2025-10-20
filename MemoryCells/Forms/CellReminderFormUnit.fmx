@@ -130,7 +130,7 @@ object CellReminderForm: TCellReminderForm
           Size.Width = 30.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
-          StyleLookup = 'RemindButtonNormalStyle'
+          StyleLookup = 'BellOffButtonStyle'
           TabOrder = 3
           OnClick = CellRemindButtonClick
         end
