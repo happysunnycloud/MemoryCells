@@ -39,7 +39,17 @@ type
       const AInParams: TParamsExt;
       const AOutParams: TParamsExt): TDBAResultCode;
 
-    class procedure Init(const ADBFileName: String; const ATemplatesDir: String);
+    class procedure Init(
+      const ADBFileName: String;
+      const ATemplatesPath: String;
+      const ATemplatesKind: TTemplatesKind);
+    class procedure InitByPath(
+      const ADBFileName: String;
+      const ATemplatesPath: String);
+    class procedure InitByPack(
+      const ADBFileName: String;
+      const ATemplatesPack: String);
+
     class procedure UnInit;
 
     class function Backup(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;
@@ -219,13 +229,38 @@ begin
   end;
 end;
 
-class procedure TDBAccess.Init(const ADBFileName: String; const ATemplatesDir: String);
+class procedure TDBAccess.Init(
+  const ADBFileName: String;
+  const ATemplatesPath: String;
+  const ATemplatesKind: TTemplatesKind);
 begin
   FCriticalSection := TCriticalSection.Create;
 
   FDBFileName := ADBFileName;
 
-  FSQLTemplates := TSQLTemplates.Create(ATemplatesDir);
+  FSQLTemplates := TSQLTemplates.Create(
+    ATemplatesPath,
+    ATemplatesKind);
+end;
+
+class procedure TDBAccess.InitByPath(
+  const ADBFileName: String;
+  const ATemplatesPath: String);
+begin
+  Init(
+    ADBFileName,
+    ATemplatesPath,
+    tkPath);
+end;
+
+class procedure TDBAccess.InitByPack(
+  const ADBFileName: String;
+  const ATemplatesPack: String);
+begin
+  Init(
+    ADBFileName,
+    ATemplatesPack,
+    tkPack);
 end;
 
 class procedure TDBAccess.UnInit;

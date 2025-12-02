@@ -2660,7 +2660,7 @@ var
   DBFileName: String;
   DBDirName: String;
   DBBackupDirName: String;
-  SQLTemplatesDirName: String;
+  SQLTemplatesPath: String;
   CurrentDir: String;
 begin
   ReportMemoryLeaksOnShutdown := true;
@@ -2754,16 +2754,6 @@ begin
     TNoteForm.Init(NoteIdentsFileName, THelpmate.Theme);
     TCellReminderForm.Init(THelpmate.Theme);
 
-    //C:\Desktop\MemoryCells\MemoryCellsCommon\SQLTemplates\
-
-    SQLTemplatesDirName := SQL_TEMPLATES_DEBUG_PATH;
-    if not DirectoryExists(SQLTemplatesDirName) then
-    begin
-      SQLTemplatesDirName := AppManager.AppPath + SQL_TEMPLATES_PATH;
-      if not DirectoryExists(SQLTemplatesDirName) then
-        raise Exception.CreateFmt('Directory "%s" not found', [SQLTemplatesDirName]);
-    end;
-
     DBDirName := DB_DEBUG_PATH;
     if not DirectoryExists(DBDirName) then
     begin
@@ -2779,7 +2769,25 @@ begin
     if not DirectoryExists(DBBackupDirName) then
       raise Exception.CreateFmt('Directory "%s" not found', [DBBackupDirName]);
 
-    AppManager.InitDBAccess(DBFileName, SQLTemplatesDirName);
+    if FileExists(SQL_TEMPLATES_PACK) then
+    begin
+      SQLTemplatesPath := SQL_TEMPLATES_PACK;
+
+      AppManager.InitDBAccessByPack(DBFileName, SQLTemplatesPath);
+    end
+    else
+    begin
+      SQLTemplatesPath := SQL_TEMPLATES_DEBUG_PATH;
+      if not DirectoryExists(SQLTemplatesPath) then
+      begin
+        SQLTemplatesPath := AppManager.AppPath + SQL_TEMPLATES_PATH;
+        if not DirectoryExists(SQLTemplatesPath) then
+          raise Exception.CreateFmt('Directory "%s" not found', [SQLTemplatesPath]);
+      end;
+
+      AppManager.InitDBAccessByPath(DBFileName, SQLTemplatesPath);
+    end;
+
     UTClientManager := TUTClientManager.Create;
 
   //  AppManager.Settings.LoadApplicationSettings;

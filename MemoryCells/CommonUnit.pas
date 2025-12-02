@@ -35,6 +35,7 @@ const
   DB_BACKUP_PATH = 'DataBaseBackup\';
   SQL_TEMPLATES_PATH = 'SQLTemplates\';
   SQL_TEMPLATES_DEBUG_PATH = '..\..\..\MemoryCellsCommon\SQLTemplates';
+  SQL_TEMPLATES_PACK = 'DbSource.dat';
   KEY_HOOK_FILE_NAME = 'KeyHook.dll';
   APP_NAME = 'MemoryCells';
 

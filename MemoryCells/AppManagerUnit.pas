@@ -54,7 +54,12 @@ type
     property Settings: TApplicationSettings read FSettings write FSettings;
     property CurrentState: TApplicationCurrentState read FCurrentState write FCurrentState;
 
-    procedure InitDBAccess(const ADBFileName: String; const ATemplatesDir: String);
+    procedure InitDBAccessByPath(
+      const ADBFileName: String;
+      const ATemplatesDir: String);
+    procedure InitDBAccessByPack(
+      const ADBFileName: String;
+      const ATemplatesPack: String);
 
     function CreateLoadCatalogThread(
       const AForm: TBaseForm;
@@ -194,9 +199,18 @@ begin
   inherited;
 end;
 
-procedure TAppManager.InitDBAccess(const ADBFileName: String; const ATemplatesDir: String);
+procedure TAppManager.InitDBAccessByPath(
+  const ADBFileName: String;
+  const ATemplatesDir: String);
 begin
-  TDBAccess.Init(ADBFileName, ATemplatesDir);
+  TDBAccess.InitByPath(ADBFileName, ATemplatesDir);
+end;
+
+procedure TAppManager.InitDBAccessByPack(
+  const ADBFileName: String;
+  const ATemplatesPack: String);
+begin
+  TDBAccess.InitByPack(ADBFileName, ATemplatesPack);
 end;
 
 function TAppManager.CreateLoadCatalogThread(

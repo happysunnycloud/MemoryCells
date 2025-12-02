@@ -81,7 +81,9 @@ uses
   FMX.ControlToolsUnit in '..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas',
   DateTimeToolsUnit in '..\..\DevelopmentsCollection\DateTimeToolsUnit.pas',
   DBToolsUnit in '..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas',
-  LoadRemindCellsThreadUnit in 'Threads\LoadRemindCellsThreadUnit.pas';
+  LoadRemindCellsThreadUnit in 'Threads\LoadRemindCellsThreadUnit.pas',
+  TextExtractorUnit in '..\..\DevelopmentsCollection\FilePacker\TextExtractorUnit.pas',
+  FilePackerUnit in '..\..\DevelopmentsCollection\FilePacker\FilePackerUnit.pas';
 
 begin
   Application.Initialize;
