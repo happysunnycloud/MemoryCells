@@ -358,7 +358,6 @@
         <DCCReference Include="..\..\DevelopmentsCollection\UTCS\PingTimeoutThreadUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\DBAccessUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\CellUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\SQLTemplatesUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\ExceptionContainerUnit.pas"/>
         <DCCReference Include="ServerRepliesParserUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\UTServerReplyUnit.pas"/>
@@ -417,6 +416,7 @@
         <DCCReference Include="Threads\LoadRemindCellsThreadUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FilePacker\TextExtractorUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FilePacker\FilePackerUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\SQL\SQLTemplatesUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

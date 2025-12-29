@@ -48,7 +48,6 @@ uses
   PingTimeoutThreadUnit in '..\..\DevelopmentsCollection\UTCS\PingTimeoutThreadUnit.pas',
   DBAccessUnit in '..\MemoryCellsCommon\DBAccessUnit.pas',
   CellUnit in '..\MemoryCellsCommon\CellUnit.pas',
-  SQLTemplatesUnit in '..\..\DevelopmentsCollection\SQLTemplatesUnit.pas',
   ExceptionContainerUnit in '..\MemoryCellsCommon\ExceptionContainerUnit.pas',
   ServerRepliesParserUnit in 'ServerRepliesParserUnit.pas',
   UTServerReplyUnit in '..\MemoryCellsCommon\UTServerReplyUnit.pas',
@@ -83,7 +82,8 @@ uses
   DBToolsUnit in '..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas',
   LoadRemindCellsThreadUnit in 'Threads\LoadRemindCellsThreadUnit.pas',
   TextExtractorUnit in '..\..\DevelopmentsCollection\FilePacker\TextExtractorUnit.pas',
-  FilePackerUnit in '..\..\DevelopmentsCollection\FilePacker\FilePackerUnit.pas';
+  FilePackerUnit in '..\..\DevelopmentsCollection\FilePacker\FilePackerUnit.pas',
+  SQLTemplatesUnit in '..\..\DevelopmentsCollection\SQL\SQLTemplatesUnit.pas';
 
 begin
   Application.Initialize;

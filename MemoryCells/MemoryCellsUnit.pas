@@ -2511,7 +2511,7 @@ begin
   SearchRecList := TSearchRecList.Create;
   try
     BackupsPath := AppManager.Settings.BackupsPath;
-    TFileTools.GetFileSearchRecListByDir(BackupsPath, SearchRecList);
+    TFileTools.GetFileSearchRecList(BackupsPath, SearchRecList);
     SearchRecList.Sort(
       TComparer<TSearchRec>.Construct(
         function(const Left, Right: TSearchRec): Integer
@@ -2529,7 +2529,7 @@ begin
 
     if SearchRecList.Count > 5 then
     begin
-      DBFileName := BackupsPath + '\' + SearchRecList[0].Name;
+      DBFileName := BackupsPath + SearchRecList[0].Name;
       if Pos(DB_FILE_NAME, DBFileName) > 0 then
         System.SysUtils.DeleteFile(DBFileName);
     end;
@@ -2566,7 +2566,7 @@ begin
     HomeButton
   ], false);
 
-  DBFullName := AppManager.Settings.BackupsPath + '\' + THelpmate.DateTimeToFileNameString('_') + '_' + DB_FILE_NAME;
+  DBFullName := AppManager.Settings.BackupsPath + THelpmate.DateTimeToFileNameString('_') + '_' + DB_FILE_NAME;
 
   AppManager.CreateBackupThread(Self, DBFullName, BackupDone);
 end;

@@ -54,9 +54,9 @@ var
 begin
   inherited;
 
-  SelectDirectory('Выберите директорию', '', SelectedFolder);
+  SelectDirectory('Choose backup path', '', SelectedFolder);
 
-  PathEdit.Text := Trim(SelectedFolder);
+  PathEdit.Text := Concat(Trim(SelectedFolder), PATH_SPLITTER);
 end;
 
 procedure TBackupSettingFrame.WriteValues(const AApplicationSettings: TApplicationSettings);

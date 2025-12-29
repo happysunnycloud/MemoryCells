@@ -38,6 +38,7 @@ const
   SQL_TEMPLATES_PACK = 'DbSource.dat';
   KEY_HOOK_FILE_NAME = 'KeyHook.dll';
   APP_NAME = 'MemoryCells';
+  PATH_SPLITTER = '\';
 
 type
   TParamIdFuncRef = function(const AId: Int64): TDBAResultCode of object;
@@ -661,10 +662,14 @@ begin
   Thread := nil;
 
   AThreadRegistry.Enumerator(
-    procedure (const AThread: Pointer)
+    procedure (const AThread: Pointer; var ABreak: Boolean)
     begin
       if TBaseThread(AThread).Name = AThreadName then
+      begin
         Thread := TBaseThread(AThread);
+
+        ABreak := true;
+      end;
     end);
 
   Result := Thread;
