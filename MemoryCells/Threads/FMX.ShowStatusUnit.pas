@@ -5,29 +5,36 @@ interface
 uses
   System.Classes,
   System.SysUtils,
-
   FMX.Controls,
-  FMX.StdCtrls
+  FMX.StdCtrls,
+  BaseThreadUnit,
+  FMX.FormExtUnit,
+  ThreadFactoryUnit
   ;
 
+const
+  THREAD_NAME = 'CountdownTimer';
+
 type
-  TCountdownTimer = class(TThread)
+  TCountdownTimer = class(TBaseThread)
   strict private
     FTextControl: TControl;
     FText: String;
     FTimeout: Word;
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
+//    procedure InnerExecute; reintroduce;
   public
     constructor Create(
+      const AForm: TFormExt;
       const ATextControl: TControl;
       const AText: String;
-      const ATimeout: Word);
+      const ATimeout: Word); reintroduce;
   end;
 
   TShowStatus = class
   strict private
-    class var FCountdownTimer: TThread;
+    class var FForm: TFormExt;
   private
     class procedure StopTimer;
   public
@@ -37,6 +44,7 @@ type
       const ATimeout: Word);
 
     class procedure Stop;
+    class property Form: TFormExt write FForm;
   end;
 
 implementation
@@ -47,20 +55,22 @@ uses
 { TCountdownTimer }
 
 constructor TCountdownTimer.Create(
+  const AForm: TFormExt;
   const ATextControl: TControl;
   const AText: String;
   const ATimeout: Word);
 begin
   TControlTools.CheckHasProperty(ATextControl, TProperties.Text);
 
+  inherited Create(AForm, Execute);
+
   FTextControl := ATextControl;
   FText := AText;
   FTimeout := ATimeout;
-
-  inherited Create(false);
 end;
 
 procedure TCountdownTimer.Execute;
+//procedure TCountdownTimer.InnerExecute;
 var
   i: Word;
 begin
@@ -91,36 +101,31 @@ end;
 
 class procedure TShowStatus.StopTimer;
 begin
-  if Assigned(FCountdownTimer) then
-  begin
-    FCountdownTimer.Terminate;
-    FCountdownTimer.WaitFor;
-    FreeAndNil(FCountdownTimer);
-  end;
+  FForm.ThreadFactory.TerminateThread(THREAD_NAME);
 end;
 
 class procedure TShowStatus.ShowStatus(
   const ATextControl: TControl;
   const AText: String;
   const ATimeout: Word);
+var
+  Thread: TCountdownTimer;
 begin
   StopTimer;
 
-  FCountdownTimer :=
+  Thread :=
     TCountdownTimer.Create(
+      FForm,
       ATextControl,
       AText,
       ATimeout);
+
+  Thread.Name := THREAD_NAME;
 end;
 
 class procedure TShowStatus.Stop;
 begin
   StopTimer;
 end;
-
-initialization
-
-finalization
-  TShowStatus.StopTimer;
 
 end.
