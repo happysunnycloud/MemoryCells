@@ -803,7 +803,7 @@ end;
 procedure TMainForm.RestartReminder;
 begin
   //asd debug TMainForm.RestartReminder
-  ThreadFactory.CreateFreeOnTerminateThread(
+  ThreadFactory.CreateInlineThread('RestartReminderInlineThread',
     procedure (const AThread: TThreadExt)
     var
       ThreadIsDeadEvent: TEvent;
@@ -830,7 +830,7 @@ begin
 
       TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
       AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
-    end, false);
+    end);
 
 //  ThreadFactory.CreateFreeOnTerminateThread(
 //    procedure (const AThread: TThreadExt)
