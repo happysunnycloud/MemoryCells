@@ -4,20 +4,20 @@ interface
 
 uses
     System.Classes
-
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , DataManagerUnit
   , MCParamsUnit
+  , ThreadFactoryUnit
   ;
 
 type
   TLoadCatalogThread = class(TBaseThread)
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
     constructor Create(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParams: TParamsExt); reintroduce;
   end;
 
@@ -34,15 +34,15 @@ uses
 { TLoadCatalogThread }
 
 constructor TLoadCatalogThread.Create(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParams: TParamsExt);
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   InParams.CopyFrom(AParams);
 end;
 
-procedure TLoadCatalogThread.Execute;
+procedure TLoadCatalogThread.Execute(const AThread: TThreadExt);
 const
   METHOD = 'TLoadCatalogThread.Execute';
 //var

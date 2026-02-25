@@ -4,22 +4,21 @@ interface
 
 uses
     System.Classes
-
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , DataManagerUnit
-  , CommonUnit
   , CellUnit
   , MCParamsUnit
+  , ThreadFactoryUnit
   ;
 
 type
   TMoveCellsThread = class(TBaseThread)
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
     constructor Create(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParams: TParamsExt); reintroduce;
     destructor Destroy; override;
   end;
@@ -30,16 +29,16 @@ uses
     System.SysUtils
   , DBAccessUnit
   , MemoryCellsUnit
+  , CommonUnit
   ;
 
 { TMoveCellsThread }
 
 constructor TMoveCellsThread.Create(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParams: TParamsExt);
-
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   InParams.CopyFrom(AParams);
 end;

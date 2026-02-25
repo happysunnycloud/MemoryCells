@@ -6,10 +6,10 @@ uses
     System.Classes
 
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , DataManagerUnit
-//  , CommonUnit
   , MCParamsUnit
+  , ThreadFactoryUnit
   ;
 
 type
@@ -17,10 +17,10 @@ type
   strict private
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
     constructor Create(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParams: TParamsExt;
       const AProcRef: TParamsProcRef); reintroduce;
   end;
@@ -35,11 +35,11 @@ uses
 { TUpdateCellAttributesThread }
 
 constructor TUpdateCellAttributesThread.Create(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;

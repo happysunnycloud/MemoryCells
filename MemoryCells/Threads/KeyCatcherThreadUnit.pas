@@ -6,16 +6,19 @@ uses
   System.Classes,
   System.SysUtils,
   MemoryFileUnit,
-  BaseFormUnit,
+  FMX.FormExtUnit,
   MCParamsUnit,
-  BaseThreadUnit;
+  BaseThreadUnit,
+  ThreadFactoryUnit
+  ;
 
 type
   TKeyCatcherThread = class (TBaseThread)
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
-    constructor Create(const AForm: TBaseForm; const AParams: TParamsExt); reintroduce;
+    constructor Create(
+      const AForm: TFormExt; const AParams: TParamsExt); reintroduce;
   end;
 
 var
@@ -29,9 +32,10 @@ uses
   CommonUnit
   ;
 
-constructor TKeyCatcherThread.Create(const AForm: TBaseForm; const AParams: TParamsExt);
+constructor TKeyCatcherThread.Create(
+  const AForm: TFormExt; const AParams: TParamsExt);
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   InParams.CopyFrom(AParams);
 end;

@@ -4,12 +4,11 @@ interface
 
 uses
     System.Classes
-
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , DataManagerUnit
-//  , CommonUnit
   , MCParamsUnit
+  , ThreadFactoryUnit
   ;
 
 type
@@ -17,10 +16,10 @@ type
   strict private
     FBuildDestinationCatalogProcRef: TParamsProcRef;
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
     constructor Create(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParams: TParamsExt;
       const ABuildDestinationCatalogProcRef: TParamsProcRef);  reintroduce;
   end;
@@ -37,11 +36,11 @@ uses
 { TLoadDestinationCatalogThread }
 
 constructor TLoadDestinationCatalogThread.Create(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParams: TParamsExt;
   const ABuildDestinationCatalogProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   Name := 'TLoadDestinationCatalogThread';
 

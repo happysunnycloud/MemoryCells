@@ -564,14 +564,14 @@ begin
     OutParams := TParamsExt.Create;
     try
       OutParams.Clear;
-      OutParams.Add(CellId);              {0}
-      OutParams.Add(FolderId);            {1}
-      OutParams.Add(Content);             {2}
-      OutParams.Add(CellTypeId);          {3}
-      OutParams.Add(CellIsDone);          {4}
-      OutParams.Add(CellUpdateDateTime);  {5}
-      OutParams.Add(CellRemindDateTime);  {6}
-      OutParams.Add(CellRemind);          {7}
+      OutParams.Add(CellId,             'CellId');              {0}
+      OutParams.Add(FolderId,           'FolderId');            {1}
+      OutParams.Add(Content,            'Content');             {2}
+      OutParams.Add(CellTypeId,         'CellTypeId');          {3}
+      OutParams.Add(CellIsDone,         'CellIsDone');          {4}
+      OutParams.Add(CellUpdateDateTime, 'CellUpdateDateTime');  {5}
+      OutParams.Add(CellRemindDateTime, 'CellRemindDateTime');  {6}
+      OutParams.Add(CellRemind,         'CellRemind');          {7}
 
       AOutParams.Clear;
       AOutParams.CopyFrom(OutParams);
@@ -668,14 +668,14 @@ begin
     OutParams := TParamsExt.Create;
     try
       OutParams.Clear;
-      OutParams.Add(CellId);              {0}
-      OutParams.Add(FolderId);            {1}
-      OutParams.Add(Content);             {2}
-      OutParams.Add(CellTypeId);          {3}
-      OutParams.Add(CellIsDone);          {4}
-      OutParams.Add(CellUpdateDateTime);  {5}
-      OutParams.Add(CellRemindDateTime);  {6}
-      OutParams.Add(CellRemind);          {7}
+      OutParams.Add(CellId,               'CellId');              {0}
+      OutParams.Add(FolderId,             'FolderId');            {1}
+      OutParams.Add(Content,              'Content');             {2}
+      OutParams.Add(CellTypeId,           'CellTypeId');          {3}
+      OutParams.Add(CellIsDone,           'CellIsDone');          {4}
+      OutParams.Add(CellUpdateDateTime,   'CellUpdateDateTime');  {5}
+      OutParams.Add(CellRemindDateTime,   'CellRemindDateTime');  {6}
+      OutParams.Add(CellRemind,           'CellRemind');          {7}
 
       AOutParams.Clear;
       AOutParams.CopyFrom(OutParams);
@@ -841,9 +841,9 @@ begin
     OutParams := TParamsExt.Create;
     try
       OutParams.Clear;
-      OutParams.Add(CellId);
-      OutParams.Add(FolderId);
-      OutParams.Add(CellTypeId);
+      OutParams.Add(CellId, 'CellId');
+      OutParams.Add(FolderId, 'FolderId');
+      OutParams.Add(CellTypeId, 'CellTypeId');
 
       AOutParams.Clear;
       AOutParams.CopyFrom(OutParams);

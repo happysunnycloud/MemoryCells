@@ -6,9 +6,10 @@ interface
 
 uses
     System.Classes
-  , BaseFormUnit
   , MCParamsUnit
   , DBAccessUnit
+  , ThreadFactoryUnit
+  , FMX.FormExtUnit
   ;
 
 //const
@@ -19,11 +20,9 @@ type
   TParamsProcRef = reference to procedure(const AParams: TParamsExt);
   TParamIdProcRef = reference to procedure(const AId: Int64);
 
-  TBaseThread = class;
-
-  TBaseThread = class(TThread)
+  TBaseThread = class(TThreadExt)
   private
-    FForm: TBaseForm;
+    FForm: TFormExt;
     FExceptionMessage: String;
     // Параметры для использования внутри Execute в качестве локальной переменной
     FParams: TParamsExt;
@@ -34,13 +33,16 @@ type
 
     FName: String;
   protected
-    property Form: TBaseForm read FForm;
+    property Form: TFormExt read FForm;
     property ExceptionMessage: String read FExceptionMessage write FExceptionMessage;
     property Params: TParamsExt read FParams write FParams;
     property InParams: TParamsExt read FInParams write FInParams;
     property OutParams: TParamsExt read FOutParams write FOutParams;
 
-    procedure Execute; override;
+    // Специально не перегружаем Execute,
+    // чтобы выполнился на стороне родительского класса
+    // В родителе ловятся исключения
+    //procedure Execute(const AThread: TThreadExt); reintroduce; // override;
 
     procedure ControlParamsProc(
       const AParamsProcRef: TParamsProcRef;
@@ -51,7 +53,7 @@ type
       const ABuildCatalogProcRef: TParamsProcRef;
       const AOpenCellProcRef: TParamsProcRef);
   public
-    constructor Create(const AForm: TBaseForm); virtual;
+    constructor Create(const AForm: TFormExt; const AExecProc: TExecProc); virtual;
     destructor Destroy; override;
 
     property Name: String read FName write FName;
@@ -72,13 +74,13 @@ uses
 
 { TBaseThread }
 
-constructor TBaseThread.Create(const AForm: TBaseForm);
+constructor TBaseThread.Create(const AForm: TFormExt; const AExecProc: TExecProc);
 begin
   FExceptionMessage := '';
 
   FForm := AForm;
 
-  FForm.ThreadRegistry.RegisterThread(Self);
+//  FForm.ThreadFactory.RegisterThread(Self);
 
   FreeOnTerminate := true;
 
@@ -86,7 +88,11 @@ begin
   FInParams := TParamsExt.Create;
   FOutParams := TParamsExt.Create;
 
-  inherited Create(false);
+  inherited Create(
+    FForm.ThreadFactory,
+    AExecProc);
+
+//  inherited Create(false);
 end;
 
 destructor TBaseThread.Destroy;
@@ -94,7 +100,9 @@ var
   ExceptionMessage: String;
 begin
   ExceptionMessage := FExceptionMessage;
-  FForm.ThreadRegistry.UnRegisterThread(Self);
+
+//  FForm.ThreadFactory.UnRegisterThread(Self);
+
   if Length(Trim(ExceptionMessage)) > 0 then
   begin
     TLogger.AddLog('TBaseThread.Destroy: ' + ExceptionMessage, ER);
@@ -109,13 +117,13 @@ begin
   FreeAndNil(FInParams);
   FreeAndNil(FOutParams);
 
-  inherited;
+  inherited Destroy;
 end;
 
-procedure TBaseThread.Execute;
-begin
-  { Place thread code here }
-end;
+//procedure TBaseThread.Execute;
+//begin
+//  { Place thread code here }
+//end;
 
 procedure TBaseThread.ControlParamsProc(
   const AParamsProcRef: TParamsProcRef;
@@ -182,7 +190,7 @@ begin
       InnerParams.Add(FolderId);
       InnerParams.Add(CellList);
       // Если CellId <= 0, тогда после прорисовки каталога папок, будет перезапущен ремайндер
-      // Если CellId > 0, тогда ремайндер перезапуститься после прорисовки ячейки
+      // Если CellId > 0, тогда ремайндер перезапустится после прорисовки ячейки
       // После прорисовки ячейки ремайндер всегда перезапускается
       if MustRestartReminder then
       begin
@@ -209,7 +217,11 @@ begin
           InnerParams.CopyFrom(OutParams);
           InnerParams.AddFrom(AInParams);
 
-          InnerParams.Add(MustRestartReminder, PARAM_IDENT_RestartReminder);
+          // Так как пользователь может внести изменения в окне ремайндера
+          // Перед переходом к ячейке (иконка бегущего человечка)
+          // Нужно переписывать значение RestartReminder приходящего из базы
+          if InnerParams.Exists(PARAM_IDENT_RestartReminder) then
+            InnerParams.ChangeValue(MustRestartReminder, PARAM_IDENT_RestartReminder);
 
           ControlParamsProc(AOpenCellProcRef, InnerParams);
         end;

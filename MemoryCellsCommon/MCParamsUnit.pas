@@ -3,7 +3,6 @@
 interface
 
 uses
-  //  ParamsClassUnit
     ParamsExtUnit
   , CellUnit
   ;

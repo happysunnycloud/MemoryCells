@@ -14,7 +14,7 @@ uses
   , FMX.Memo
   , FMX.Forms
   , FMX.Platform.Win
-  , FMX.ThemeUnit
+  , FMX.Theme
 
   , CellUnit
   , CellUnitFrameUnit
@@ -114,10 +114,6 @@ type
 //    class procedure StyleAssign(
 //      const AStyleTo: TStyleBook;
 //      const AStyleFrom: TStyleBook);
-
-    class function FindThreadByName(
-      const AThreadRegistry: TThreadRegistry<Pointer>;
-      const AThreadName: String): TBaseThread;
 
     class function IsFormActive(const AForm: TForm): Boolean;
 
@@ -650,30 +646,6 @@ end;
 //      THelpmate.RaiseException(METHOD, e);
 //  end;
 //end;
-
-class function THelpmate.FindThreadByName(
-  const AThreadRegistry: TThreadRegistry<Pointer>;
-  const AThreadName: String): TBaseThread;
-const
-  METHOD = 'THelpmate.FindThreadByName';
-var
-  Thread: TBaseThread;
-begin
-  Thread := nil;
-
-  AThreadRegistry.Enumerator(
-    procedure (const AThread: Pointer; var ABreak: Boolean)
-    begin
-      if TBaseThread(AThread).Name = AThreadName then
-      begin
-        Thread := TBaseThread(AThread);
-
-        ABreak := true;
-      end;
-    end);
-
-  Result := Thread;
-end;
 
 class function THelpmate.IsFormActive(const AForm: TForm): Boolean;
 var

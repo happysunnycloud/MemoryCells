@@ -7,14 +7,13 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts,
   FMX.Memo.Types, FMX.Controls.Presentation, FMX.ScrollBox, FMX.Memo,
   CellUnit, FMX.StdCtrls, FMX.Objects
-
-  , BaseFormUnit
   , CellReminderDateTimeFrameUnit
-  , FMX.ThemeUnit
+  , FMX.FormExtUnit
+  , FMX.Theme
   ;
 
 type
-  TCellReminderForm = class(TForm)
+  TCellReminderForm = class(TFormExt)
     CellMemoLayout: TLayout;
     CellMemo: TMemo;
     ControlButtonsLayout: TLayout;
@@ -183,23 +182,28 @@ begin
 
   CellMemo.Text := FCell.Content;
 
-  TBorderFrame.Create(
-    Self,
-    loContent,
-    'Reminder',
-    Trunc(loScreen.Width * SCALE_VALUE) + 50,
-    Trunc(loScreen.Height * SCALE_VALUE) + 10,
-    TAlphaColorRec.White,
-    $FF2A001A,
-    $FF4C002F,
-    $FF9B0060);
+//  TBorderFrame.Create(
+//    Self,
+//    loContent,
+//    'Reminder',
+//    Trunc(loScreen.Width * SCALE_VALUE) + 50,
+//    Trunc(loScreen.Height * SCALE_VALUE) + 10,
+//    TAlphaColorRec.White,
+//    $FF2A001A,
+//    $FF4C002F,
+//    $FF9B0060);
+
+  BorderFrame.Kind := TBorderFrameKind.bfkNormal;
+  BorderFrame.CaptionColor := $FFFFFFFF;
+  BorderFrame.Color := $FF2A001A;
+  BorderFrame.ToolButtonColor := BorderFrame.CaptionColor;
+  BorderFrame.ToolButtonMouseOverColor := $FF9B0060;
 
   Self.Fill.Kind := TBrushKind.Solid;
   Self.Fill.Color := FTheme.LightBackgroundColor;
 
-  Self.CellMemo.TextSettings.FontColor :=
-    FTheme.CommonTextProps.TextSettings.FontColor;
-  Self.CellMemo.TextSettings.Font.Size := FTheme.CommonTextProps.TextSettings.Font.Size;
+  Self.CellMemo.TextSettings.FontColor := FTheme.TextSettings.FontColor;
+  Self.CellMemo.TextSettings.Font.Size := FTheme.TextSettings.Font.Size;
 //  FTheme.TextFontSize;
 //  Self.NoteMemo.TextSettings.Font.Family := 'MS Reference Sans Serif';
   Self.CellMemo.StyledSettings := [];
@@ -224,15 +228,15 @@ begin
   if ModalResult = mrCancel then
     FCell.Remind := false;
 
-  Action := TCloseAction.caFree;
+//  Action := TCloseAction.caFree;
 end;
 
 procedure TCellReminderForm.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  CanClose := true;
-
-  Self.OnCloseQuery := nil;
+//  CanClose := true;
+//
+//  Self.OnCloseQuery := nil;
 end;
 
 procedure TCellReminderForm.GotoButtonClick(Sender: TObject);

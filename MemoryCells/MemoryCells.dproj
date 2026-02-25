@@ -293,7 +293,6 @@
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\ToolsUnit.pas"/>
         <DCCReference Include="Threads\BaseThreadUnit.pas"/>
-        <DCCReference Include="Threads\CloseFormThreadUnit.pas"/>
         <DCCReference Include="Threads\DeleteFolderThreadUnit.pas"/>
         <DCCReference Include="Threads\InsertCellThreadUnit.pas"/>
         <DCCReference Include="Threads\InsertFolderThreadUnit.pas"/>
@@ -344,7 +343,6 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Threads\LoadDestinationCatalogThreadUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\ThreadRegistryUnit.pas"/>
         <DCCReference Include="Threads\MoveCellsThreadUnit.pas"/>
         <DCCReference Include="Threads\KeyCatcherThreadUnit.pas"/>
         <DCCReference Include="KeyHandlerUnit.pas"/>
@@ -362,16 +360,11 @@
         <DCCReference Include="ServerRepliesParserUnit.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\UTServerReplyUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.MemoTextHighlighterUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\AddLogUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ShowNoteFormUnit\FMX.ShowNoteFormUnit.pas">
             <Form>NoteForm</Form>
         </DCCReference>
-        <DCCReference Include="FMX.ShowStatusUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.TrayIcon.Win.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\CustomThreadUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\FMX.Craft.PopupMenu\FMX.Craft.PopupMenu.Structures.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\FMX.Craft.PopupMenu\FMX.Craft.PopupMenu.Thread.Win.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\FMX.Craft.PopupMenu\FMX.Craft.PopupMenu.Win.pas"/>
         <DCCReference Include="Frames\CellReminderDateTimeFrameUnit.pas">
             <Form>CellReminderDateTimeFrame</Form>
             <DesignClass>TFrame</DesignClass>
@@ -407,9 +400,10 @@
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\FileToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ImageToolsUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\FMX.ThemeUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.Theme\FMX.Theme.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.Theme\FMX.Theme.Types.pas"/>
         <DCCReference Include="..\MemoryCellsCommon\MCParamsUnit.pas"/>
-        <DCCReference Include="..\..\DevelopmentsCollection\ParamsExtUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ParamsExt\ParamsExtUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FMX.ControlToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\DateTimeToolsUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\SQLite\DBToolsUnit.pas"/>
@@ -417,6 +411,23 @@
         <DCCReference Include="..\..\DevelopmentsCollection\FilePacker\TextExtractorUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\FilePacker\FilePackerUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\SQL\SQLTemplatesUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ThreadFactoryRegistryUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ThreadRegistryUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ObjectRegistryUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.FormExtUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\ThreadFactoryUnit.pas"/>
+        <DCCReference Include="Threads\FMX.ShowStatusUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.BaseClass.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.Windows.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.Form.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.Layout.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.Constants.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\FMX.PopupMenuExt.Thread.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\FMX.PopupMenuExt\PopupMenuExt.Item.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\AddLogUnit.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\Types\BinFileTypes.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\Stream\StreamHandler.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

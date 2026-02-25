@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, BaseSettingUnit,
   FMX.Edit, FMX.Objects
-  , FMX.ThemeUnit, BackupSettingFrameUnit, LaunchSettingFrameUnit;
+  , FMX.Theme, BackupSettingFrameUnit, LaunchSettingFrameUnit;
 
 type
   TCallbackProc = reference to procedure (const ABaseSettingFrame: TBaseSettingFrame);
@@ -82,7 +82,7 @@ begin
   if Assigned(ATheme) then
     FTheme.CopyFrom(ATheme);
 
-  FTheme.CommonTextProps.Align := TAlignLayout.Left;
+//  FTheme.CommonTextProps.Align := TAlignLayout.Left;
 
   FTheme.SaveStyleBookTo(Self.StyleBook);
 
@@ -123,7 +123,7 @@ begin
     _TextSettings := TTextSettings(
       TControlTools.GetPropertyAsObject(_Control, TProperties.TextSettings));
 
-    _TextSettings.FontColor := FTheme.CommonTextProps.TextSettings.FontColor;
+    _TextSettings.FontColor := FTheme.TextSettings.FontColor;
   end;
 
   BackupSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style :=

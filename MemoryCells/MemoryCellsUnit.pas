@@ -7,10 +7,8 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts, FMX.Controls.Presentation, FMX.StdCtrls,
   FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.Objects, FMX.Edit, FMX.Menus
   , Windows
-  , BaseFormUnit
   , DataManagerUnit
   , CellUnit
-  , BorderFrameUnit
   , CurrentFolderFrameUnit
   , CellMemoFrameUnit
   , CellUnitFrameUnit
@@ -20,8 +18,11 @@ uses
   , UTClientUnit
   , TransportContainerUnit
   , CellReminderDateTimeFrameUnit
-  , FMX.Craft.PopupMenu.Win, FMX.DateTimeCtrls
   , BaseThreadUnit
+  , FMX.FormExtUnit
+  , FMX.PopupMenuExt
+  , PopupMenuExt.Item
+  , FMX.DateTimeCtrls
   ;
 
 const
@@ -30,7 +31,7 @@ const
 type
   TEventsManager = class;
 
-  TMainForm = class(TBaseForm)
+  TMainForm = class(TFormExt)
     FoldersScrollBox: TScrollBox;
     CellsScrollBox: TScrollBox;
     CellLayout: TLayout;
@@ -113,8 +114,10 @@ type
     procedure CellRemindButtonClick(Sender: TObject);
     procedure SettingsButtonClick(Sender: TObject);
     procedure ShowRemindCellsButtonClick(Sender: TObject);
+
+    procedure Repaint;
   strict private
-    FBorderFrame: TBorderFrame;
+//    FBorderFrame: TBorderFrame;
 
     FFoldersMinWidth: Single;
     FFoldersMaxWidth: Single;
@@ -125,7 +128,7 @@ type
     FCellMinWidth: Single;
     FCellMaxWidth: Single;
 
-    FTrayPopupMenu: TCraftPopupMenu;
+    FTrayPopupMenu: TPopupMenuExt;
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
     procedure CreateFolderUnitFrame(
@@ -144,6 +147,8 @@ type
     procedure StopOnline;
 
     procedure RaiseAppException(const AMethod: String; const AE: Exception);
+
+    procedure CloseMenuItemClickHandler(Sender: TObject);
   protected
     procedure CreateHandle; override;
     procedure DestroyHandle; override;
@@ -188,7 +193,7 @@ type
     procedure ShowRemindCells(const AShow: Boolean);
 
     // Handlers.Begin
-    procedure TrayIconMouseRightButtonDown(
+    procedure TrayIconMouseRightButtonDownHandler(
       Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 
     procedure UTClientOnExceptionHandler(const AErrorCode: TUTCErrorCode; const AExceptionMessage: String);
@@ -267,7 +272,7 @@ type
 //    procedure StoreEvents;
 //    procedure ReStoreEvents;
 
-    property BorderFrame: TBorderFrame read FBorderFrame;
+//    property BorderFrame: TBorderFrame read FBorderFrame;
 
     property  CurrentFolderFrame: TCurrentFolderFrame read FCurrentFolderFrame;
     property  CellMemo: TMemo read GetCellMemo;
@@ -299,6 +304,7 @@ implementation
 uses
     System.Generics.Collections
   , System.Generics.Defaults
+  , System.SyncObjs
 //  , ToolsUnit
   , FMX.ControlToolsUnit
   , FileToolsUnit
@@ -318,14 +324,15 @@ uses
   , FMX.ShowNoteFormUnit
   , FMX.OnClickReplacerUnit
   , FMX.ShowStatusUnit
-  , FMX.Craft.PopupMenu.Structures
+//  , FMX.Craft.PopupMenu.Structures
   , FMX.Platform.Win
   , VCL.Graphics
   , Winapi.Messages
   , AddLogUnit
   , CellReminderFormUnit
-  , FMX.ThemeUnit
+  , FMX.Theme
   , SettingsFrameUnit
+  , ThreadFactoryUnit
   ;
 
 type
@@ -336,7 +343,6 @@ type
       FTimeout: Word;
   public
     class procedure Init(const ATextControl: TControl; const ATimeout: Word);
-    class procedure Uninit;
     class procedure ShowCellUpdated(const AParams: TParamsExt);
     class procedure ShowCellReminderUpdated;
     class procedure ShowSettingsSaved;
@@ -347,23 +353,14 @@ type
 //function KeyHook(Code: Integer; wParam: Word; lParam: Longint): Longint;
   //stdcall; external 'KeyHook' name 'KeyHookProc';
 
-procedure CloseApp;
-begin
-  if Assigned(MainForm) then
-    MainForm.BorderFrame.CloseButtonRectangle.OnClick(MainForm.BorderFrame.CloseButtonRectangle);
-end;
-
 class procedure TShowStatusExt.Init(const ATextControl: TControl; const ATimeout: Word);
 begin
   TControlTools.CheckHasProperty(ATextControl, TProperties.Text);
 
   FTextControl := ATextControl;
   FTimeout := ATimeout;
-end;
 
-class procedure TShowStatusExt.Uninit;
-begin
-  TShowStatus.Stop;
+  Form := MainForm;
 end;
 
 class procedure TShowStatusExt.ShowCellUpdated(const AParams: TParamsExt);
@@ -804,21 +801,59 @@ end;
 //end;
 
 procedure TMainForm.RestartReminder;
-var
-  ThreadName: String;
-  Thread: TThread;
 begin
-  ThreadName := 'TCellReminderThread';
-  Thread := THelpmate.FindThreadByName(Self.ThreadRegistry, ThreadName);
-  if Assigned(Thread) then
-    Thread.Terminate;
+  //asd debug TMainForm.RestartReminder
+  ThreadFactory.CreateFreeOnTerminateThread(
+    procedure (const AThread: TThreadExt)
+    var
+      ThreadIsDeadEvent: TEvent;
+      ThreadName: String;
+    begin
+      ThreadIsDeadEvent := TEvent.Create(nil, true, true, '');
+      try
+        TLogger.AddLog('TMainForm.RestartReminder -> Выставляем потокам терминатора', MG);
 
-  ThreadName := 'TLoadCellReminderThread';
-  Thread := THelpmate.FindThreadByName(Self.ThreadRegistry, ThreadName);
-  if Assigned(Thread) then
-    Thread.Terminate;
+        ThreadName := 'TCellReminderThread';
+        ThreadFactory.ActivateThreadIsDeadEvent(ThreadName, ThreadIsDeadEvent);
+        ThreadFactory.TerminateThread(ThreadName);
+        ThreadIsDeadEvent.WaitFor(INFINITE);
 
-  AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
+        ThreadName := 'TLoadCellReminderThread';
+        ThreadFactory.ActivateThreadIsDeadEvent(ThreadName, ThreadIsDeadEvent);
+        ThreadFactory.TerminateThread(ThreadName);
+        ThreadIsDeadEvent.WaitFor(INFINITE);
+
+        TLogger.AddLog('TMainForm.RestartReminder -> Терминатор потокам выставлен', MG);
+      finally
+        FreeAndNil(ThreadIsDeadEvent);
+      end;
+
+      TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
+      AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
+    end, false);
+
+//  ThreadFactory.CreateFreeOnTerminateThread(
+//    procedure (const AThread: TThreadExt)
+//    begin
+//      TLogger.AddLog('TMainForm.RestartReminder -> Выставляем потокам терминатора', MG);
+//
+//      ThreadName := 'TCellReminderThread';
+//      ThreadFactory.TerminateThread(ThreadName);
+//
+//      while Assigned(ThreadFactory.FindThread(ThreadName)) do
+//        Sleep(400);
+//
+//      ThreadName := 'TLoadCellReminderThread';
+//      ThreadFactory.TerminateThread(ThreadName);
+//
+//      while Assigned(ThreadFactory.FindThread(ThreadName)) do
+//        Sleep(400);
+//
+//      TLogger.AddLog('TMainForm.RestartReminder -> Терминатор потокам выставлен', MG);
+//
+//      TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
+//      AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
+//    end, false);
 end;
 
 procedure TMainForm.DoUpdateCell(const AProcRef: TParamsProcRef);
@@ -838,6 +873,12 @@ end;
 
 procedure TMainForm.UpdateCellReminder(const ACell: TCell);
 begin
+  TLogger.AddLog('TMainForm.UpdateCellReminder -> Запускаем обновление ячейки с содержимым: ' +
+    ACell.Content +
+    ' RemindDateTime: ' +
+    DateTimeToStr(ACell.RemindDateTime)
+    , MG);
+
   AppManager.CreateUpdateCellThread(Self, ACell, CellReminderUpdated);
 end;
 
@@ -856,6 +897,8 @@ begin
 
     CellMemoChangeTrackingHandler(nil);
   end;
+  //asd debug TMainForm.CellReminderUpdated перезапуск ремайндера
+  TLogger.AddLog('TMainForm.CellReminderUpdated -> Перезапускаем ремайндер', MG);
 
   RestartReminder;
 end;
@@ -1087,8 +1130,8 @@ begin
         UpdateCellButton,
         DeleteCellButton,
         CellRemindButton,
-        HideFoldersButton,
-        FBorderFrame.RolldownButtonRectangle];
+        HideFoldersButton
+        ];
     end
     else
     begin
@@ -1097,8 +1140,8 @@ begin
         DeleteCellButton,
         CellRemindButton,
         HideFoldersButton,
-        FBorderFrame.RolldownButtonRectangle,
-        FCellReminderDateTimeFrame.OkButton];
+        FCellReminderDateTimeFrame.OkButton
+        ];
     end;
 
     TOnClickReplacer.Replace(Self,
@@ -1730,6 +1773,11 @@ begin
   ShowRemindCells(not DoShowRemindCells);
 end;
 
+procedure TMainForm.Repaint;
+begin
+  Self.PaintRects([Self.ClientRect]);
+end;
+
 procedure TMainForm.InsertFolderButtonClick(Sender: TObject);
 var
   Cell: TCell;
@@ -1788,18 +1836,20 @@ begin
     ParamsObj := TParamsExt.Create;
     try
       ParamsObj.CopyFrom(AParams);
-      CellId := ParamsObj.AsInt64[0];
-      FolderId := ParamsObj.AsInt64[1];
-      Content := ParamsObj.AsString[2];
-      CellTypeId := ParamsObj.AsInteger[3];
-      CellIsDone := ParamsObj.AsBoolean[4];
+      CellId := ParamsObj.AsInt64ByIdent['CellId'];
+      FolderId := ParamsObj.AsInt64ByIdent['FolderId'];
+      Content := ParamsObj.AsStringByIdent['Content'];
+      CellTypeId := ParamsObj.AsIntegerByIdent['CellTypeId'];
+      CellIsDone := ParamsObj.AsBooleanByIdent['CellIsDone'];
+
       //CellUpdateDateTime{5} - здесь не используем
+
       CellRemindDateTime :=
         ParamsObj.IfAsDateTimeByIdent(PARAM_IDENT_CellReminderFormRemindDateTime,
-          ParamsObj.AsDateTime[6]);
+          ParamsObj.AsDateTimeByIdent['CellRemindDateTime']);
       CellRemind :=
         ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_CellReminderFormRemind,
-          ParamsObj.AsBoolean[7]);
+          ParamsObj.AsBooleanByIdent['CellRemind']);
 
       OpenReminderPanel :=
         ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_CellReminderFormOpenReminderPanel, false);
@@ -1888,14 +1938,14 @@ begin
       ParamsObj.CopyFrom(AParams);
       Cell := TCell.Create;
       try
-        CellId := ParamsObj.AsInt64[0];
-        FolderId := ParamsObj.AsInt64[1];
-        Content := ParamsObj.AsString[2];
-        CellTypeId := ParamsObj.AsInteger[3];
-        CellIsDone := ParamsObj.AsBoolean[4];
-        CellUpdateDateTime := ParamsObj.AsDateTime[5];
-        CellRemindDateTime := ParamsObj.AsDateTime[6];
-        CellRemind := ParamsObj.AsBoolean[7];
+        CellId := ParamsObj.AsInt64ByIdent['CellId'];
+        FolderId := ParamsObj.AsInt64ByIdent['FolderId'];
+        Content := ParamsObj.AsStringByIdent['Content'];
+        CellTypeId := ParamsObj.AsIntegerByIdent['CellTypeId'];
+        CellIsDone := ParamsObj.AsBooleanByIdent['CellIsDone'];
+        CellUpdateDateTime := ParamsObj.AsDateTimeByIdent['CellUpdateDateTime'];
+        CellRemindDateTime := ParamsObj.AsDateTimeByIdent['CellRemindDateTime'];
+        CellRemind := ParamsObj.AsBooleanByIdent['CellRemind'];
 
         Cell.Id := CellId;
         Cell.FolderId := FolderId;
@@ -1909,6 +1959,23 @@ begin
         if CellId = 0 then
           Exit;
 
+        TLogger.AddLog(
+          'TMainForm.StartCellReminder -> Создаем поток с напоминанием: ' +
+          Cell.Content +
+          ' RemindDateTime: ' +
+          DateTimeToStr(Cell.RemindDateTime),
+          MG);
+
+        //asd debug
+        if Assigned(ThreadFactory.FindThread('TCellReminderThread')) then
+          TLogger.AddLog(
+            'TMainForm.StartCellReminder -> Поток TCellReminderThread все еще существует',
+            MG)
+        else
+          TLogger.AddLog(
+            'TMainForm.StartCellReminder -> Поток TCellReminderThread уже не существует',
+            MG);
+        //asd debug
         AppManager.CreateCellReminderThread(Self, Cell, ShowCellReminderForm);
       finally
         FreeAndNil(Cell);
@@ -2056,7 +2123,9 @@ begin
 
   RestartReminder;
 end;
-
+{ TODO :
+Слить TMainForm.InsertCell с TMainForm.OpenCell
+Должна остаться только TMainForm.OpenCell }
 procedure TMainForm.InsertCell(const AParams: TParamsExt);
 const
   METHOD = 'TMainForm.InsertCell';
@@ -2068,12 +2137,14 @@ var
   Cell: TCell;
 begin
   try
+    SetCellMemoFrameNullId;
+
     ParamsObj := TParamsExt.Create;
     try
       ParamsObj.CopyFrom(AParams);
-      CellId := ParamsObj.AsInt64[0];
-      FolderId := ParamsObj.AsInt64[1];
-      CellTypeId := ParamsObj.AsInteger[2];
+      CellId := ParamsObj.AsInt64ByIdent['CellId'];
+      FolderId := ParamsObj.AsInt64ByIdent['FolderId'];
+      CellTypeId := ParamsObj.AsIntegerByIdent['CellTypeId'];
     finally
       FreeAndNil(ParamsObj);
     end;
@@ -2081,13 +2152,12 @@ begin
     Cell := TCell.Create(CellId, FolderId, CellTypeId);
     try
       CreateCellUnitFrame(Cell);
+      CellMemoFrame.SetCell(Cell);
     finally
       FreeAndNil(Cell);
     end;
 
-    SetCellMemoFrameNullId;
-
-    CellMemoFrame.Cell.Id := CellId;
+//    CellMemoFrame.Cell.Id := CellId;
     CellMemoFrame.CellUnitFrame := THelpmate.GetCellUnitFrameByCellId(CellsScrollBox, CellId);
 
     THelpmate.SetMemoCellDefaultSettings(CellMemo);
@@ -2431,7 +2501,7 @@ begin
     end;
   end;
 end;
-
+//asd debug TMainForm.ShowCellReminderForm
 procedure TMainForm.ShowCellReminderForm(const AParams: TParamsExt);
 var
   Cell: TCell;
@@ -2446,6 +2516,15 @@ begin
     //      Exit;
 
     Cell.CopyFrom(CellTemp);
+
+    TLogger.AddLog(
+      'TMainForm.ShowCellReminderForm -> Показываем ячейку с содержимым: ' +
+      Cell.Content +
+      ' RemindDateTime: ' +
+      DateTimeToStr(Cell.RemindDateTime)
+      ,
+      MG);
+
     ModalResult := TCellReminderForm.Show(Cell, OpenCellReminderPanel);
     if CellMemoFrame.Cell.Id = Cell.Id then
     begin
@@ -2455,6 +2534,9 @@ begin
     case ModalResult of
       mrContinue{Goto}:
       begin
+        TLogger.AddLog(
+          'TMainForm.ShowCellReminderForm -> ModalResult = mrContinue',
+          MG);
         //        Cell.Remind := false;
         //        UpdateCellReminder(Cell);
 
@@ -2477,10 +2559,18 @@ begin
       end;
       mrRetry{Ok(Reschedule)}:
       begin
+        TLogger.AddLog(
+          'TMainForm.ShowCellReminderForm -> ModalResult = mrRetry',
+          MG);
+
         UpdateCellReminder(Cell);
       end;
       mrAbort{Delete}:
       begin
+        TLogger.AddLog(
+          'TMainForm.ShowCellReminderForm -> ModalResult = mrAbort',
+          MG);
+
         if Cell.Id = AppManager.Settings.CurrentCellId then
         begin
           DoDeleteCell(Cell.Id, True);
@@ -2492,6 +2582,10 @@ begin
       end;
       mrCancel{Cancel, Close}:
       begin
+        TLogger.AddLog(
+          'TMainForm.ShowCellReminderForm -> ModalResult = mrCancel',
+          MG);
+
         UpdateCellReminder(Cell);
       end;
     end;
@@ -2655,22 +2749,23 @@ procedure TMainForm.FormCreate(Sender: TObject);
 const
   METHOD = 'TMainForm.FormCreate';
 var
-  SCALE_VALUE: Byte;
+//  SCALE_VALUE: Byte;
   NoteIdentsFileName: String;
   DBFileName: String;
   DBDirName: String;
   DBBackupDirName: String;
   SQLTemplatesPath: String;
   CurrentDir: String;
+  MenuItem: TItem;
 begin
   ReportMemoryLeaksOnShutdown := true;
 
   try
-    CurrentDir := ExtractFilePath(ParamStr(0));
-    SetCurrentDir(CurrentDir);
-
     TLogger.Init('AppLog', 1000, true, true);
     TLogger.AddLog('Start app', MG);
+
+    CurrentDir := ExtractFilePath(ParamStr(0));
+    SetCurrentDir(CurrentDir);
 
     SettingsFrame := nil;
 
@@ -2691,24 +2786,26 @@ begin
     FCellMinWidth := CellsSplitter.MinSize;
   //  FCellMaxWidth := Round(Width * 0.6);  // Задается в MainForm.OnResize
 
-    SCALE_VALUE := 1;
-    FBorderFrame :=
-      TBorderFrame.Create(
-        Self,
-        loContent,
-        'Memory cells',
-        Round(loScreen.Width * SCALE_VALUE) + 50,
-        Round(loScreen.Height * SCALE_VALUE) + 10,
-        $FFFFFFFF,
-        $FF2A001A,
-        $FF4C002F,
-        $FF9B0060);
-    FBorderFrame.TrayIconMouseRightButtonDown := TrayIconMouseRightButtonDown;
+//    SCALE_VALUE := 1;
 
-    FTrayPopupMenu := TCraftPopupMenu.Create('>>', 1000);
-    FTrayPopupMenu.MenuItems.AddItem('Close', 'Close', true, CloseApp);
-    FTrayPopupMenu.BuildMenu;
-    //asd
+    BorderFrame.Kind := TBorderFrameKind.bfkNormal;
+    BorderFrame.CaptionColor := $FFFFFFFF;
+    BorderFrame.Color := $FF2A001A;
+    BorderFrame.ToolButtonColor := BorderFrame.CaptionColor;
+    BorderFrame.ToolButtonMouseOverColor := $FF9B0060;
+    TrayIconMouseRightButtonDown := TrayIconMouseRightButtonDownHandler;
+
+    FTrayPopupMenu := TPopupMenuExt.Create(Self);
+    MenuItem := TItem.Create;
+    MenuItem.Name := 'CloseMenuItem';
+//    MenuItem.Parent := FPatternBoardMenuItem;
+    MenuItem.Text := 'Close';
+    MenuItem.Tag := 0;
+    MenuItem.OnClick := CloseMenuItemClickHandler;
+//    MenuItem.IsChecked :=
+//      (TState.ImageName = ImageName) and (TState.Board = bkElectronic);
+    FTrayPopupMenu.Add(MenuItem);
+
     if AppManager.Settings.CollapseAppAtStartup.ToBoolean then
       TThread.ForceQueue(nil,
         procedure
@@ -2716,7 +2813,7 @@ begin
           Hide;
           ShowWindow(ApplicationHwnd, SW_HIDE);
         end);
-    //asd
+
     FEventsManager := TEventsManager.Create(Self);
 
     FCurrentFolderFrame := TCurrentFolderFrame.Create(Self);
@@ -2737,17 +2834,13 @@ begin
     if not FileExists(NoteIdentsFileName) then
       raise Exception.CreateFmt('File "%s" not found', [NoteIdentsFileName]);
 
-    THelpmate.Theme.BackgroundColor := InfoRectangle.Fill.Color;
+    THelpmate.Theme.FormSettings.BackgroundColor := InfoRectangle.Fill.Color;
+//    THelpmate.Theme.BackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.DarkBackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.LightBackgroundColor := Self.Fill.Color;
-//    THelpmate.Theme.MemoColor := Self.Fill.Color;
-    //asd debug
-    THelpmate.Theme.CommonTextProps.TextSettings.FontColor :=
+    THelpmate.Theme.TextSettings.FontColor :=
       FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-    //THelpmate.Theme.TextColor := TAlphaColorRec.Blue;
-    //FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-    //asd debug
-    THelpmate.Theme.CommonTextProps.TextSettings.Font.Size :=
+    THelpmate.Theme.TextSettings.Font.Size :=
       FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
     THelpmate.Theme.LoadStyleBookFrom(StyleBook);
 
@@ -2816,9 +2909,9 @@ begin
     else
       raise Exception.Create('Fatal error. Can`t load keydoard hook dll');
 
-    AppManager.CreateKeyCatcherThread(Self, 'MemoryCellsMemoryFile');
+//    AppManager.CreateKeyCatcherThread(Self, 'MemoryCellsMemoryFile');
 
-    RunBackupStarter;
+//    RunBackupStarter;
 
     if AppManager.Settings.IsFavoriteCellsShowing = 1 then
       ShowFavoriteCells(true)
@@ -2837,7 +2930,7 @@ end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
-  TShowStatusExt.Uninit;
+//  TShowStatusExt.Uninit;
 
   if Assigned(@HookSwitchProc) then
     HookSwitchProc(false);
@@ -2946,7 +3039,7 @@ begin
   end;
 end;
 
-procedure TMainForm.TrayIconMouseRightButtonDown(
+procedure TMainForm.TrayIconMouseRightButtonDownHandler(
   Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 var
   MousePoint: TPoint;
@@ -2997,6 +3090,11 @@ begin
       TNoteForm.ShowOk('Error', ExceptionMessage);
       // ShowMessage(ExceptionMessage);
     end);
+end;
+
+procedure TMainForm.CloseMenuItemClickHandler(Sender: TObject);
+begin
+  Close;
 end;
 
 //procedure TMainForm.StoreEvents;

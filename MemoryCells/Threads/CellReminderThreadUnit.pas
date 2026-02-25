@@ -6,10 +6,10 @@ uses
     System.Classes
 
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , CellUnit
-//  , CommonUnit
   , MCParamsUnit
+  , ThreadFactoryUnit
   ;
 
 type
@@ -18,10 +18,10 @@ type
     FCell: TCell;
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute; override;
+    procedure Execute(const AThread: TThreadExt); reintroduce;
   public
     constructor Create(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParams: TParamsExt;
       const AProcRef: TParamsProcRef); reintroduce;
     destructor Destroy; override;
@@ -36,18 +36,15 @@ uses
 { TCellReminderThread }
 
 constructor TCellReminderThread.Create(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm);
+  inherited Create(AForm, Execute);
 
   FCell := TCell.Create;
-
   InParams.CopyFrom(AParams);
-
   FCell.CopyFrom(InParams.AsPointer[0]);
-
   FProcRef := AProcRef;
 end;
 

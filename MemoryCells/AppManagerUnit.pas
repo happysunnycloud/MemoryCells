@@ -26,7 +26,7 @@ uses
   , UpdateCellReminderThreadUnit
   , LoadRemindCellsThreadUnit
   , BaseThreadUnit
-  , BaseFormUnit
+  , FMX.FormExtUnit
   , DBAccessUnit
   , CommonUnit
   , CellUnit
@@ -62,11 +62,11 @@ type
       const ATemplatesPack: String);
 
     function CreateLoadCatalogThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const ACellId: Int64): TLoadCatalogThread; overload;
     function CreateLoadCatalogThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const ACellId: Int64;
       const ACellRemindDateTime: TDateTime;
@@ -74,101 +74,101 @@ type
       const AOpenCellReminderPanel: Boolean): TLoadCatalogThread; overload;
 
     function CreateLoadDestinationCatalogThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const ABuildDestinationCatalogProcRef: TParamsProcRef): TLoadDestinationCatalogThread;
 
     function CreateLoadCellThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACell: TCell;
       const AProcRef: TParamsProcRef): TLoadCellThread;
 
     function CreateUpdateCellThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACell: TCell;
       const AProcRef: TParamsProcRef): TUpdateCellThread;
 
     function CreateInsertCellThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const AProcRef: TParamsProcRef): TInsertCellThread;
 
     function CreateDeleteCellThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACellId: Int64;
       const AProcRef: TParamsProcRef): TDeleteCellThread;
 
     function CreateUpdateFolderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const AFolderName: String;
       const AProcRef: TParamsProcRef): TUpdateFolderThread;
 
     function CreateInsertFolderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AParentFolderId: Int64;
       const AFolderName: String;
       const AProcRef: TParamsProcRef): TInsertFolderThread;
 
     function CreateDeleteFolderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AFolderId: Int64;
       const AParentFolderId: Int64;
       const AProcRef: TParamsProcRef;
       const ADeleteFolderError: TParamsProcRef): TDeleteFolderThread;
 
     function CreateSearchThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ASearchText: String;
       const AProcRef: TParamsProcRef): TSearchThread;
 
     function CreateLoadCellsByIdListThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACellIdList: TCellIdList;
       const AProcRef: TParamsProcRef): TLoadCellsByIdListThread;
 
     function CreateLoadRemindCellsThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AProcRef: TParamsProcRef): TLoadRemindCellsThread;
 
     function CreateBackupThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ABackupFileName: String;
       const AProcRef: TParamsProcRef): TBackupThread;
 
     function CreateBackupStarterThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ALastBackupDateTime: TDateTime;
       const AProcRef: TParamsProcRef): TBackupStarterThread;
 
     function CreateUpdateCellAttributesThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACellId: Int64;
       const AIsDone: Boolean;
       const AProcRef: TParamsProcRef): TUpdateCellAttributesThread;
 
     function CreateMoveCellsThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ASourceFolderId: Int64;
       const ADestinationFolderId: Int64;
       const ACellIdList: TCellIdList;
       const AActionType: TActionType): TMoveCellsThread;
 
     function CreateLoadCellReminderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AProcRef: TParamsProcRef): TLoadCellReminderThread;
 
     function CreateKeyCatcherThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const AMemoryFileName: String): TKeyCatcherThread;
 
     function CreateCellReminderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACell: TCell;
       const AProcRef: TParamsProcRef): TCellReminderThread;
     { TODO:  Разделить сохранение ячейки и ее ремайндера }
     function CreateUpdateCellReminderThread(
-      const AForm: TBaseForm;
+      const AForm: TFormExt;
       const ACell: TCell;
       const AProcRef: TParamsProcRef): TUpdateCellReminderThread;
   end;
@@ -182,8 +182,7 @@ implementation
 uses
     System.SysUtils
   , System.Classes
-
-  , CloseFormThreadUnit
+  , AddLogUnit
   ;
 
 constructor TAppManager.Create;
@@ -214,7 +213,7 @@ begin
 end;
 
 function TAppManager.CreateLoadCatalogThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const ACellId: Int64): TLoadCatalogThread;
 var
@@ -232,7 +231,7 @@ begin
 end;
 
 function TAppManager.CreateLoadCatalogThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const ACellId: Int64;
   const ACellRemindDateTime: TDateTime;
@@ -257,7 +256,7 @@ begin
 end;
 
 function TAppManager.CreateLoadDestinationCatalogThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const ABuildDestinationCatalogProcRef: TParamsProcRef): TLoadDestinationCatalogThread;
 var
@@ -274,7 +273,7 @@ begin
 end;
 
 function TAppManager.CreateLoadCellThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACell: TCell;
   const AProcRef: TParamsProcRef): TLoadCellThread;
 var
@@ -290,7 +289,7 @@ begin
 end;
 
 function TAppManager.CreateUpdateCellThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACell: TCell;
   const AProcRef: TParamsProcRef): TUpdateCellThread;
 var
@@ -311,7 +310,7 @@ begin
 end;
 
 function TAppManager.CreateInsertCellThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const AProcRef: TParamsProcRef): TInsertCellThread;
 var
@@ -327,7 +326,7 @@ begin
 end;
 
 function TAppManager.CreateDeleteCellThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACellId: Int64;
   const AProcRef: TParamsProcRef): TDeleteCellThread;
 var
@@ -343,7 +342,7 @@ begin
 end;
 
 function TAppManager.CreateUpdateFolderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const AFolderName: String;
   const AProcRef: TParamsProcRef): TUpdateFolderThread;
@@ -362,7 +361,7 @@ begin
 end;
 
 function TAppManager.CreateInsertFolderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AParentFolderId: Int64;
   const AFolderName: String;
   const AProcRef: TParamsProcRef): TInsertFolderThread;
@@ -381,7 +380,7 @@ begin
 end;
 
 function TAppManager.CreateDeleteFolderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AFolderId: Int64;
   const AParentFolderId: Int64;
   const AProcRef: TParamsProcRef;
@@ -400,7 +399,7 @@ begin
 end;
 
 function TAppManager.CreateSearchThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ASearchText: String;
   const AProcRef: TParamsProcRef): TSearchThread;
 var
@@ -415,7 +414,7 @@ begin
 end;
 
 function TAppManager.CreateLoadCellsByIdListThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACellIdList: TCellIdList;
   const AProcRef: TParamsProcRef): TLoadCellsByIdListThread;
 var
@@ -432,7 +431,7 @@ begin
 end;
 
 function TAppManager.CreateLoadRemindCellsThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AProcRef: TParamsProcRef): TLoadRemindCellsThread;
 var
   ParamsObj: TParamsExt;
@@ -446,7 +445,7 @@ begin
 end;
 
 function TAppManager.CreateBackupThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ABackupFileName: String;
   const AProcRef: TParamsProcRef): TBackupThread;
 var
@@ -463,7 +462,7 @@ begin
 end;
 
 function TAppManager.CreateBackupStarterThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ALastBackupDateTime: TDateTime;
   const AProcRef: TParamsProcRef): TBackupStarterThread;
 var
@@ -480,7 +479,7 @@ begin
 end;
 
 function TAppManager.CreateUpdateCellAttributesThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACellId: Int64;
   const AIsDone: Boolean;
   const AProcRef: TParamsProcRef): TUpdateCellAttributesThread;
@@ -499,7 +498,7 @@ begin
 end;
 
 function TAppManager.CreateMoveCellsThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ASourceFolderId: Int64;
   const ADestinationFolderId: Int64;
   const ACellIdList: TCellIdList;
@@ -520,7 +519,7 @@ begin
 end;
 
 function TAppManager.CreateLoadCellReminderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AProcRef: TParamsProcRef): TLoadCellReminderThread;
 var
   ParamsObj: TParamsExt;
@@ -535,7 +534,7 @@ begin
 end;
 
 function TAppManager.CreateKeyCatcherThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const AMemoryFileName: String): TKeyCatcherThread;
 var
   ParamsObj: TParamsExt;
@@ -551,12 +550,14 @@ begin
 end;
 
 function TAppManager.CreateCellReminderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACell: TCell;
   const AProcRef: TParamsProcRef): TCellReminderThread;
 var
   ParamsObj: TParamsExt;
 begin
+  TLogger.AddLog('Создаем TAppManager.CreateCellReminderThread', MG);
+
   ParamsObj := TParamsExt.Create;
   ParamsObj.Add(ACell);
   try
@@ -568,7 +569,7 @@ begin
 end;
 
 function TAppManager.CreateUpdateCellReminderThread(
-  const AForm: TBaseForm;
+  const AForm: TFormExt;
   const ACell: TCell;
   const AProcRef: TParamsProcRef): TUpdateCellReminderThread;
 var
