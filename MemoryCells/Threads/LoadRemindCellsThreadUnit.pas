@@ -49,19 +49,26 @@ end;
 procedure TLoadRemindCellsThread.Execute;
 const
   METHOD = 'TLoadRemindCellsThread.Execute';
+var
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    OutParams.Clear;
+      OutParams.Clear;
 
-    TDBAccess.DBAParamsFunc(TDBAccess.RemindCells, Params, OutParams);
+      TDBAccess.DBAParamsFunc(TDBAccess.RemindCells, Params, OutParams);
 
-    Params.Clear;
-    Params.Add(OutParams);
+      Params.Clear;
+      Params.Add(OutParams);
 
-    ControlParamsProc(FProcRef, OutParams);
+      ControlParamsProc(FProcRef, OutParams);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

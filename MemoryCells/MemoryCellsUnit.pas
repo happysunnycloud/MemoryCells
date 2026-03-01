@@ -164,11 +164,10 @@ type
     procedure ClearScrollBox(const AScrollBox: TScrollBox);
 
     procedure BuildDestinationFolderCatalog(const AParams: TParamsExt);
-    procedure UpdateCell(const AParams: TParamsExt);
-    procedure UpdateCellIsDone(const AParams: TParamsExt);
     procedure CellUpdated(const AParams: TParamsExt);
+    procedure UpdateCellIsDone(const AParams: TParamsExt);
     procedure InsertCell(const AParams: TParamsExt);
-    procedure DeleteCell(const AParams: TParamsExt);
+    procedure CellDeleted(const AParams: TParamsExt);
     procedure UpdateFolder(const AParams: TParamsExt);
     procedure InsertFolder(const AParams: TParamsExt);
     procedure DeleteFolderError(const AParams: TParamsExt);
@@ -205,12 +204,16 @@ type
 
     procedure ClientOnReadHandler(const ATransportContainer: TTransportContainer);
     // Handlers.End
+
+    procedure ActivateOnClickReplacer;
+    procedure ProcessCellMemoChange(const ARestartReminderEnabled: Boolean = true);
   public
     // Handlers.Begin
     procedure EditFolderNameOkHandler(Sender: TObject);
     procedure EditFolderNameCancelHandler(Sender: TObject);
     procedure InsertFolderNameOkHandler(Sender: TObject);
     procedure CellMemoChangeTrackingHandler(Sender: TObject);
+    //procedure CellMemoEnterHandler(Sender: TObject);
     //procedure CellMemoExitHandler(Sender: TObject);
 
     procedure SearchTextOkHandler(Sender: TObject);
@@ -261,7 +264,7 @@ type
     procedure GotoCell(const ACell: TCell);
     procedure GotoSearchResultFolder(const ACellIdList: TCellIdList);
     //procedure GetReminder;
-    procedure RestartReminder;
+    procedure RestartReminder(const AParams: TParamsExt);
 
     procedure DoUpdateCell(const AProcRef: TParamsProcRef);
 
@@ -278,7 +281,7 @@ type
     property  CellMemo: TMemo read GetCellMemo;
     property  CellMemoFrame: TCellMemoFrame read FCellMemoFrame;
   end;
-
+  {TODO: Разобраться нужен ли вообще TEventsManager? Уже есть TOnClickReplacer}
   TEventsManager = class
   strict private
     FMainForm: TMainForm;
@@ -720,21 +723,12 @@ procedure TMainForm.GotoFolder(
   const AFolderId: Int64;
   const ACellId: Int64);
 begin
-  TControlTools.EnableControls([
-    InsertFolderButton,
-    RenameFolderButton,
-    DeleteFolderButton,
-    InsertCellButton,
-    SearchButton,
-    HomeButton
-  ], false);
-
-  SetCellMemoFrameNullId;
-
-  AppManager.CreateLoadCatalogThread(
-    Self,
+  GotoFolder(
     AFolderId,
-    ACellId);
+    ACellId,
+    Now,
+    false,
+    false);
 end;
 
 procedure TMainForm.GotoFolder(
@@ -743,7 +737,11 @@ procedure TMainForm.GotoFolder(
   const ACellRemindDateTime: TDateTime;
   const ACellRemind: Boolean;
   const AOpenCellReminderPanel: Boolean);
+var
+  LoadCatalogThread: TLoadCatalogThread;
 begin
+  TLogger.AddLog('TMainForm.GotoFolder -> Входим', MG);
+
   TControlTools.EnableControls([
     InsertFolderButton,
     RenameFolderButton,
@@ -755,13 +753,43 @@ begin
 
   SetCellMemoFrameNullId;
 
-  AppManager.CreateLoadCatalogThread(
-    Self,
-    AFolderId,
-    ACellId,
-    ACellRemindDateTime,
-    ACellRemind,
-    AOpenCellReminderPanel);
+//  LoadCatalogThread := AppManager.CreateLoadCatalogThread(
+//    Self,
+//    AFolderId,
+//    ACellId,
+//    ACellRemindDateTime,
+//    ACellRemind,
+//    AOpenCellReminderPanel);
+
+  ThreadFactory.CreateInlineThread('GotoFolderInlineThread',
+    procedure (const AThread: TThreadExt)
+    var
+      ThreadIsDeadEvent: TEvent;
+      ThreadName: String;
+    begin
+      ThreadIsDeadEvent := TEvent.Create(nil, true, true, '');
+      try
+        ThreadName := 'TLoadCatalogThread';
+        ThreadFactory.ActivateThreadIsDeadEvent(ThreadName, ThreadIsDeadEvent);
+        ThreadIsDeadEvent.WaitFor(INFINITE);
+
+        LoadCatalogThread := AppManager.CreateLoadCatalogThread(
+          Self,
+          AFolderId,
+          ACellId,
+          ACellRemindDateTime,
+          ACellRemind,
+          AOpenCellReminderPanel);
+
+        ThreadFactory.ActivateThreadIsDeadEvent(LoadCatalogThread, ThreadIsDeadEvent);
+        ThreadIsDeadEvent.WaitFor(INFINITE);
+      finally
+        FreeAndNil(ThreadIsDeadEvent);
+      end;
+
+      if ACellRemind then
+        RestartReminder(nil);
+    end);
 end;
 
 procedure TMainForm.GotoDestinationFolder(const AFolderId: Int64);
@@ -800,9 +828,8 @@ end;
 //  AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
 //end;
 
-procedure TMainForm.RestartReminder;
+procedure TMainForm.RestartReminder(const AParams: TParamsExt);
 begin
-  //asd debug TMainForm.RestartReminder
   ThreadFactory.CreateInlineThread('RestartReminderInlineThread',
     procedure (const AThread: TThreadExt)
     var
@@ -811,19 +838,19 @@ begin
     begin
       ThreadIsDeadEvent := TEvent.Create(nil, true, true, '');
       try
-        TLogger.AddLog('TMainForm.RestartReminder -> Выставляем потокам терминатора', MG);
-
         ThreadName := 'TCellReminderThread';
+        TLogger.AddLog('TMainForm.RestartReminder -> Терминируем ' + ThreadName, MG);
         ThreadFactory.ActivateThreadIsDeadEvent(ThreadName, ThreadIsDeadEvent);
         ThreadFactory.TerminateThread(ThreadName);
         ThreadIsDeadEvent.WaitFor(INFINITE);
+        TLogger.AddLog('TMainForm.RestartReminder -> ' + ThreadName + ' терминирован', MG);
 
         ThreadName := 'TLoadCellReminderThread';
+        TLogger.AddLog('TMainForm.RestartReminder -> Терминируем ' + ThreadName, MG);
         ThreadFactory.ActivateThreadIsDeadEvent(ThreadName, ThreadIsDeadEvent);
         ThreadFactory.TerminateThread(ThreadName);
         ThreadIsDeadEvent.WaitFor(INFINITE);
-
-        TLogger.AddLog('TMainForm.RestartReminder -> Терминатор потокам выставлен', MG);
+        TLogger.AddLog('TMainForm.RestartReminder -> ' + ThreadName + ' терминирован', MG);
       finally
         FreeAndNil(ThreadIsDeadEvent);
       end;
@@ -831,29 +858,6 @@ begin
       TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
       AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
     end);
-
-//  ThreadFactory.CreateFreeOnTerminateThread(
-//    procedure (const AThread: TThreadExt)
-//    begin
-//      TLogger.AddLog('TMainForm.RestartReminder -> Выставляем потокам терминатора', MG);
-//
-//      ThreadName := 'TCellReminderThread';
-//      ThreadFactory.TerminateThread(ThreadName);
-//
-//      while Assigned(ThreadFactory.FindThread(ThreadName)) do
-//        Sleep(400);
-//
-//      ThreadName := 'TLoadCellReminderThread';
-//      ThreadFactory.TerminateThread(ThreadName);
-//
-//      while Assigned(ThreadFactory.FindThread(ThreadName)) do
-//        Sleep(400);
-//
-//      TLogger.AddLog('TMainForm.RestartReminder -> Терминатор потокам выставлен', MG);
-//
-//      TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
-//      AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
-//    end, false);
 end;
 
 procedure TMainForm.DoUpdateCell(const AProcRef: TParamsProcRef);
@@ -897,10 +901,10 @@ begin
 
     CellMemoChangeTrackingHandler(nil);
   end;
-  //asd debug TMainForm.CellReminderUpdated перезапуск ремайндера
+
   TLogger.AddLog('TMainForm.CellReminderUpdated -> Перезапускаем ремайндер', MG);
 
-  RestartReminder;
+  RestartReminder(nil);
 end;
 
 procedure TMainForm.HideFoldersButtonClick(Sender: TObject);
@@ -1111,67 +1115,18 @@ begin
 end;
 
 procedure TMainForm.CellMemoChangeTrackingHandler(Sender: TObject);
-var
-  ExcludedControl: TArray<TControl>;
 begin
   if CellMemoFrame.CellMemoTextIsChanged then
   begin
     TControlTools.EnableControls([
       UpdateCellButton
     ], true);
-
-//    TOnClickReplacer.Restore;
-    if TOnClickReplacer.HasReplaced then
-      Exit;
-
-    if not Assigned(FCellReminderDateTimeFrame) then
-    begin
-      ExcludedControl := [
-        UpdateCellButton,
-        DeleteCellButton,
-        CellRemindButton,
-        HideFoldersButton
-        ];
-    end
-    else
-    begin
-      ExcludedControl := [
-        UpdateCellButton,
-        DeleteCellButton,
-        CellRemindButton,
-        HideFoldersButton,
-        FCellReminderDateTimeFrame.OkButton
-        ];
-    end;
-
-    TOnClickReplacer.Replace(Self,
-      ExcludedControl,
-      procedure
-      var
-        ParamsProcRef: TParamsProcRef;
-      begin
-        TOnClickReplacer.Restore;
-
-        if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
-        begin
-          ParamsProcRef := TShowStatusExt.ShowCellUpdated;
-          DoUpdateCell(ParamsProcRef);
-        end
-        else
-        begin
-          CellMemoFrame.RestoreContent;
-        end;
-      end
-    );
   end
   else
   begin
     TControlTools.EnableControls([
       UpdateCellButton
     ], false);
-
-    if TOnClickReplacer.HasReplaced then
-      TOnClickReplacer.Restore;
   end;
 end;
 
@@ -1452,13 +1407,6 @@ begin
 
   if FCellsMaxWidth = 0 then
     Exit;
-
-//  if CellsLayout.Width < FCellsMinWidth then
-//    CellsLayout.Width := FCellsMinWidth
-
-//  else
-//  if CellsLayout.Width > FCellsMaxWidth then
-//    CellsLayout.Width := FCellsMaxWidth;
 end;
 
 procedure TMainForm.SilentTextInsertIntoCellMemo(const AText: String);
@@ -1470,9 +1418,6 @@ end;
 
 procedure TMainForm.SetCellMemoFrameNullId;
 begin
-  //  if Assigned(FCellReminderDateTimeFrame) then
-  //    FCellReminderDateTimeFrame.CancelButton.OnClick(nil);
-
   HideCellReminderFrame;
 
   SilentTextInsertIntoCellMemo('');
@@ -1536,23 +1481,23 @@ var
   Cell: TCell;
   ParamsObj: TParamsExt;
   FolderId: Int64;
-  MustRestartReminder: Boolean;
+//  MustRestartReminder: Boolean;
 begin
-  SetCellMemoFrameNullId;
-
   try
+    SetCellMemoFrameNullId;
+
     CellList := TCellList.Create;
     try
       ParamsObj := TParamsExt.Create;
       try
         ParamsObj.CopyFrom(AParams);
 
-        FolderId := ParamsObj.AsInt64[0];
+        FolderId := ParamsObj.AsInt64ByIdent['FolderId'];
         OuterCellList := ParamsObj.AsPointer[1];
         CellList.CopyFrom(OuterCellList);
         CellList.FolderParentId := FolderId;
 
-        MustRestartReminder := ParamsObj.AsBooleanByIdent[PARAM_IDENT_RestartReminder];
+//        MustRestartReminder := ParamsObj.AsBooleanByIdent[PARAM_IDENT_RestartReminder];
       finally
         FreeAndNil(ParamsObj);
       end;
@@ -1618,8 +1563,11 @@ begin
     if CurrentFolderFrame.Cell.Id = ROOT_FOLDER_ID then
       DeleteFolderButton.Enabled := false;
 
-    if MustRestartReminder then
-      RestartReminder;
+//    if MustRestartReminder then
+//    begin
+//      TLogger.AddLog('TMainForm.BuildFolderCatalog -> Перезапускаем RestartReminder', MG);
+//      RestartReminder;
+//    end;
   except
     on e: Exception do
     begin
@@ -1828,7 +1776,6 @@ var
   CellRemind: Boolean;
   Cell: TCell;
   OpenReminderPanel: Boolean;
-  MustRestartReminder: Boolean;
 begin
   try
     SetCellMemoFrameNullId;
@@ -1842,8 +1789,6 @@ begin
       CellTypeId := ParamsObj.AsIntegerByIdent['CellTypeId'];
       CellIsDone := ParamsObj.AsBooleanByIdent['CellIsDone'];
 
-      //CellUpdateDateTime{5} - здесь не используем
-
       CellRemindDateTime :=
         ParamsObj.IfAsDateTimeByIdent(PARAM_IDENT_CellReminderFormRemindDateTime,
           ParamsObj.AsDateTimeByIdent['CellRemindDateTime']);
@@ -1853,9 +1798,6 @@ begin
 
       OpenReminderPanel :=
         ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_CellReminderFormOpenReminderPanel, false);
-
-      MustRestartReminder :=
-        ParamsObj.IfAsBooleanByIdent(PARAM_IDENT_RestartReminder, true);
     finally
       FreeAndNil(ParamsObj);
     end;
@@ -1906,8 +1848,7 @@ begin
     if OpenReminderPanel then
       CellRemindButton.OnClick(nil);
 
-    if MustRestartReminder then
-      RestartReminder;
+    ActivateOnClickReplacer;
   except
     on e: Exception do
     begin
@@ -1933,6 +1874,7 @@ var
   CellRemind: Boolean;
 begin
   try
+    TLogger.AddLog('TMainForm.StartCellReminder -> Зашли', MG);
     ParamsObj := TParamsExt.Create;
     try
       ParamsObj.CopyFrom(AParams);
@@ -1959,13 +1901,6 @@ begin
         if CellId = 0 then
           Exit;
 
-        TLogger.AddLog(
-          'TMainForm.StartCellReminder -> Создаем поток с напоминанием: ' +
-          Cell.Content +
-          ' RemindDateTime: ' +
-          DateTimeToStr(Cell.RemindDateTime),
-          MG);
-
         //asd debug
         if Assigned(ThreadFactory.FindThread('TCellReminderThread')) then
           TLogger.AddLog(
@@ -1976,6 +1911,14 @@ begin
             'TMainForm.StartCellReminder -> Поток TCellReminderThread уже не существует',
             MG);
         //asd debug
+
+        TLogger.AddLog(
+          'TMainForm.StartCellReminder -> Создаем поток с напоминанием: ' +
+          Cell.Content +
+          ' RemindDateTime: ' +
+          DateTimeToStr(Cell.RemindDateTime),
+          MG);
+
         AppManager.CreateCellReminderThread(Self, Cell, ShowCellReminderForm);
       finally
         FreeAndNil(Cell);
@@ -2031,9 +1974,9 @@ begin
   EditFolderNameFrame.FolderNameEdit.SetFocus;
 end;
 
-procedure TMainForm.UpdateCell(const AParams: TParamsExt);
+procedure TMainForm.CellUpdated(const AParams: TParamsExt);
 const
-  METHOD = 'TMainForm.UpdateCell';
+  METHOD = 'TMainForm.CellUpdated';
 var
   ParamsObj: TParamsExt;
   CellContent: String;
@@ -2063,10 +2006,9 @@ begin
       HomeButton
     ], true);
 
-    TOnClickReplacer.Restore;
-    //FEventsManager.ReStoreEvents;
-
     TShowStatusExt.ShowCellUpdated(nil);
+
+    RestartReminder(nil);
   except
     on e: Exception do
     begin
@@ -2115,13 +2057,6 @@ begin
       raise Exception.Create(Format('%s: %s', [METHOD, e.Message]));
     end;
   end;
-end;
-
-procedure TMainForm.CellUpdated(const AParams: TParamsExt);
-begin
-  UpdateCell(AParams);
-
-  RestartReminder;
 end;
 { TODO :
 Слить TMainForm.InsertCell с TMainForm.OpenCell
@@ -2183,9 +2118,9 @@ begin
   end;
 end;
 
-procedure TMainForm.DeleteCell(const AParams: TParamsExt);
+procedure TMainForm.CellDeleted(const AParams: TParamsExt);
 const
-  METHOD = 'TMainForm.DeleteCell';
+  METHOD = 'TMainForm.CellDeleted';
 var
   ParamsObj: TParamsExt;
   CellId: Int64;
@@ -2230,7 +2165,7 @@ begin
     // Сисок эвентов после удаления через окно ремайнреда будет пуст
     FEventsManager.ReStoreEvents;
 
-    RestartReminder;
+    RestartReminder(nil);
   except
     on e: Exception do
     begin
@@ -2373,9 +2308,9 @@ var
   Cell: TCell;
   ParamsObj: TParamsExt;
 begin
-  SetCellMemoFrameNullId;
-
   try
+    SetCellMemoFrameNullId;
+
     FolderList := TCellList.Create;
     try
       ParamsObj := TParamsExt.Create;
@@ -2444,9 +2379,9 @@ var
   Cell: TCell;
   ParamsObj: TParamsExt;
 begin
-  SetCellMemoFrameNullId;
-
   try
+    SetCellMemoFrameNullId;
+
     CellList := TCellList.Create;
     try
       ParamsObj := TParamsExt.Create;
@@ -2512,8 +2447,8 @@ begin
   Cell := TCell.Create;
   try
     CellTemp := TCell(AParams.AsPointer[0]);
-    //    if CellMemoFrame.Cell.Id = CellTemp.Id then
-    //      Exit;
+//    if CellMemoFrame.Cell.Id = CellTemp.Id then
+//      Exit;
 
     Cell.CopyFrom(CellTemp);
 
@@ -2537,22 +2472,15 @@ begin
         TLogger.AddLog(
           'TMainForm.ShowCellReminderForm -> ModalResult = mrContinue',
           MG);
-        //        Cell.Remind := false;
-        //        UpdateCellReminder(Cell);
 
-        //        if CellMemoFrame.CellMemoTextIsChanged then
-        //        begin
-        //          if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
-        //          begin
-        //            DoUpdateCell(TShowStatusExt.ShowCellUpdated);
-        //          end;
-        //        end;
+        TOnClickReplacer.Restore;
+        ProcessCellMemoChange(false);
 
         GotoFolder(
           Cell.FolderId,
           Cell.Id,
           Cell.RemindDateTime,
-          Cell.Remind,
+          false,
           OpenCellReminderPanel);
 
         THelpmate.ShowFormIfHidden(Self);
@@ -2701,7 +2629,7 @@ begin
     ], false);
   end;
 
-  AppManager.CreateDeleteCellThread(Self, CellId, DeleteCell);
+  AppManager.CreateDeleteCellThread(Self, CellId, CellDeleted);
 end;
 
 procedure TMainForm.DeleteFolderButtonClick(Sender: TObject);
@@ -2829,6 +2757,7 @@ begin
     FCellMemoFrame.Align := TAlignLayout.Client;
     FCellMemoFrame.CellMemo.StyleLookup := 'Memostyle';
     FCellMemoFrame.OnCellMemoChangeTracking := CellMemoChangeTrackingHandler;
+//    FCellMemoFrame.CellMemo.OnEnter := CellMemoEnterHandler;
 
     NoteIdentsFileName := AppPath + 'Langs\ru\NoteIdents.xml';
     if not FileExists(NoteIdentsFileName) then
@@ -2919,7 +2848,12 @@ begin
     if AppManager.Settings.IsRemindCellsShowing = 1 then
       ShowRemindCells(true)
     else
-      GotoFolder(AppManager.Settings.CurrentFolderId, AppManager.Settings.CurrentCellId);
+      GotoFolder(
+        AppManager.Settings.CurrentFolderId,
+        AppManager.Settings.CurrentCellId,
+        Now,
+        true,
+        false);
 
 //    RestartReminder;
   except
@@ -3037,6 +2971,70 @@ begin
     on e: Exception do
       RaiseAppException(METHOD, e);
   end;
+end;
+//asd debug TMainForm.ActivateOnClickReplacer
+procedure TMainForm.ActivateOnClickReplacer;
+var
+  ExcludedControl: TArray<TControl>;
+begin
+  TOnClickReplacer.Restore;
+
+//  if not Assigned(FCellReminderDateTimeFrame) then
+//  begin
+//    ExcludedControl := [
+//      UpdateCellButton,
+//      DeleteCellButton,
+//      CellRemindButton,
+//      HideFoldersButton
+//      ];
+//  end
+//  else
+//  begin
+//    ExcludedControl := [
+//      UpdateCellButton,
+//      DeleteCellButton,
+//      CellRemindButton,
+//      HideFoldersButton,
+//      FCellReminderDateTimeFrame.OkButton
+//      ];
+//  end;
+
+  ExcludedControl := [
+    UpdateCellButton,
+    DeleteCellButton,
+    CellRemindButton
+  ];
+
+  TOnClickReplacer.Replace(Self,
+    ExcludedControl,
+    procedure
+    begin
+      TOnClickReplacer.Restore;
+
+      ProcessCellMemoChange(true);
+    end);
+end;
+//asd debug TMainForm.ProcessCellMemoChange
+procedure TMainForm.ProcessCellMemoChange(
+  const ARestartReminderEnabled: Boolean = true);
+var
+  ParamsProcRef: TParamsProcRef;
+begin
+  if CellMemoFrame.CellMemoTextIsChanged then
+  begin
+    if mrYes = TNoteForm.Show(TNoteIdentConst.SaveCell) then
+    begin
+      ParamsProcRef := TShowStatusExt.ShowCellUpdated;
+      DoUpdateCell(ParamsProcRef);
+    end
+    else
+    begin
+      CellMemoFrame.RestoreContent;
+    end;
+  end;
+
+  if ARestartReminderEnabled then
+    RestartReminder(nil);
 end;
 
 procedure TMainForm.TrayIconMouseRightButtonDownHandler(

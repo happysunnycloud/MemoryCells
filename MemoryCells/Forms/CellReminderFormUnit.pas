@@ -30,8 +30,7 @@ type
     procedure DeleteButtonClick(Sender: TObject);
     procedure GotoButtonClick(Sender: TObject);
     procedure CellRemindButtonClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);  strict private
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);  strict private
     FCell: TCell;
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
@@ -182,17 +181,6 @@ begin
 
   CellMemo.Text := FCell.Content;
 
-//  TBorderFrame.Create(
-//    Self,
-//    loContent,
-//    'Reminder',
-//    Trunc(loScreen.Width * SCALE_VALUE) + 50,
-//    Trunc(loScreen.Height * SCALE_VALUE) + 10,
-//    TAlphaColorRec.White,
-//    $FF2A001A,
-//    $FF4C002F,
-//    $FF9B0060);
-
   BorderFrame.Kind := TBorderFrameKind.bfkNormal;
   BorderFrame.CaptionColor := $FFFFFFFF;
   BorderFrame.Color := $FF2A001A;
@@ -204,13 +192,9 @@ begin
 
   Self.CellMemo.TextSettings.FontColor := FTheme.TextSettings.FontColor;
   Self.CellMemo.TextSettings.Font.Size := FTheme.TextSettings.Font.Size;
-//  FTheme.TextFontSize;
-//  Self.NoteMemo.TextSettings.Font.Family := 'MS Reference Sans Serif';
   Self.CellMemo.StyledSettings := [];
 
   Self.ControlButtonsBackgroundRectangle.Fill.Color := FTheme.DarkBackgroundColor;
-
-  //  Self.CancelButton.StyleLookup := 'CancelButtonStyle';
 
   ModalResult := mrCancel;
 end;
@@ -227,16 +211,6 @@ procedure TCellReminderForm.FormClose(Sender: TObject;
 begin
   if ModalResult = mrCancel then
     FCell.Remind := false;
-
-//  Action := TCloseAction.caFree;
-end;
-
-procedure TCellReminderForm.FormCloseQuery(Sender: TObject;
-  var CanClose: Boolean);
-begin
-//  CanClose := true;
-//
-//  Self.OnCloseQuery := nil;
 end;
 
 procedure TCellReminderForm.GotoButtonClick(Sender: TObject);
@@ -265,12 +239,11 @@ class function TCellReminderForm.Show(
   const ACell: TCell;
   var AOpenCellReminderPanel: Boolean): TModalResult;
 var
-  CellReminderForm: TCellReminderForm;
+  //CellReminderForm: TCellReminderForm;
   VisibleState: Boolean;
   OpenCellReminderPanel: Boolean;
 begin
   CellReminderForm := TCellReminderForm.Create(nil, ACell, ThemeOfClass);
-
   try
     // Если приложение было свернуто в трэй, тогда необходимо его показать
     VisibleState := IsWindowVisible(ApplicationHwnd);
@@ -287,6 +260,7 @@ begin
       ShowWindow(ApplicationHwnd, SW_HIDE);
   finally
     CellReminderForm.ReleaseForm;
+    CellReminderForm := nil;
   end;
 end;
 

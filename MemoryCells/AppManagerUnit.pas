@@ -61,10 +61,10 @@ type
       const ADBFileName: String;
       const ATemplatesPack: String);
 
-    function CreateLoadCatalogThread(
-      const AForm: TFormExt;
-      const AFolderId: Int64;
-      const ACellId: Int64): TLoadCatalogThread; overload;
+//    function CreateLoadCatalogThread(
+//      const AForm: TFormExt;
+//      const AFolderId: Int64;
+//      const ACellId: Int64): TLoadCatalogThread; overload;
     function CreateLoadCatalogThread(
       const AForm: TFormExt;
       const AFolderId: Int64;
@@ -212,23 +212,23 @@ begin
   TDBAccess.InitByPack(ADBFileName, ATemplatesPack);
 end;
 
-function TAppManager.CreateLoadCatalogThread(
-  const AForm: TFormExt;
-  const AFolderId: Int64;
-  const ACellId: Int64): TLoadCatalogThread;
-var
-  ParamsObj: TParamsExt;
-begin
-  ParamsObj := TParamsExt.Create([
-    AFolderId,
-    ACellId
-  ]);
-  try
-    Result := TLoadCatalogThread.Create(AForm, ParamsObj);
-  finally
-    FreeAndNil(ParamsObj);
-  end;
-end;
+//function TAppManager.CreateLoadCatalogThread(
+//  const AForm: TFormExt;
+//  const AFolderId: Int64;
+//  const ACellId: Int64): TLoadCatalogThread;
+//var
+//  ParamsObj: TParamsExt;
+//begin
+//  ParamsObj := TParamsExt.Create([
+//    AFolderId,
+//    ACellId
+//  ]);
+//  try
+//    Result := TLoadCatalogThread.Create(AForm, ParamsObj);
+//  finally
+//    FreeAndNil(ParamsObj);
+//  end;
+//end;
 
 function TAppManager.CreateLoadCatalogThread(
   const AForm: TFormExt;
@@ -240,10 +240,9 @@ function TAppManager.CreateLoadCatalogThread(
 var
   ParamsObj: TParamsExt;
 begin
-  ParamsObj := TParamsExt.Create([
-    AFolderId,
-    ACellId
-  ]);
+  ParamsObj := TParamsExt.Create;
+  ParamsObj.Add(AFolderId, 'FolderId');
+  ParamsObj.Add(ACellId, 'CellId');
   ParamsObj.Add(ACellRemindDateTime, PARAM_IDENT_CellReminderFormRemindDateTime);
   ParamsObj.Add(ACellRemind, PARAM_IDENT_CellReminderFormRemind);
   ParamsObj.Add(AOpenCellReminderPanel, PARAM_IDENT_CellReminderFormOpenReminderPanel);
@@ -455,7 +454,7 @@ begin
   try
     ParamsObj.Add(ABackupFileName);
     Result := TBackupThread.Create(AForm, ParamsObj, AProcRef);
-    Result.Name := 'TBackupThread';
+//    Result.Name := 'TBackupThread';
   finally
     FreeAndNil(ParamsObj);
   end;
@@ -472,7 +471,7 @@ begin
   try
     ParamsObj.Add(ALastBackupDateTime);
     Result := TBackupStarterThread.Create(AForm, ParamsObj, AProcRef);
-    Result.Name := 'TBackupStarterThread';
+//    Result.Name := 'TBackupStarterThread';
   finally
     FreeAndNil(ParamsObj);
   end;
@@ -527,7 +526,7 @@ begin
   ParamsObj := TParamsExt.Create;
   try
     Result := TLoadCellReminderThread.Create(AForm, ParamsObj, AProcRef);
-    Result.Name := 'TLoadCellReminderThread';
+//    Result.Name := 'TLoadCellReminderThread';
   finally
     FreeAndNil(ParamsObj);
   end;
@@ -543,7 +542,7 @@ begin
   ParamsObj.Add(AMemoryFileName);
   try
     Result := TKeyCatcherThread.Create(AForm, ParamsObj);
-    Result.Name := 'TKeyCatcherThread';
+//    Result.Name := 'TKeyCatcherThread';
   finally
     FreeAndNil(ParamsObj);
   end;
@@ -556,13 +555,13 @@ function TAppManager.CreateCellReminderThread(
 var
   ParamsObj: TParamsExt;
 begin
-  TLogger.AddLog('Создаем TAppManager.CreateCellReminderThread', MG);
+  TLogger.AddLog('TAppManager.CreateCellReminderThread -> Создаем поток обратного отсчета', MG);
 
   ParamsObj := TParamsExt.Create;
   ParamsObj.Add(ACell);
   try
     Result := TCellReminderThread.Create(AForm, ParamsObj, AProcRef);
-    Result.Name := 'TCellReminderThread';
+//    Result.Name := 'TCellReminderThread';
   finally
     FreeAndNil(ParamsObj);
   end;

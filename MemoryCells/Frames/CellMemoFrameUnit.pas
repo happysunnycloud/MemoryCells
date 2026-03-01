@@ -150,13 +150,6 @@ begin
 
   FBackupCell.CopyFrom(Cell);
   CellMemo.Text := Cell.Content;
-
-//  Cell.Content := AText;
-//  CellMemo.Text := Cell.Content
-//  FBackupCell.Content := CellMemo.Text;
-//  if FBackupCell.Content = '' then
-//    FBackupCell.RemindDateTime := 0;
-  //FBackupText := CellMemo.Text;
 end;
 
 function TCellMemoFrame.CellMemoTextIsChanged: Boolean;

@@ -50,16 +50,22 @@ const
   METHOD = 'TBackupThread.Execute';
 var
   BackupFileName: String;
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    BackupFileName := Params.AsString[0];
+      BackupFileName := Params.AsString[0];
 
-    TDBAccess.DBAParamsFunc(TDBAccess.Backup, Params, nil);
+      TDBAccess.DBAParamsFunc(TDBAccess.Backup, Params, nil);
 
-    ControlParamsProc(FProcRef, nil);
+      ControlParamsProc(FProcRef, nil);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

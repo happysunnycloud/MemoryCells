@@ -42,7 +42,7 @@ constructor TLoadDestinationCatalogThread.Create(
 begin
   inherited Create(AForm, Execute);
 
-  Name := 'TLoadDestinationCatalogThread';
+//  Name := 'TLoadDestinationCatalogThread';
 
   InParams.CopyFrom(AParams);
   FBuildDestinationCatalogProcRef := ABuildDestinationCatalogProcRef;
@@ -53,25 +53,31 @@ const
   METHOD = 'TLoadDestinationCatalogThread.Execute';
 var
   FolderId: Int64;
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    FolderId := Params.AsInt64[0];
+      FolderId := Params.AsInt64[0];
 
-    Params.Clear;
-    Params.Add(FolderId);
+      Params.Clear;
+      Params.Add(FolderId);
 
-    OutParams.Clear;
+      OutParams.Clear;
 
-    TDBAccess.DBAParamsFunc(TDBAccess.LoadDestinationCatalog, Params, OutParams);
+      TDBAccess.DBAParamsFunc(TDBAccess.LoadDestinationCatalog, Params, OutParams);
 
-    Params.Clear;
-    Params.Add(FolderId);
-    Params.Add(OutParams.AsPointer[0]);
+      Params.Clear;
+      Params.Add(FolderId);
+      Params.Add(OutParams.AsPointer[0]);
 
-    ControlParamsProc(FBuildDestinationCatalogProcRef, Params);
+      ControlParamsProc(FBuildDestinationCatalogProcRef, Params);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

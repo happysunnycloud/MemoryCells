@@ -50,14 +50,21 @@ end;
 procedure TUpdateCellThread.Execute;
 const
   METHOD = 'TUpdateCellThread.Execute';
+var
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    TDBAccess.DBAParamsFunc(TDBAccess.UpdateCell, Params, nil);
+      TDBAccess.DBAParamsFunc(TDBAccess.UpdateCell, Params, nil);
 
-    ControlParamsProc(FProcRef, Params);
+      ControlParamsProc(FProcRef, Params);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

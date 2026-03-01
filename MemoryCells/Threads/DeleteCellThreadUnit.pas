@@ -51,20 +51,26 @@ procedure TDeleteCellThread.Execute;
 const
   METHOD = 'TDeleteCellThread.Execute';
 var
+  Params: TParamsExt;
   CellId: Int64;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    CellId := Params.AsInt64[0];
+      CellId := Params.AsInt64[0];
 
-    TDBAccess.DBAParamsFunc(TDBAccess.DeleteCell, Params, nil);
+      TDBAccess.DBAParamsFunc(TDBAccess.DeleteCell, Params, nil);
 
-    OutParams.Clear;
-    OutParams.Add(CellId);
+      OutParams.Clear;
+      OutParams.Add(CellId);
 
-    ControlParamsProc(FProcRef, OutParams);
+      ControlParamsProc(FProcRef, OutParams);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

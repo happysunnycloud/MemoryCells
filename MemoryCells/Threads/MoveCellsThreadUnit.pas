@@ -58,33 +58,39 @@ var
   DestinationFolderId: Int64;
   CellIdList: TCellIdList;
   ActionType: TActionType;
+  Params: TParamsExt;
 begin
   try
-    SourceFolderId := InParams.AsInt64[0];
-    DestinationFolderId := InParams.AsInt64[1];
-    CellIdList := TCellIdList(InParams.AsPointer[2]);
-    ActionType := TActionType(InParams.AsByte[3]);
+    Params := TParamsExt.Create;
+    try
+      SourceFolderId := InParams.AsInt64[0];
+      DestinationFolderId := InParams.AsInt64[1];
+      CellIdList := TCellIdList(InParams.AsPointer[2]);
+      ActionType := TActionType(InParams.AsByte[3]);
 
-    Params.Clear;
-    Params.Add(DestinationFolderId);
-    Params.Add(CellIdList);
+      Params.Clear;
+      Params.Add(DestinationFolderId);
+      Params.Add(CellIdList);
 
-    if ActionType = atMove then
-      TDBAccess.DBAParamsFunc(TDBAccess.UpdateCellDestinationFolder, Params, nil)
-    else
-    if ActionType = atCopy then
-      TDBAccess.DBAParamsFunc(TDBAccess.InsertDestinationCell, Params, nil)
-    else
-      raise Exception.Create('Unidentified variable value of TActionType');
+      if ActionType = atMove then
+        TDBAccess.DBAParamsFunc(TDBAccess.UpdateCellDestinationFolder, Params, nil)
+      else
+      if ActionType = atCopy then
+        TDBAccess.DBAParamsFunc(TDBAccess.InsertDestinationCell, Params, nil)
+      else
+        raise Exception.Create('Unidentified variable value of TActionType');
 
-    FolderId := SourceFolderId;
-    CellId := NULL_ID;
+      FolderId := SourceFolderId;
+      CellId := NULL_ID;
 
-    Params.Clear;
-    Params.Add(FolderId);
-    Params.Add(CellId);
+      Params.Clear;
+      Params.Add(FolderId);
+      Params.Add(CellId);
 
-    LoadCatalog(Params, TMainForm(Form).BuildFolderCatalog, nil);
+      LoadCatalog(Params, TMainForm(Form).BuildFolderCatalog, nil, nil);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

@@ -12,8 +12,8 @@ uses
   ThreadFactoryUnit
   ;
 
-const
-  THREAD_NAME = 'CountdownTimer';
+//const
+//  THREAD_NAME = 'CountdownTimer';
 
 type
   TCountdownTimer = class(TBaseThread)
@@ -74,7 +74,7 @@ procedure TCountdownTimer.Execute;
 var
   i: Word;
 begin
-  TThread.Queue(nil,
+  Synchronize(
     procedure
     begin
       FTextControl.Visible := true;
@@ -89,7 +89,7 @@ begin
     Sleep(100);
   end;
 
-  TThread.Queue(nil,
+  Synchronize(
     procedure
     begin
       TLabel(FTextControl).Text := '';
@@ -101,26 +101,29 @@ end;
 
 class procedure TShowStatus.StopTimer;
 begin
-  FForm.ThreadFactory.TerminateThread(THREAD_NAME);
+  {TODO: Перевести на работу через ThreadFactory.ActivateThreadIsDeadEvent() }
+
+  FForm.ThreadFactory.TerminateThread('TCountdownTimer');
+//  FForm.ThreadFactory.TerminateThread(THREAD_NAME);
 end;
 
 class procedure TShowStatus.ShowStatus(
   const ATextControl: TControl;
   const AText: String;
   const ATimeout: Word);
-var
-  Thread: TCountdownTimer;
+//var
+//  Thread: TCountdownTimer;
 begin
   StopTimer;
 
-  Thread :=
-    TCountdownTimer.Create(
-      FForm,
-      ATextControl,
-      AText,
-      ATimeout);
+//  Thread :=
+  TCountdownTimer.Create(
+    FForm,
+    ATextControl,
+    AText,
+    ATimeout);
 
-  Thread.Name := THREAD_NAME;
+//  Thread.Name := THREAD_NAME;
 end;
 
 class procedure TShowStatus.Stop;

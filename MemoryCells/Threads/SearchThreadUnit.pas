@@ -50,19 +50,26 @@ end;
 procedure TSearchThread.Execute;
 const
   METHOD = 'TSearchThread.Execute';
+var
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    OutParams.Clear;
+      OutParams.Clear;
 
-    TDBAccess.DBAParamsFunc(TDBAccess.Search, Params, OutParams);
+      TDBAccess.DBAParamsFunc(TDBAccess.Search, Params, OutParams);
 
-    Params.Clear;
-    Params.CopyFrom(OutParams);
+      Params.Clear;
+      Params.CopyFrom(OutParams);
 
-    ControlParamsProc(FProcRef, Params);
+      ControlParamsProc(FProcRef, Params);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

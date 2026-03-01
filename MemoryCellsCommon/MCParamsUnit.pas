@@ -19,7 +19,13 @@ type
     destructor Destroy; override;
 
     procedure Clear; reintroduce;
-    procedure Add(const AValue: Pointer); reintroduce; overload;
+//    procedure Add(const AValue: Pointer); reintroduce; overload;
+//    procedure Add(const AValue: Pointer; const AIdent: String); reintroduce; overload;
+
+    procedure Add(const AValue: TCellIdList; const AIdent: String = ''); reintroduce; overload;
+    procedure Add(const AValue: TCellList; const AIdent: String = ''); reintroduce; overload;
+    procedure Add(const AValue: TCell; const AIdent: String = ''); reintroduce; overload;
+
     procedure CopyFrom(const AParamsObj: TParamsExt); reintroduce;
   end;
 
@@ -45,6 +51,7 @@ begin
   begin
     Dec(i);
 
+//    if TypeOfVar[i] = (varByRef or varUnknown) then
     if TypeOfVar[i] = varByRef then
     begin
       p := AsPointer[i];
@@ -71,38 +78,45 @@ begin
   inherited;
 end;
 
-procedure TParamsExt.Add(const AValue: Pointer);
-var
-  CellIdList: TCellIdList;
-  CellList: TCellList;
-  Cell: TCell;
-begin
-  if TObject(AValue) is TCellIdList then
-  begin
-    CellIdList := TCellIdList.Create;
-    CellIdList.CopyFrom(AValue);
-
-    inherited Add(CellIdList);
-  end
-  else
-  if TObject(AValue) is TCellList then
-  begin
-    CellList := TCellList.Create;
-    CellList.CopyFrom(AValue);
-
-    inherited Add(CellList);
-  end
-  else
-  if TObject(AValue) is TCell then
-  begin
-    Cell := TCell.Create;
-    Cell.CopyFrom(AValue);
-
-    inherited Add(Cell);
-  end
-  else
-    inherited Add(AValue);
-end;
+//procedure TParamsExt.Add(const AValue: Pointer);
+//begin
+//  Add(AValue, '');
+//end;
+//
+//procedure TParamsExt.Add(const AValue: Pointer; const AIdent: String);
+//var
+//  CellIdList: TCellIdList;
+//  CellList: TCellList;
+//  Cell: TCell;
+//  ClassName: String;
+//begin
+//  ClassName := TObject(AValue).ClassName;
+//  if TObject(AValue) is TCellIdList then
+//  begin
+//    CellIdList := TCellIdList.Create;
+//    CellIdList.CopyFrom(AValue);
+//
+//    inherited Add(CellIdList, AIdent);
+//  end
+//  else
+//  if TObject(AValue) is TCellList then
+//  begin
+//    CellList := TCellList.Create;
+//    CellList.CopyFrom(AValue);
+//
+//    inherited Add(CellList, AIdent);
+//  end
+//  else
+//  if TObject(AValue) is TCell then
+//  begin
+//    Cell := TCell.Create;
+//    Cell.CopyFrom(AValue);
+//
+//    inherited Add(Cell, AIdent);
+//  end
+//  else
+//    inherited Add(AValue, AIdent);
+//end;
 
 procedure TParamsExt.CopyFrom(const AParamsObj: TParamsExt);
 var
@@ -115,11 +129,13 @@ var
   Cell: TCell;
   CellTmp: TCell;
   p: Pointer;
+  Ident: String;
 begin
   i := 0;
   while i < AParamsObj.Length do
   begin
     //Если в параметрах передается ссылка на список TCellIdList, то копируем и сам список
+    Ident := AParamsObj.Params[i].Ident;
     if AParamsObj.TypeOfVar[i] = varByRef then
     begin
       p := AParamsObj.AsPointer[i];
@@ -130,7 +146,7 @@ begin
         CellIdList := TCellIdList.Create;
         CellIdList.CopyFrom(CellIdListTmp);
 
-        inherited Add(CellIdList);
+        inherited Add(CellIdList, Ident);
       end
       else
       if TObject(p) is TCellList then
@@ -140,7 +156,7 @@ begin
         CellList := TCellList.Create;
         CellList.CopyFrom(CellListTmp);
 
-        inherited Add(CellList);
+        inherited Add(CellList, Ident);
       end
       else
       if TObject(p) is TCell then
@@ -150,18 +166,48 @@ begin
         Cell := TCell.Create;
         Cell.CopyFrom(CellTmp);
 
-        inherited Add(Cell);
+        inherited Add(Cell, Ident);
       end
       else
-        inherited Add(p);
+        inherited Add(p, Ident);
     end
     else
     begin
-      inherited Add(AParamsObj.Params[i].v, AParamsObj.Params[i].Ident);
+      inherited Add(AParamsObj.Params[i].v, Ident);
     end;
 
     Inc(i);
   end;
+end;
+
+procedure TParamsExt.Add(const AValue: TCellIdList; const AIdent: String = '');
+var
+  CellIdList: TCellIdList;
+begin
+  CellIdList := TCellIdList.Create;
+  CellIdList.CopyFrom(AValue);
+
+  inherited Add(Pointer(CellIdList), AIdent);
+end;
+
+procedure TParamsExt.Add(const AValue: TCellList; const AIdent: String = '');
+var
+  CellList: TCellList;
+begin
+  CellList := TCellList.Create;
+  CellList.CopyFrom(AValue);
+
+  inherited Add(Pointer(CellList), AIdent);
+end;
+
+procedure TParamsExt.Add(const AValue: TCell; const AIdent: String = '');
+var
+  Cell: TCell;
+begin
+  Cell := TCell.Create;
+  Cell.CopyFrom(AValue);
+
+  inherited Add(Pointer(Cell), AIdent);
 end;
 
 end.

@@ -53,34 +53,40 @@ var
   LastBackupDateTime: TDateTime;
   _HoursBetween: Int64;
   i: Word;
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    LastBackupDateTime := Params.AsDateTime[0];
+      LastBackupDateTime := Params.AsDateTime[0];
 
-    while not Terminated do
-    begin
-      i := 0;
-      while (i < 10) and (not Terminated) do
+      while not Terminated do
       begin
-        Sleep(1000);
+        i := 0;
+        while (i < 10) and (not Terminated) do
+        begin
+          Sleep(1000);
 
-        Inc(i);
+          Inc(i);
+        end;
+
+        if Terminated then
+          Exit;
+
+        _HoursBetween := HoursBetween(Now, LastBackupDateTime);
+
+        if _HoursBetween >= 24 then
+        begin
+          ControlParamsProc(FProcRef, nil{OutParams});
+
+          Terminate;
+        end;
       end;
-
-      if Terminated then
-        Exit;
-
-      _HoursBetween := HoursBetween(Now, LastBackupDateTime);
-
-      if _HoursBetween >= 24 then
-      begin
-        ControlParamsProc(FProcRef, nil{OutParams});
-
-        Terminate;
-      end;
+    finally
+      FreeAndNil(Params);
     end;
   except
     on e: Exception do

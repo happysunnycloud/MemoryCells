@@ -69,6 +69,7 @@ const
       raise Exception.Create(METHOD + ': Wrong key catcher string format for StrToDateTime');
     end;
   end;
+
 var
   ReadedString: String;
   KeyCode: Word;
@@ -77,56 +78,62 @@ var
   LastDateTime: TDateTime;
   MemoryFile: TMemoryFile;
   MemoryFileName: String;
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
-
-    MemoryFileName := Params.AsString[0];
-
-    MemoryFile := TMemoryFile.Create(MemoryFileName);
+    Params := TParamsExt.Create;
     try
-      if not MemoryFile.ExistsMemoryFile then
-        MemoryFile.CreateMemoryFile;
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-      MemoryFile.OpenMemoryFile;
+      MemoryFileName := Params.AsString[0];
 
-      CurrentDateTime := Now;
-      LastDateTime := CurrentDateTime;
-      KeyCode := 0;
-      LastKeyCode := KeyCode;
-      while not Terminated do
-      begin
-        Sleep(10);
+      MemoryFile := TMemoryFile.Create(MemoryFileName);
+      try
+        if not MemoryFile.ExistsMemoryFile then
+          MemoryFile.CreateMemoryFile;
 
-        ReadedString := MemoryFile.ReadFromMemoryFile;
+        MemoryFile.OpenMemoryFile;
 
-        if ReadedString.Length = 0 then
-          Continue;
-
-        _GetValues(ReadedString, CurrentDateTime, KeyCode);
-
-        if (LastDateTime <> CurrentDateTime) and
-           (LastKeyCode <> KeyCode)
-        then
+        CurrentDateTime := Now;
+        LastDateTime := CurrentDateTime;
+        KeyCode := 0;
+        LastKeyCode := KeyCode;
+        while not Terminated do
         begin
-          LastDateTime := CurrentDateTime;
-          LastKeyCode := KeyCode;
+          Sleep(10);
 
-          if not THelpmate.IsFormActive(Form) then
+          ReadedString := MemoryFile.ReadFromMemoryFile;
+
+          if ReadedString.Length = 0 then
             Continue;
 
-          Queue(nil,
-          //Synchronize(
-            procedure
-            begin
-              KeyHandler(KeyCode);
-            end);
+          _GetValues(ReadedString, CurrentDateTime, KeyCode);
+
+          if (LastDateTime <> CurrentDateTime) and
+             (LastKeyCode <> KeyCode)
+          then
+          begin
+            LastDateTime := CurrentDateTime;
+            LastKeyCode := KeyCode;
+
+            if not THelpmate.IsFormActive(Form) then
+              Continue;
+
+            Queue(nil,
+            //Synchronize(
+              procedure
+              begin
+                KeyHandler(KeyCode);
+              end);
+          end;
         end;
+      finally
+        MemoryFile.FreeMemoryFile;
+        MemoryFile.Free;
       end;
     finally
-      MemoryFile.FreeMemoryFile;
-      MemoryFile.Free;
+      FreeAndNil(Params);
     end;
   except
     on e: Exception do

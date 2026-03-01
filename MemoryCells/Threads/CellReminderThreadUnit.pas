@@ -31,6 +31,7 @@ implementation
 
 uses
     System.SysUtils
+  , AddLogUnit
   ;
 
 { TCellReminderThread }
@@ -60,22 +61,29 @@ const
   METHOD = 'TCellReminderThread.Execute';
 var
   RemindDateTime: TDateTime;
+  Params: TParamsExt;
 begin
   try
-    RemindDateTime := FCell.RemindDateTime;
+    Params := TParamsExt.Create;
+    try
+      RemindDateTime := FCell.RemindDateTime;
 
-    while (RemindDateTime > Now) and (not Terminated) do
-    begin
-      Sleep(100);
+      while (RemindDateTime > Now) and (not Terminated) do
+      begin
+        Sleep(100);
+      end;
+
+      if Terminated then
+        Exit;
+
+      Params.Clear;
+      Params.Add(FCell);
+
+      TLogger.AddLog('TCellReminderThread.Execute -> Таймер сработал', MG);
+      ControlParamsProc(FProcRef, Params);
+    finally
+      FreeAndNil(Params);
     end;
-
-    if Terminated then
-      Exit;
-
-    Params.Clear;
-    Params.Add(FCell);
-
-    ControlParamsProc(FProcRef, Params);
   except
     on e: Exception do
     begin

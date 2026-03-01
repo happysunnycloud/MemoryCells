@@ -12,7 +12,6 @@ object CellReminderForm: TCellReminderForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnClose = FormClose
-  OnCloseQuery = FormCloseQuery
   DesignerMasterStyle = 0
   object loContent: TLayout
     Align = Contents

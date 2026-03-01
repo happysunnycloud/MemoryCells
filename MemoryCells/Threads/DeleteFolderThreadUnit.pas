@@ -58,45 +58,51 @@ var
   ParentFolderId: Int64;
   ResultCode: TDBAResultCode;
   CellList: TCellList;
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
-
-    FolderId := Params.AsInt64[0];
-    ParentFolderId := Params.AsInt64[1];
-
-    Params.Clear;
-    Params.Add(FolderId);
-    ResultCode := TDBAccess.DBAParamsFunc(TDBAccess.DeleteFolder, Params, nil);
-
-    if ResultCode <> TDBAResultCode.rcFolderIsNotEmpty then
-    begin
+    Params := TParamsExt.Create;
+    try
       Params.Clear;
-      Params.Add(ParentFolderId);
-      Params.Add(CellList);
+      Params.CopyFrom(InParams);
 
-      TDBAccess.DBAParamsFunc(TDBAccess.LoadCatalog, Params, OutParams);
-
-      CellList := OutParams.AsPointer[0];
+      FolderId := Params.AsInt64[0];
+      ParentFolderId := Params.AsInt64[1];
 
       Params.Clear;
-      Params.Add(ParentFolderId);
-      Params.Add(CellList);
+      Params.Add(FolderId);
+      ResultCode := TDBAccess.DBAParamsFunc(TDBAccess.DeleteFolder, Params, nil);
 
-      ControlParamsProc(FProcRef, Params);
-    end
-    else
-    begin
-      CellList := TCellList.Create;
-      try
+      if ResultCode <> TDBAResultCode.rcFolderIsNotEmpty then
+      begin
         Params.Clear;
-        Params.Add(ResultCode);
+        Params.Add(ParentFolderId);
+        Params.Add(CellList);
 
-        ControlParamsProc(FDeleteFolderError, Params);
-      finally
-        FreeAndNil(CellList);
+        TDBAccess.DBAParamsFunc(TDBAccess.LoadCatalog, Params, OutParams);
+
+        CellList := OutParams.AsPointer[0];
+
+        Params.Clear;
+        Params.Add(ParentFolderId);
+        Params.Add(CellList);
+
+        ControlParamsProc(FProcRef, Params);
+      end
+      else
+      begin
+        CellList := TCellList.Create;
+        try
+          Params.Clear;
+          Params.Add(ResultCode);
+
+          ControlParamsProc(FDeleteFolderError, Params);
+        finally
+          FreeAndNil(CellList);
+        end;
       end;
+    finally
+      FreeAndNil(Params);
     end;
   except
     on e: Exception do

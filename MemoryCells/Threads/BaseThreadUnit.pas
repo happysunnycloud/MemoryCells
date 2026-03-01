@@ -21,21 +21,21 @@ type
   TParamIdProcRef = reference to procedure(const AId: Int64);
 
   TBaseThread = class(TThreadExt)
+  strict private
+    FStrictedParams: TParamsExt;
   private
     FForm: TFormExt;
     FExceptionMessage: String;
     // Параметры для использования внутри Execute в качестве локальной переменной
-    FParams: TParamsExt;
+//    FParams: TParamsExt;
     // Входные параметры, манипуляций с ними не производим, нужны для отслеживания, того что пришло на в ход
     FInParams: TParamsExt;
     // Выходные параметры
     FOutParams: TParamsExt;
-
-    FName: String;
   protected
     property Form: TFormExt read FForm;
     property ExceptionMessage: String read FExceptionMessage write FExceptionMessage;
-    property Params: TParamsExt read FParams write FParams;
+//    property Params: TParamsExt read FParams write FParams;
     property InParams: TParamsExt read FInParams write FInParams;
     property OutParams: TParamsExt read FOutParams write FOutParams;
 
@@ -51,12 +51,11 @@ type
     procedure LoadCatalog(
       const AInParams: TParamsExt;
       const ABuildCatalogProcRef: TParamsProcRef;
-      const AOpenCellProcRef: TParamsProcRef);
+      const AOpenCellProcRef: TParamsProcRef;
+      const ARestartReminderProcRef: TParamsProcRef);
   public
     constructor Create(const AForm: TFormExt; const AExecProc: TExecProc); virtual;
     destructor Destroy; override;
-
-    property Name: String read FName write FName;
   end;
 
 implementation
@@ -80,19 +79,15 @@ begin
 
   FForm := AForm;
 
-//  FForm.ThreadFactory.RegisterThread(Self);
-
   FreeOnTerminate := true;
 
-  FParams := TParamsExt.Create;
   FInParams := TParamsExt.Create;
   FOutParams := TParamsExt.Create;
 
   inherited Create(
     FForm.ThreadFactory,
+    Self.ClassName,
     AExecProc);
-
-//  inherited Create(false);
 end;
 
 destructor TBaseThread.Destroy;
@@ -113,7 +108,7 @@ begin
       end);
   end;
 
-  FreeAndNil(FParams);
+//  FreeAndNil(FParams);
   FreeAndNil(FInParams);
   FreeAndNil(FOutParams);
 
@@ -132,19 +127,18 @@ const
   METHOD = 'TBaseThread.ControlParamsProc';
 var
   ParamsProcRef: TParamsProcRef absolute AParamsProcRef;
-  Params: TParamsExt;
 begin
   if not Assigned(ParamsProcRef) then
     Exit;
 
-  Params := TParamsExt.Create;
+  FStrictedParams := TParamsExt.Create;
   try
     if Assigned(AParams) then
-      Params.CopyFrom(AParams);
+      FStrictedParams.CopyFrom(AParams);
     try
       Synchronize(procedure
         begin
-          ParamsProcRef(Params);
+          ParamsProcRef(FStrictedParams);
         end);
     except
       on e: Exception do
@@ -153,14 +147,15 @@ begin
       end;
     end;
   finally
-    FreeAndNil(Params);
+    FreeAndNil(FStrictedParams);
   end;
 end;
 
 procedure TBaseThread.LoadCatalog(
   const AInParams: TParamsExt;
   const ABuildCatalogProcRef: TParamsProcRef;
-  const AOpenCellProcRef: TParamsProcRef);
+  const AOpenCellProcRef: TParamsProcRef;
+  const ARestartReminderProcRef: TParamsProcRef);
 const
   METHOD = 'TBaseThread.LoadCatalog';
 var
@@ -169,38 +164,37 @@ var
   FolderId: Int64;
   CellId: Int64;
   InnerParams: TParamsExt;
-  MustRestartReminder: Boolean;
+//  MustRestartReminder: Boolean;
 begin
-  FolderId := AInParams.AsInt64[0];
-  CellId := AInParams.AsInt64[1];
-  MustRestartReminder :=
-    AInParams.IfAsBooleanByIdent(PARAM_IDENT_RestartReminder, true);
+  FolderId := AInParams.AsInt64ByIdent['FolderId'];
+  CellId := AInParams.AsInt64ByIdent['CellId'];
+//  MustRestartReminder := true;//AInParams.AsBooleanByIdent[PARAM_IDENT_RestartReminder];
 
   OutParams := TParamsExt.Create;
   try
     InnerParams := TParamsExt.Create;
     try
-      InnerParams.Add(FolderId);
+      InnerParams.Add(FolderId, 'FolderId');
 
       TDBAccess.DBAParamsFunc(TDBAccess.LoadCatalog, InnerParams, OutParams);
 
-      CellList := OutParams.AsPointer[0];
+      CellList := OutParams.AsPointerByIdent['CellList'];
 
       InnerParams.Clear;
-      InnerParams.Add(FolderId);
-      InnerParams.Add(CellList);
+      InnerParams.Add(FolderId, 'FolderId');
+      InnerParams.Add(CellList, 'CellList');
       // Если CellId <= 0, тогда после прорисовки каталога папок, будет перезапущен ремайндер
       // Если CellId > 0, тогда ремайндер перезапустится после прорисовки ячейки
       // После прорисовки ячейки ремайндер всегда перезапускается
-      if MustRestartReminder then
-      begin
-        if CellId <= 0 then
-          InnerParams.Add(true, PARAM_IDENT_RestartReminder)
-        else
-          InnerParams.Add(false, PARAM_IDENT_RestartReminder);
-      end
-      else
-        InnerParams.Add(false, PARAM_IDENT_RestartReminder);
+//      if MustRestartReminder then
+//      begin
+//        if CellId <= 0 then
+//          InnerParams.Add(true, PARAM_IDENT_RestartReminder)
+//        else
+//          InnerParams.Add(false, PARAM_IDENT_RestartReminder);
+//      end
+//      else
+//        InnerParams.Add(false, PARAM_IDENT_RestartReminder);
 
       ControlParamsProc(ABuildCatalogProcRef, InnerParams);
 
@@ -209,23 +203,29 @@ begin
         if CellId > 0 then
         begin
           InnerParams.Clear;
-          InnerParams.Add(CellId);
+          InnerParams.Add(CellId, 'CellId');
 
           TDBAccess.DBAParamsFunc(TDBAccess.LoadCell, InnerParams, OutParams);
 
           InnerParams.Clear;
           InnerParams.CopyFrom(OutParams);
-          InnerParams.AddFrom(AInParams);
+//          InnerParams.AddFrom(AInParams);
 
-          // Так как пользователь может внести изменения в окне ремайндера
-          // Перед переходом к ячейке (иконка бегущего человечка)
-          // Нужно переписывать значение RestartReminder приходящего из базы
-          if InnerParams.Exists(PARAM_IDENT_RestartReminder) then
-            InnerParams.ChangeValue(MustRestartReminder, PARAM_IDENT_RestartReminder);
+//          // Так как пользователь может внести изменения в окне ремайндера
+//          // Перед переходом к ячейке (иконка бегущего человечка)
+//          // Нужно переписывать значение RestartReminder приходящего из базы
+//          if InnerParams.Exists(PARAM_IDENT_RestartReminder) then
+//            InnerParams.ChangeValue(MustRestartReminder, PARAM_IDENT_RestartReminder);
 
           ControlParamsProc(AOpenCellProcRef, InnerParams);
         end;
       end;
+
+//      if MustRestartReminder then
+//        if Assigned(ARestartReminderProcRef) then
+//          ControlParamsProc(ARestartReminderProcRef, nil)
+//        else
+//          raise Exception.Create('Требуется перезагрузка ремайндера, но ссылка на метод = nil');
     finally
       FreeAndNil(InnerParams);
     end;

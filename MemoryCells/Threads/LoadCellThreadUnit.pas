@@ -48,19 +48,26 @@ end;
 procedure TLoadCellThread.Execute;
 const
   METHOD = 'TLoadCellThread.Execute';
+var
+  Params: TParamsExt;
 begin
   try
-    Params.Clear;
-    Params.CopyFrom(InParams);
+    Params := TParamsExt.Create;
+    try
+      Params.Clear;
+      Params.CopyFrom(InParams);
 
-    OutParams.Clear;
+      OutParams.Clear;
 
-    TDBAccess.DBAParamsFunc(TDBAccess.LoadCell, Params, OutParams);
+      TDBAccess.DBAParamsFunc(TDBAccess.LoadCell, Params, OutParams);
 
-    Params.Clear;
-    Params.CopyFrom(OutParams);
+      Params.Clear;
+      Params.CopyFrom(OutParams);
 
-    ControlParamsProc(FProcRef, Params);
+      ControlParamsProc(FProcRef, Params);
+    finally
+      FreeAndNil(Params);
+    end;
   except
     on e: Exception do
     begin

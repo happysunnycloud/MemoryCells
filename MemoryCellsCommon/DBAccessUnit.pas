@@ -348,7 +348,7 @@ begin
     try
       List := CellList.LockList;
       try
-        FolderId := AInParams.AsInt64[0];
+        FolderId := AInParams.AsInt64ByIdent['FolderId'];
 
         DBTools.CreateQuery;
 
@@ -386,7 +386,7 @@ begin
         FreeAndNil(DBTools);
       end;
       AOutParams.Clear;
-      AOutParams.Add(CellList);
+      AOutParams.Add(CellList, 'CellList');
     finally
       FreeAndNil(CellList);
     end;
