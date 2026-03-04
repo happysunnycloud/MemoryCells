@@ -467,7 +467,7 @@ begin
         FreeAndNil(DBTools);
       end;
       AOutParams.Clear;
-      AOutParams.Add(CellList);
+      AOutParams.Add(CellList, 'CellList');
     finally
       FreeAndNil(CellList);
     end;
@@ -515,7 +515,7 @@ begin
     end;
 
     try
-      CellId := AInParams.AsInt64[0];
+      CellId := AInParams.AsInt64ByIdent['CellId'];
 
       DBTools.CreateQuery;
 
@@ -844,6 +844,10 @@ begin
       OutParams.Add(CellId, 'CellId');
       OutParams.Add(FolderId, 'FolderId');
       OutParams.Add(CellTypeId, 'CellTypeId');
+      OutParams.Add('', 'Content');
+      OutParams.Add(false, 'CellIsDone');
+      OutParams.Add(TDateTime(Now), 'CellRemindDateTime');
+      OutParams.Add(false, 'CellRemind');
 
       AOutParams.Clear;
       AOutParams.CopyFrom(OutParams);
@@ -1649,6 +1653,7 @@ var
 
   CellId: Int64;
   CellRemidDateTime: TDateTime;
+  CellRemind: Boolean;
 begin
   TLogger.AddLog(Format('%s in', [METHOD]));
   try
@@ -1664,8 +1669,9 @@ begin
     end;
 
     try
-      CellId := AInParams.AsInt64[0];
-      CellRemidDateTime := AInParams.AsDateTime[1];
+      CellId := AInParams.AsInt64ByIdent['CellId'];
+      CellRemidDateTime := AInParams.AsDateTimeByIdent['RemindDateTime'];
+      CellRemind := AInParams.AsBooleanByIdent['Remind'];
 
       DBTools.CreateQuery;
 
@@ -1675,6 +1681,7 @@ begin
       DBTools.Query.AddParameterAsLargeInt(':id', CellId);
       DBTools.Query.AddParameterAsString(':remind_datetime',
         TSQLiteHelpmate.DateTimeToStr(CellRemidDateTime));
+      DBTools.Query.AddParameterAsBoolean(':remind', CellRemind);
 
       DBTools.StartTransaction;
       try

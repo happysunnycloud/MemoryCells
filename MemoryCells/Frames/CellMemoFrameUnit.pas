@@ -29,6 +29,9 @@ type
     procedure OnCellMemoChangeTrackingHandler(Sender: TObject);
     procedure OnIsDoneChangeHandler(Sender: TObject);
     //    procedure OnOnCellMemoHandler(Sender: TObject);
+//  protected
+//    procedure SetCell(const ACell: TCell); overload;
+
   public
     constructor Create(AOwner: TComponent); reintroduce;
     destructor Destroy; override;
@@ -38,8 +41,10 @@ type
 
     procedure InsertText(const AText: String);
 
-    property CellUnitFrame: TCellUnitFrame read FCellUnitFrame write SetCellUnitFrame;
-    property OnCellMemoChangeTracking: TNotifyEvent read FOnCellMemoChangeTracking write FOnCellMemoChangeTracking;
+    property CellUnitFrame: TCellUnitFrame
+      read FCellUnitFrame write SetCellUnitFrame;
+    property OnCellMemoChangeTracking: TNotifyEvent
+      read FOnCellMemoChangeTracking write FOnCellMemoChangeTracking;
     //    property OnCellMemoExit: TNotifyEvent read FOnCellMemoExit write FOnCellMemoExit;
 
     function CellMemoTextIsChanged: Boolean;
@@ -64,6 +69,8 @@ var
 implementation
 
 {$R *.fmx}
+
+{ TCellMemoFrame }
 
 constructor TCellMemoFrame.Create(AOwner: TComponent);
 begin

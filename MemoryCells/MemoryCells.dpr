@@ -94,7 +94,8 @@ uses
   PopupMenuExt.Item in '..\..\DevelopmentsCollection\FMX.PopupMenuExt\PopupMenuExt.Item.pas',
   AddLogUnit in '..\..\DevelopmentsCollection\AddLogUnit.pas',
   BinFileTypes in '..\..\DevelopmentsCollection\Types\BinFileTypes.pas',
-  StreamHandler in '..\..\DevelopmentsCollection\Stream\StreamHandler.pas';
+  StreamHandler in '..\..\DevelopmentsCollection\Stream\StreamHandler.pas',
+  StringToolsUnit in '..\..\DevelopmentsCollection\StringToolsUnit.pas';
 
 begin
   Application.Initialize;

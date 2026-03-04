@@ -43,6 +43,7 @@ type
     procedure SetContent(const AContent: String);
     procedure SetDesc(const ADesc: String);
     procedure SetIsDone(const AIsDone: Boolean);
+    procedure SetRemindDateTime(const ADateTime: TDateTime);
   public
     constructor Create; overload;
     constructor Create(
@@ -61,7 +62,7 @@ type
     property IsDone: Boolean read FIsDone write SetIsDone;
     property UpdateDateTime: TDateTime read FUpdateDateTime write FUpdateDateTime;
     property LinkedCellIdList: TCellIdList read FLinkedCellIdList write FLinkedCellIdList;
-    property RemindDateTime: TDateTime read FRemindDateTime write FRemindDateTime;
+    property RemindDateTime: TDateTime read FRemindDateTime write SetRemindDateTime;
     property Remind: Boolean read FRemind write FRemind;
 
     property OnContentChanged: TNotifyEvent read FOnContentChanged write FOnContentChanged;
@@ -255,6 +256,11 @@ begin
 
   if Assigned(FOnIsDoneChanged) then
     FOnIsDoneChanged(Self);
+end;
+
+procedure TCell.SetRemindDateTime(const ADateTime: TDateTime);
+begin
+  FRemindDateTime := ADateTime;
 end;
 
 procedure TCell.CopyFrom(const ACell: TCell);

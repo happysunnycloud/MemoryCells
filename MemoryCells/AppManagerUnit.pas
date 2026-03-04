@@ -68,10 +68,7 @@ type
     function CreateLoadCatalogThread(
       const AForm: TFormExt;
       const AFolderId: Int64;
-      const ACellId: Int64;
-      const ACellRemindDateTime: TDateTime;
-      const ACellRemind: Boolean;
-      const AOpenCellReminderPanel: Boolean): TLoadCatalogThread; overload;
+      const ACellId: Int64): TLoadCatalogThread;
 
     function CreateLoadDestinationCatalogThread(
       const AForm: TFormExt;
@@ -80,7 +77,7 @@ type
 
     function CreateLoadCellThread(
       const AForm: TFormExt;
-      const ACell: TCell;
+      const ACellId: Int64;
       const AProcRef: TParamsProcRef): TLoadCellThread;
 
     function CreateUpdateCellThread(
@@ -233,20 +230,13 @@ end;
 function TAppManager.CreateLoadCatalogThread(
   const AForm: TFormExt;
   const AFolderId: Int64;
-  const ACellId: Int64;
-  const ACellRemindDateTime: TDateTime;
-  const ACellRemind: Boolean;
-  const AOpenCellReminderPanel: Boolean): TLoadCatalogThread;
+  const ACellId: Int64): TLoadCatalogThread;
 var
   ParamsObj: TParamsExt;
 begin
   ParamsObj := TParamsExt.Create;
   ParamsObj.Add(AFolderId, 'FolderId');
   ParamsObj.Add(ACellId, 'CellId');
-  ParamsObj.Add(ACellRemindDateTime, PARAM_IDENT_CellReminderFormRemindDateTime);
-  ParamsObj.Add(ACellRemind, PARAM_IDENT_CellReminderFormRemind);
-  ParamsObj.Add(AOpenCellReminderPanel, PARAM_IDENT_CellReminderFormOpenReminderPanel);
-  ParamsObj.Add(false, PARAM_IDENT_RestartReminder);
   try
     Result := TLoadCatalogThread.Create(AForm, ParamsObj);
   finally
@@ -261,9 +251,8 @@ function TAppManager.CreateLoadDestinationCatalogThread(
 var
   ParamsObj: TParamsExt;
 begin
-  ParamsObj := TParamsExt.Create([
-    AFolderId
-  ]);
+  ParamsObj := TParamsExt.Create;
+  ParamsObj.Add(AFolderId, 'FolderId');
   try
     Result := TLoadDestinationCatalogThread.Create(AForm, ParamsObj, ABuildDestinationCatalogProcRef);
   finally
@@ -273,14 +262,16 @@ end;
 
 function TAppManager.CreateLoadCellThread(
   const AForm: TFormExt;
-  const ACell: TCell;
+  const ACellId: Int64;
   const AProcRef: TParamsProcRef): TLoadCellThread;
 var
+  CellId: Int64;
   ParamsObj: TParamsExt;
 begin
   ParamsObj := TParamsExt.Create;
   try
-    ParamsObj.Add(ACell.Id);
+    CellId := ACellId;
+    ParamsObj.Add(CellId, 'CellId');
     Result := TLoadCellThread.Create(AForm, ParamsObj, AProcRef);
   finally
     FreeAndNil(ParamsObj);
@@ -561,7 +552,6 @@ begin
   ParamsObj.Add(ACell);
   try
     Result := TCellReminderThread.Create(AForm, ParamsObj, AProcRef);
-//    Result.Name := 'TCellReminderThread';
   finally
     FreeAndNil(ParamsObj);
   end;
@@ -576,8 +566,9 @@ var
 begin
   ParamsObj := TParamsExt.Create;
   try
-    ParamsObj.Add(ACell.Id);
-    ParamsObj.Add(ACell.RemindDateTime);
+    ParamsObj.Add(ACell.Id, 'CellId');
+    ParamsObj.Add(ACell.RemindDateTime, 'RemindDateTime');
+    ParamsObj.Add(ACell.Remind, 'Remind');
     Result := TUpdateCellReminderThread.Create(AForm, ParamsObj, AProcRef);
   finally
     FreeAndNil(ParamsObj);

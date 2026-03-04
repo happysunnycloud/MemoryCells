@@ -465,7 +465,7 @@ var
   Control: TControl;
   i: Integer;
 begin
-//  Result := nil;
+  Result := nil;
 
   i := AScrollBox.Content.ControlsCount;
   while i > 0 do
@@ -482,7 +482,7 @@ begin
       end;
   end;
 
-  raise Exception.CreateFmt('GetCellUnitFrameByCellId: CellUnitFrame with id = %d not found', [ACellId]);
+//  raise Exception.CreateFmt('GetCellUnitFrameByCellId: CellUnitFrame with id = %d not found', [ACellId]);
 end;
 
 class procedure THelpmate.SetMemoCellDefaultSettings(const AMemoCell: TMemo);

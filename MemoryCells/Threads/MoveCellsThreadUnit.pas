@@ -79,15 +79,6 @@ begin
         TDBAccess.DBAParamsFunc(TDBAccess.InsertDestinationCell, Params, nil)
       else
         raise Exception.Create('Unidentified variable value of TActionType');
-
-      FolderId := SourceFolderId;
-      CellId := NULL_ID;
-
-      Params.Clear;
-      Params.Add(FolderId);
-      Params.Add(CellId);
-
-      LoadCatalog(Params, TMainForm(Form).BuildFolderCatalog, nil, nil);
     finally
       FreeAndNil(Params);
     end;

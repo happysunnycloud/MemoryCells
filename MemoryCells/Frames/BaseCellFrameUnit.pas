@@ -15,15 +15,13 @@ type
     FParams: TParamsExt;
     FCell: TCell;
 
-    procedure SetCell(const ACell: TCell);
-
     procedure Init(AOwner: TComponent; const ACell: TCell);
   public
     constructor Create(AOwner: TComponent; const ACell: TCell); reintroduce; overload;
     constructor Create(AOwner: TComponent); reintroduce; overload;
     destructor Destroy; override;
 
-    property Cell: TCell read FCell write SetCell;
+    property Cell: TCell read FCell write FCell;
     property Params: TParamsExt read FParams write FParams;
   end;
 
@@ -59,11 +57,6 @@ begin
   FreeAndNil(FParams);
 
   inherited;
-end;
-
-procedure TBaseCellFrame.SetCell(const ACell: TCell);
-begin
-  FCell := ACell;
 end;
 
 end.

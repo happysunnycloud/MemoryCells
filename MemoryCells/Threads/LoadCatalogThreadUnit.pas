@@ -46,19 +46,27 @@ procedure TLoadCatalogThread.Execute(const AThread: TThreadExt);
 const
   METHOD = 'TLoadCatalogThread.Execute';
 var
+  CellList: TCellList;
+  FolderId: Int64;
   Params: TParamsExt;
 begin
   try
+    FolderId := InParams.AsInt64ByIdent['FolderId'];
+
     Params := TParamsExt.Create;
     try
       Params.Clear;
-      Params.CopyFrom(InParams);
+      Params.Add(FolderId, 'FolderId');
 
-      LoadCatalog(
-        Params,
-        TMainForm(Form).BuildFolderCatalog,
-        TMainForm(Form).OpenCell,
-        TMainForm(Form).RestartReminder);
+      TDBAccess.DBAParamsFunc(TDBAccess.LoadCatalog, Params, OutParams);
+
+      CellList := OutParams.AsPointerByIdent['CellList'];
+
+      Params.Clear;
+      Params.Add(FolderId, 'FolderId');
+      Params.Add(CellList, 'CellList');
+
+      ControlParamsProc(TMainForm(Form).BuildFolderCatalog, Params);
     finally
       FreeAndNil(Params);
     end;

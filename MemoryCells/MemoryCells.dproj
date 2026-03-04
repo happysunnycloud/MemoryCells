@@ -428,6 +428,7 @@
         <DCCReference Include="..\..\DevelopmentsCollection\AddLogUnit.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\Types\BinFileTypes.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\Stream\StreamHandler.pas"/>
+        <DCCReference Include="..\..\DevelopmentsCollection\StringToolsUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

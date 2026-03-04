@@ -53,6 +53,7 @@ const
   METHOD = 'TLoadDestinationCatalogThread.Execute';
 var
   FolderId: Int64;
+  CellList: TCellList;
   Params: TParamsExt;
 begin
   try
@@ -61,7 +62,7 @@ begin
       Params.Clear;
       Params.CopyFrom(InParams);
 
-      FolderId := Params.AsInt64[0];
+      FolderId := Params.AsInt64ByIdent['FolderId'];
 
       Params.Clear;
       Params.Add(FolderId);
@@ -70,9 +71,11 @@ begin
 
       TDBAccess.DBAParamsFunc(TDBAccess.LoadDestinationCatalog, Params, OutParams);
 
+      CellList := OutParams.AsPointerByIdent['CellList'];
+
       Params.Clear;
       Params.Add(FolderId);
-      Params.Add(OutParams.AsPointer[0]);
+      Params.Add(CellList);
 
       ControlParamsProc(FBuildDestinationCatalogProcRef, Params);
     finally
