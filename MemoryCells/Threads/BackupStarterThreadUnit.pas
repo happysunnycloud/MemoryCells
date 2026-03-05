@@ -15,7 +15,7 @@ type
   strict private
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -42,12 +42,12 @@ begin
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
 
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 end;
 
-procedure TBackupStarterThread.Execute;
+procedure TBackupStarterThread.InnerExecute;
 const
-  METHOD = 'TBackupStarterThread.Execute';
+  METHOD = 'TBackupStarterThread.InnerExecute';
 var
 //  OutParams: TParamsExt;
   LastBackupDateTime: TDateTime;
