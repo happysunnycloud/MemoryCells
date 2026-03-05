@@ -16,7 +16,7 @@ type
   strict private
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -38,15 +38,15 @@ constructor TInsertFolderThread.Create(
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
 end;
 
-procedure TInsertFolderThread.Execute;
+procedure TInsertFolderThread.InnerExecute;
 const
-  METHOD = 'TInsertFolderThread.Execute';
+  METHOD = 'TInsertFolderThread.InnerExecute';
 var
   Params: TParamsExt;
 begin

@@ -14,7 +14,7 @@ uses
 type
   TLoadCatalogThread = class(TBaseThread)
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -37,14 +37,14 @@ constructor TLoadCatalogThread.Create(
   const AForm: TFormExt;
   const AParams: TParamsExt);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
 end;
 
-procedure TLoadCatalogThread.Execute(const AThread: TThreadExt);
+procedure TLoadCatalogThread.InnerExecute;
 const
-  METHOD = 'TLoadCatalogThread.Execute';
+  METHOD = 'TLoadCatalogThread.InnerExecute';
 var
   CellList: TCellList;
   FolderId: Int64;

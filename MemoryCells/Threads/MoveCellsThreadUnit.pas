@@ -15,7 +15,7 @@ uses
 type
   TMoveCellsThread = class(TBaseThread)
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -38,7 +38,7 @@ constructor TMoveCellsThread.Create(
   const AForm: TFormExt;
   const AParams: TParamsExt);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
 end;
@@ -48,13 +48,13 @@ begin
   inherited;
 end;
 
-procedure TMoveCellsThread.Execute;
+procedure TMoveCellsThread.InnerExecute;
 const
-  METHOD = 'TMoveCellsThread.Execute';
+  METHOD = 'TMoveCellsThread.InnerExecute';
 var
-  FolderId: Int64;
-  CellId: Int64;
-  SourceFolderId: Int64;
+//  FolderId: Int64;
+//  CellId: Int64;
+//  SourceFolderId: Int64;
   DestinationFolderId: Int64;
   CellIdList: TCellIdList;
   ActionType: TActionType;
@@ -63,10 +63,10 @@ begin
   try
     Params := TParamsExt.Create;
     try
-      SourceFolderId := InParams.AsInt64[0];
-      DestinationFolderId := InParams.AsInt64[1];
-      CellIdList := TCellIdList(InParams.AsPointer[2]);
-      ActionType := TActionType(InParams.AsByte[3]);
+//      SourceFolderId := InParams.AsInt64ByIdent['SourceFolderId'];
+      DestinationFolderId := InParams.AsInt64ByIdent['DestinationFolderId'];
+      CellIdList := TCellIdList(InParams.AsPointerByIdent['CellIdList']);
+      ActionType := TActionType(InParams.AsByteByIdent['ActionType']);
 
       Params.Clear;
       Params.Add(DestinationFolderId);

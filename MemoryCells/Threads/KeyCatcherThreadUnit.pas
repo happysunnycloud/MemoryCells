@@ -15,7 +15,7 @@ uses
 type
   TKeyCatcherThread = class (TBaseThread)
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt; const AParams: TParamsExt); reintroduce;
@@ -35,14 +35,14 @@ uses
 constructor TKeyCatcherThread.Create(
   const AForm: TFormExt; const AParams: TParamsExt);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
 end;
 
-procedure TKeyCatcherThread.Execute;
+procedure TKeyCatcherThread.InnerExecute;
 const
-  METHOD = 'TKeyCatcherThread.Execute';
+  METHOD = 'TKeyCatcherThread.InnerExecute';
 
   procedure _GetValues(const AReadedString: String; var ADateTime: TDateTime; var AKeyCode: Word);
   var

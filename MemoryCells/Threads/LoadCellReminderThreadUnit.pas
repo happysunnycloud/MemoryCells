@@ -17,7 +17,7 @@ type
   strict private
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -40,7 +40,7 @@ constructor TLoadCellReminderThread.Create(
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
@@ -51,9 +51,9 @@ begin
   inherited;
 end;
 
-procedure TLoadCellReminderThread.Execute;
+procedure TLoadCellReminderThread.InnerExecute;
 const
-  METHOD = 'TLoadCellReminderThread.Execute';
+  METHOD = 'TLoadCellReminderThread.InnerExecute';
 var
   Params: TParamsExt;
 begin

@@ -123,7 +123,8 @@ begin
     _TextSettings := TTextSettings(
       TControlTools.GetPropertyAsObject(_Control, TProperties.TextSettings));
 
-    _TextSettings.FontColor := FTheme.TextSettings.FontColor;
+    _TextSettings.FontColor := FTheme.CommonSettings.CustomTextSettings.FontColor;
+//    _TextSettings.FontColor := FTheme.TextSettings.FontColor;
   end;
 
   BackupSettingEmbeddedFrame.CaptionLabel.TextSettings.Font.Style :=

@@ -336,7 +336,6 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Threads\BackupThreadUnit.pas"/>
-        <DCCReference Include="BackupStarterThreadUnit.pas"/>
         <DCCReference Include="Threads\UpdateCellAttributesThreadUnit.pas"/>
         <DCCReference Include="Frames\DestinationFolderNavigatorFrameUnit.pas">
             <Form>DestinationFolderNavigatorFrame</Form>
@@ -429,6 +428,7 @@
         <DCCReference Include="..\..\DevelopmentsCollection\Types\BinFileTypes.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\Stream\StreamHandler.pas"/>
         <DCCReference Include="..\..\DevelopmentsCollection\StringToolsUnit.pas"/>
+        <DCCReference Include="Threads\BackupStarterThreadUnit.pas"/>
         <RcItem Include="Styles\Logo32.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>Icon_1</ResourceId>

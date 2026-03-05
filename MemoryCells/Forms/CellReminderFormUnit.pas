@@ -190,8 +190,9 @@ begin
   Self.Fill.Kind := TBrushKind.Solid;
   Self.Fill.Color := FTheme.LightBackgroundColor;
 
-  Self.CellMemo.TextSettings.FontColor := FTheme.TextSettings.FontColor;
-  Self.CellMemo.TextSettings.Font.Size := FTheme.TextSettings.Font.Size;
+  FTheme.CommonSettings.CustomTextSettings.ApplyTo(Self.CellMemo);
+//  Self.CellMemo.TextSettings.FontColor := FTheme.TextSettings.FontColor;
+//  Self.CellMemo.TextSettings.Font.Size := FTheme.TextSettings.Font.Size;
   Self.CellMemo.StyledSettings := [];
 
   Self.ControlButtonsBackgroundRectangle.Fill.Color := FTheme.DarkBackgroundColor;

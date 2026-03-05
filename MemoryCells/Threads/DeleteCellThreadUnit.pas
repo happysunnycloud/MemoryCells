@@ -17,7 +17,7 @@ type
   strict private
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -41,15 +41,15 @@ constructor TDeleteCellThread.Create(
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
 end;
 
-procedure TDeleteCellThread.Execute;
+procedure TDeleteCellThread.InnerExecute;
 const
-  METHOD = 'TDeleteCellThread.Execute';
+  METHOD = 'TDeleteCellThread.InnerExecute';
 var
   Params: TParamsExt;
   CellId: Int64;

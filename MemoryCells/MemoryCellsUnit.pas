@@ -847,7 +847,6 @@ end;
 
 procedure TMainForm.RestartReminder(const AParams: TParamsExt);
 begin
-  TLogger.AddLog('TMainForm.RestartReminder -> Запускаем AppManager.CreateLoadCellReminderThread', MG);
   AppManager.CreateLoadCellReminderThread(Self, StartCellReminder);
 end;
 
@@ -869,12 +868,6 @@ end;
 
 procedure TMainForm.UpdateCellReminder(const ACell: TCell);
 begin
-  TLogger.AddLog('TMainForm.UpdateCellReminder -> Запускаем обновление ячейки с содержимым: ' +
-    ACell.Content +
-    ' RemindDateTime: ' +
-    DateTimeToStr(ACell.RemindDateTime)
-    , MG);
-
   AppManager.CreateUpdateCellReminderThread(Self, ACell, CellReminderUpdated);
 end;
 
@@ -891,8 +884,6 @@ begin
 
     CellMemoChangeTrackingHandler(nil);
   end;
-
-  TLogger.AddLog('TMainForm.CellReminderUpdated -> Перезапускаем ремайндер', MG);
 
   RestartReminder(nil);
 end;
@@ -1121,7 +1112,8 @@ begin
 
   CheckCellMemoIsEmpty;
 
-  //ActivateOnClickReplacer;
+  if not TOnClickReplacer.HasReplaced then
+    ActivateOnClickReplacer;
 end;
 
 procedure TMainForm.SearchTextOkHandler(Sender: TObject);
@@ -1361,7 +1353,7 @@ begin
 
     Thread := AppManager.CreateMoveCellsThread(
       Self,
-      SourceFolderId,
+//      SourceFolderId,
       DestinationFolderId,
       CellIdList,
       AActionType);
@@ -1579,11 +1571,6 @@ begin
     if CurrentFolderFrame.Cell.Id = ROOT_FOLDER_ID then
       DeleteFolderButton.Enabled := false;
 
-//    if MustRestartReminder then
-//    begin
-//      TLogger.AddLog('TMainForm.BuildFolderCatalog -> Перезапускаем RestartReminder', MG);
-//      RestartReminder;
-//    end;
   except
     on e: Exception do
     begin
@@ -1897,7 +1884,6 @@ var
   CellRemind: Boolean;
 begin
   try
-    TLogger.AddLog('TMainForm.StartCellReminder -> Зашли', MG);
     ParamsObj := TParamsExt.Create;
     try
       ParamsObj.CopyFrom(AParams);
@@ -1923,24 +1909,6 @@ begin
 
         if CellId = 0 then
           Exit;
-
-        //asd debug
-        if Assigned(ThreadFactory.FindThread('TCellReminderThread')) then
-          TLogger.AddLog(
-            'TMainForm.StartCellReminder -> Поток TCellReminderThread все еще существует',
-            MG)
-        else
-          TLogger.AddLog(
-            'TMainForm.StartCellReminder -> Поток TCellReminderThread уже не существует',
-            MG);
-        //asd debug
-
-        TLogger.AddLog(
-          'TMainForm.StartCellReminder -> Создаем поток с напоминанием: ' +
-          Cell.Content +
-          ' RemindDateTime: ' +
-          DateTimeToStr(Cell.RemindDateTime),
-          MG);
 
         if Assigned(CellReminderThread) then
           ThreadFactory.TerminateThread(CellReminderThread);
@@ -2473,25 +2441,10 @@ begin
   Cell := TCell.Create;
   try
     CellTemp := TCell(AParams.AsPointer[0]);
-//    if CellMemoFrame.Cell.Id = CellTemp.Id then
-//      Exit;
 
     Cell.CopyFrom(CellTemp);
 
-    TLogger.AddLog(
-      'TMainForm.ShowCellReminderForm -> Показываем ячейку с содержимым: ' +
-      Cell.Content +
-      ' RemindDateTime: ' +
-      DateTimeToStr(Cell.RemindDateTime)
-      ,
-      MG);
-
     ModalResult := TCellReminderForm.Show(Cell, OpenCellReminderPanel);
-//    if CellMemoFrame.Cell.Id = Cell.Id then
-//    begin
-//      CellMemoFrame.Cell.RemindDateTime := Cell.RemindDateTime;
-//      CellMemoFrame.Cell.Remind := Cell.Remind;
-//    end;
     case ModalResult of
       mrContinue{Goto}:
       begin
@@ -2513,18 +2466,10 @@ begin
       end;
       mrRetry{Ok(Reschedule)}:
       begin
-        TLogger.AddLog(
-          'TMainForm.ShowCellReminderForm -> ModalResult = mrRetry',
-          MG);
-
         UpdateCellReminder(Cell);
       end;
       mrAbort{Delete}:
       begin
-        TLogger.AddLog(
-          'TMainForm.ShowCellReminderForm -> ModalResult = mrAbort',
-          MG);
-
         if Cell.Id = AppManager.Settings.CurrentCellId then
         begin
           DoDeleteCell(Cell.Id, True);
@@ -2536,10 +2481,6 @@ begin
       end;
       mrCancel{Cancel, Close}:
       begin
-        TLogger.AddLog(
-          'TMainForm.ShowCellReminderForm -> ModalResult = mrCancel',
-          MG);
-
         UpdateCellReminder(Cell);
       end;
     end;
@@ -2791,9 +2732,9 @@ begin
 //    THelpmate.Theme.BackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.DarkBackgroundColor := InfoRectangle.Fill.Color;
     THelpmate.Theme.LightBackgroundColor := Self.Fill.Color;
-    THelpmate.Theme.TextSettings.FontColor :=
+    THelpmate.Theme.CommonSettings.CustomTextSettings.FontColor :=
       FCurrentFolderFrame.FolderNameText.TextSettings.FontColor;
-    THelpmate.Theme.TextSettings.Font.Size :=
+    THelpmate.Theme.CommonSettings.CustomTextSettings.FontSize :=
       FCurrentFolderFrame.FolderNameText.TextSettings.Font.Size;
     THelpmate.Theme.LoadStyleBookFrom(StyleBook);
 
@@ -2998,7 +2939,7 @@ begin
       RaiseAppException(METHOD, e);
   end;
 end;
-//asd debug TMainForm.ActivateOnClickReplacer
+
 procedure TMainForm.ActivateOnClickReplacer;
 var
   ExcludedControl: TArray<TControl>;
@@ -3032,7 +2973,7 @@ begin
       ProcessCellMemoChange(true);
     end);
 end;
-//asd debug TMainForm.ProcessCellMemoChange
+
 procedure TMainForm.ProcessCellMemoChange(
   const ARestartReminderEnabled: Boolean = true);
 var

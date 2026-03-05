@@ -18,7 +18,7 @@ type
     FCell: TCell;
     FProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -41,7 +41,7 @@ constructor TCellReminderThread.Create(
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   FCell := TCell.Create;
   InParams.CopyFrom(AParams);
@@ -56,9 +56,9 @@ begin
   inherited;
 end;
 
-procedure TCellReminderThread.Execute;
+procedure TCellReminderThread.InnerExecute;
 const
-  METHOD = 'TCellReminderThread.Execute';
+  METHOD = 'TCellReminderThread.InnerExecute';
 var
   RemindDateTime: TDateTime;
   Params: TParamsExt;
@@ -79,7 +79,6 @@ begin
       Params.Clear;
       Params.Add(FCell);
 
-      TLogger.AddLog('TCellReminderThread.Execute -> Таймер сработал', MG);
       ControlParamsProc(FProcRef, Params);
     finally
       FreeAndNil(Params);

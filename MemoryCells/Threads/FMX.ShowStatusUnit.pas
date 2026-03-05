@@ -12,9 +12,6 @@ uses
   ThreadFactoryUnit
   ;
 
-//const
-//  THREAD_NAME = 'CountdownTimer';
-
 type
   TCountdownTimer = class(TBaseThread)
   strict private
@@ -22,8 +19,7 @@ type
     FText: String;
     FTimeout: Word;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
-//    procedure InnerExecute; reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -34,6 +30,7 @@ type
 
   TShowStatus = class
   strict private
+    class var FThread: TThreadExt;
     class var FForm: TFormExt;
   private
     class procedure StopTimer;
@@ -45,12 +42,48 @@ type
 
     class procedure Stop;
     class property Form: TFormExt write FForm;
+
+    class procedure Init;
   end;
 
 implementation
 
 uses
-  FMX.ControlToolsUnit;
+    System.SyncObjs
+  , FMX.ControlToolsUnit
+  ;
+
+{ TShowStatus }
+
+class procedure TShowStatus.Init;
+begin
+  FThread := nil;
+  FForm := nil;
+end;
+
+class procedure TShowStatus.StopTimer;
+begin
+  FForm.ThreadFactory.TerminateThread(FThread);
+end;
+
+class procedure TShowStatus.ShowStatus(
+  const ATextControl: TControl;
+  const AText: String;
+  const ATimeout: Word);
+begin
+  StopTimer;
+
+  FThread := TCountdownTimer.Create(
+    FForm,
+    ATextControl,
+    AText,
+    ATimeout);
+end;
+
+class procedure TShowStatus.Stop;
+begin
+  StopTimer;
+end;
 
 { TCountdownTimer }
 
@@ -62,73 +95,53 @@ constructor TCountdownTimer.Create(
 begin
   TControlTools.CheckHasProperty(ATextControl, TProperties.Text);
 
-  inherited Create(AForm, Execute);
-
   FTextControl := ATextControl;
   FText := AText;
   FTimeout := ATimeout;
+
+  inherited Create(AForm);
 end;
 
-procedure TCountdownTimer.Execute;
-//procedure TCountdownTimer.InnerExecute;
+procedure TCountdownTimer.InnerExecute;
+const
+  METHOD = 'TCountdownTimer.InnerExecute';
 var
   i: Word;
 begin
-  Synchronize(
-    procedure
+  try
+    HoldThread;
+    TThread.Queue(nil,
+      procedure
+      begin
+        FTextControl.Visible := true;
+        TControlTools.SetPropertyAsString(FTextControl, TProperties.Text, FText);
+        UnHoldThread;
+      end);
+    ExecHold;
+
+    i := FTimeout div 100;
+    while (i > 0) and (not Terminated) do
     begin
-      FTextControl.Visible := true;
-      TControlTools.SetPropertyAsString(FTextControl, TProperties.Text, FText);
-    end);
+      Dec(i);
 
-  i := FTimeout div 100;
-  while (i > 0) and (not Terminated) do
-  begin
-    Dec(i);
+      Sleep(100);
+    end;
 
-    Sleep(100);
+    TThread.Queue(nil,
+      procedure
+      begin
+        TLabel(FTextControl).Text := '';
+        FTextControl.Visible := false;
+      end);
+  except
+    on e: Exception do
+    begin
+      ExceptionMessage := Format('%s: %s', [METHOD, e.Message]);
+    end;
   end;
-
-  Synchronize(
-    procedure
-    begin
-      TLabel(FTextControl).Text := '';
-      FTextControl.Visible := false;
-    end);
 end;
 
-{ TShowStatus }
-
-class procedure TShowStatus.StopTimer;
-begin
-  {TODO: Перевести на работу через ThreadFactory.ActivateThreadIsDeadEvent() }
-
-  FForm.ThreadFactory.TerminateThread('TCountdownTimer');
-//  FForm.ThreadFactory.TerminateThread(THREAD_NAME);
-end;
-
-class procedure TShowStatus.ShowStatus(
-  const ATextControl: TControl;
-  const AText: String;
-  const ATimeout: Word);
-//var
-//  Thread: TCountdownTimer;
-begin
-  StopTimer;
-
-//  Thread :=
-  TCountdownTimer.Create(
-    FForm,
-    ATextControl,
-    AText,
-    ATimeout);
-
-//  Thread.Name := THREAD_NAME;
-end;
-
-class procedure TShowStatus.Stop;
-begin
-  StopTimer;
-end;
+initialization
+  TShowStatus.Init;
 
 end.

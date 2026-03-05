@@ -16,7 +16,7 @@ type
   strict private
     FBuildDestinationCatalogProcRef: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -40,7 +40,7 @@ constructor TLoadDestinationCatalogThread.Create(
   const AParams: TParamsExt;
   const ABuildDestinationCatalogProcRef: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
 //  Name := 'TLoadDestinationCatalogThread';
 
@@ -48,9 +48,9 @@ begin
   FBuildDestinationCatalogProcRef := ABuildDestinationCatalogProcRef;
 end;
 
-procedure TLoadDestinationCatalogThread.Execute;
+procedure TLoadDestinationCatalogThread.InnerExecute;
 const
-  METHOD = 'TLoadDestinationCatalogThread.Execute';
+  METHOD = 'TLoadDestinationCatalogThread.InnerExecute';
 var
   FolderId: Int64;
   CellList: TCellList;

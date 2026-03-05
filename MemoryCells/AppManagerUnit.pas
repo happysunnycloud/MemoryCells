@@ -146,7 +146,7 @@ type
 
     function CreateMoveCellsThread(
       const AForm: TFormExt;
-      const ASourceFolderId: Int64;
+//      const ASourceFolderId: Int64;
       const ADestinationFolderId: Int64;
       const ACellIdList: TCellIdList;
       const AActionType: TActionType): TMoveCellsThread;
@@ -489,7 +489,7 @@ end;
 
 function TAppManager.CreateMoveCellsThread(
   const AForm: TFormExt;
-  const ASourceFolderId: Int64;
+//  const ASourceFolderId: Int64;
   const ADestinationFolderId: Int64;
   const ACellIdList: TCellIdList;
   const AActionType: TActionType): TMoveCellsThread;
@@ -497,10 +497,10 @@ var
   ParamsObj: TParamsExt;
 begin
   ParamsObj := TParamsExt.Create;
-  ParamsObj.Add(ASourceFolderId);
-  ParamsObj.Add(ADestinationFolderId);
-  ParamsObj.Add(ACellIdList);
-  ParamsObj.Add(AActionType);
+//  ParamsObj.Add(ASourceFolderId, 'SourceFolderId');
+  ParamsObj.Add(ADestinationFolderId, 'DestinationFolderId');
+  ParamsObj.Add(ACellIdList, 'CellIdList');
+  ParamsObj.Add(AActionType, 'ActionType');
   try
     Result := TMoveCellsThread.Create(AForm, ParamsObj);
   finally

@@ -29,7 +29,6 @@ uses
   LoadCellsByIdListThreadUnit in 'Threads\LoadCellsByIdListThreadUnit.pas',
   SearchTextFrameUnit in 'Frames\SearchTextFrameUnit.pas' {SearchTextFrame: TFrame},
   BackupThreadUnit in 'Threads\BackupThreadUnit.pas',
-  BackupStarterThreadUnit in 'BackupStarterThreadUnit.pas',
   UpdateCellAttributesThreadUnit in 'Threads\UpdateCellAttributesThreadUnit.pas',
   DestinationFolderNavigatorFrameUnit in 'Frames\DestinationFolderNavigatorFrameUnit.pas' {DestinationFolderNavigatorFrame: TFrame},
   LoadDestinationCatalogThreadUnit in 'Threads\LoadDestinationCatalogThreadUnit.pas',
@@ -95,7 +94,8 @@ uses
   AddLogUnit in '..\..\DevelopmentsCollection\AddLogUnit.pas',
   BinFileTypes in '..\..\DevelopmentsCollection\Types\BinFileTypes.pas',
   StreamHandler in '..\..\DevelopmentsCollection\Stream\StreamHandler.pas',
-  StringToolsUnit in '..\..\DevelopmentsCollection\StringToolsUnit.pas';
+  StringToolsUnit in '..\..\DevelopmentsCollection\StringToolsUnit.pas',
+  BackupStarterThreadUnit in 'Threads\BackupStarterThreadUnit.pas';
 
 begin
   Application.Initialize;

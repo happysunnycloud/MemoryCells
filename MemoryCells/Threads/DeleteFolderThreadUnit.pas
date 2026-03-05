@@ -18,7 +18,7 @@ type
     FProcRef: TParamsProcRef;
     FDeleteFolderError: TParamsProcRef;
   protected
-    procedure Execute(const AThread: TThreadExt); reintroduce;
+    procedure InnerExecute; override;
   public
     constructor Create(
       const AForm: TFormExt;
@@ -43,16 +43,16 @@ constructor TDeleteFolderThread.Create(
   const AProcRef: TParamsProcRef;
   const ADeleteFolderError: TParamsProcRef);
 begin
-  inherited Create(AForm, Execute);
+  inherited Create(AForm);
 
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
   FDeleteFolderError := ADeleteFolderError;
 end;
 
-procedure TDeleteFolderThread.Execute;
+procedure TDeleteFolderThread.InnerExecute;
 const
-  METHOD = 'TDeleteFolderThread.Execute';
+  METHOD = 'TDeleteFolderThread.InnerExecute';
 var
   FolderId: Int64;
   ParentFolderId: Int64;
