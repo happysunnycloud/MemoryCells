@@ -379,22 +379,18 @@
         <DCCReference Include="CommonUnit.pas"/>
         <DCCReference Include="Frames\Settings\BaseSettingUnit.pas">
             <Form>BaseSettingFrame</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames\Settings\BackupSettingFrameUnit.pas">
             <Form>BackupSettingFrame</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames\Settings\LaunchSettingFrameUnit.pas">
             <Form>LaunchSettingFrame</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames\Settings\SettingsFrameUnit.pas">
             <Form>SettingsFrame</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\..\DevelopmentsCollection\FileToolsUnit.pas"/>

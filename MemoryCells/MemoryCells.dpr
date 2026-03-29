@@ -7,6 +7,7 @@
 uses
   System.StartUpCopy,
   FMX.Forms,
+  Winapi.Windows,
   MemoryCellsUnit in 'MemoryCellsUnit.pas' {MainForm},
   ToolsUnit in '..\..\DevelopmentsCollection\ToolsUnit.pas',
   BaseThreadUnit in 'Threads\BaseThreadUnit.pas',
@@ -97,8 +98,35 @@ uses
   StringToolsUnit in '..\..\DevelopmentsCollection\StringToolsUnit.pas',
   BackupStarterThreadUnit in 'Threads\BackupStarterThreadUnit.pas';
 
+const
+  MutexName = 'Global\MemoryCells';
+
+var
+  MutexHandle: THandle;
+
 begin
+  // создаём именованный mutex
+  MutexHandle := CreateMutex(nil, False, MutexName);
+  if MutexHandle = 0 then
+    Halt;
+
+  // проверяем, есть ли уже запущенный экземпляр
+  if GetLastError = ERROR_ALREADY_EXISTS then
+  begin
+    // используем FindWindow для поиска окна первого экземпляра по уникальному имени формы
+    // у FMX можно задать WindowHandle для основного окна
+    MessageBox(0,
+      'Экземпляр приложения уже запущен',
+      'Информация',
+      MB_OK or MB_ICONINFORMATION);
+
+    CloseHandle(MutexHandle);
+    Halt;
+  end;
+
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
+
+  CloseHandle(MutexHandle);
 end.

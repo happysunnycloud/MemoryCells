@@ -119,6 +119,8 @@ type
 
     procedure Repaint;
   strict private
+    FHandle: HWND;
+
     FCriticalSection: TCriticalSection;
 
     FFoldersMinWidth: Single;
@@ -134,6 +136,8 @@ type
     FCellReminderDateTimeFrame: TCellReminderDateTimeFrame;
 
     FCellReminderThread: TThreadExt;
+
+    procedure HookWindow;
 
     procedure CreateFolderUnitFrame(
       const ACell: TCell;
@@ -2639,6 +2643,13 @@ begin
   DoUpdateCell(CellUpdated);
 end;
 
+procedure TMainForm.HookWindow;
+begin
+  FHandle := WindowHandleToPlatform(Self.Handle).Wnd;
+  // Можно здесь создать message-only окно для получения сообщений от второго экземпляра,
+  // если позже нужно будет передавать параметры.
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 const
   METHOD = 'TMainForm.FormCreate';
@@ -2652,6 +2663,8 @@ var
   CurrentDir: String;
   MenuItem: TItem;
 begin
+  HookWindow;
+
   ReportMemoryLeaksOnShutdown := true;
 
   try
