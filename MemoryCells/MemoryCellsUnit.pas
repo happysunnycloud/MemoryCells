@@ -2656,8 +2656,12 @@ begin
 
   try
     FCriticalSection := TCriticalSection.Create;
-
+    {$IFDEF DEBUG}
     TLogger.Init('AppLog', 1000, true, true);
+    {$ELSE}
+    TLogger.Init('AppLog', 1000, false, false);
+    {$ENDIF}
+
     TLogger.AddLog('Start app', MG);
 
     CurrentDir := ExtractFilePath(ParamStr(0));
@@ -3141,19 +3145,21 @@ end;
 //  CurrentFolderFrame.Panel.OnClick := FEventRecordList.GetByIdent(CurrentFolderFrame.Panel, EVENT_ONCLICK);
 //end;
 
+// Нарочно протаскиваем иконку, что бы гарантировать ее отображение
 procedure TMainForm.CreateHandle;
 var
   AppIcon: TIcon;
+  IconHandle: HICON;
 begin
   inherited;
-
   AppIcon := TIcon.Create;
+  AppIcon.LoadFromResourceName(HInstance, 'MAINICON');
   AppManager.AppIcon := AppIcon;
-  { TODO : Грузить иконку из файла с ресурсами }
-  AppIcon.LoadFromFile('C:\Desktop\MemoryCells\MemoryCells\Styles\Logo32.ico');
-
-  SendMessage(ApplicationHWND, WM_SETICON, 1, AppIcon.Handle);
-  SendMessage(WindowHandleToPlatform(Handle).Wnd, WM_SETICON, 1, AppIcon.Handle);
+  IconHandle := AppIcon.Handle;
+  SendMessage(ApplicationHWND, WM_SETICON, 0, IconHandle);
+  SendMessage(ApplicationHWND, WM_SETICON, 1, IconHandle);
+  SendMessage(WindowHandleToPlatform(Handle).Wnd, WM_SETICON, 0, IconHandle);
+  SendMessage(WindowHandleToPlatform(Handle).Wnd, WM_SETICON, 1, IconHandle);
 end;
 
 procedure TMainForm.DestroyHandle;
