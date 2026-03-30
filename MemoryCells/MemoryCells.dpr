@@ -116,8 +116,8 @@ begin
     // используем FindWindow для поиска окна первого экземпляра по уникальному имени формы
     // у FMX можно задать WindowHandle для основного окна
     MessageBox(0,
-      'Экземпляр приложения уже запущен',
-      'Информация',
+      'An instance of the application is already running.',
+      'Information',
       MB_OK or MB_ICONINFORMATION);
 
     CloseHandle(MutexHandle);
