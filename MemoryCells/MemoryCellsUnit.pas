@@ -247,6 +247,9 @@ type
     procedure DestinationFolderUnitFrameClickHandler(Sender: TObject);
     procedure FavoriteCellButtonClickHandler(Sender: TObject);
     procedure CellUnitFrameClickHandler(Sender: TObject);
+    procedure CellUnitFrameMouseUpHandler(
+      Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
     procedure CellReminderOkButtonClickHandler(Sender: TObject);
     procedure CellReminderOnChangedHandler(Sender: TObject);
 
@@ -549,6 +552,30 @@ begin
   end
   else
     raise Exception.Create('CellUnitFrameClick: Sender is not a TButton');
+end;
+
+procedure TMainForm.CellUnitFrameMouseUpHandler(
+  Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+var
+  CellButton: TButton;
+  CellUnitFrame: TCellUnitFrame;
+  Point: TPointF;
+begin
+  if Button = TMouseButton.mbRight then
+  begin
+    if Sender is TButton then
+    begin
+      CellButton := TButton(Sender);
+      CellUnitFrame := TCellUnitFrame(CellButton.Owner);
+      Point := Screen.MousePos;
+      CellUnitFrame.LocalToAbsolute(Point);
+      CellPopupMenu.Popup(Point.X, Point.Y);
+      CellPopupMenu.PopupComponent := CellUnitFrame;
+    end
+    else
+      raise Exception.Create('CellUnitFrameClick: Sender is not a TButton');
+  end;
 end;
 
 procedure TMainForm.CellReminderOkButtonClickHandler(Sender: TObject);
@@ -972,7 +999,8 @@ begin
 //  CellUnitFrame.CreateDateText.TextSettings.FontColor := $FFBCBCBC;
 //  CellUnitFrame.CreateDateText.TextSettings.Font.Size := 14;
   CellUnitFrame.CellUnitButton.OnClick := CellUnitFrameClickHandler;
-  CellUnitFrame.CellUnitButton.PopupMenu := CellPopupMenu;
+  CellUnitFrame.CellUnitButton.OnMouseUp := CellUnitFrameMouseUpHandler;
+//  CellUnitFrame.CellUnitButton.PopupMenu := CellPopupMenu;
 
   Result := CellUnitFrame;
 end;
@@ -1157,7 +1185,7 @@ begin
 
     SetSelectModeOffMenuItemClick(nil);
 
-    Cell := TCellUnitFrame(CellPopupMenu.PopupComponent.Owner).Cell;
+    Cell := TCellUnitFrame(CellPopupMenu.PopupComponent).Cell;
     FolderId := Cell.FolderId;
 
     GotoDestinationFolder(FolderId);
@@ -1178,7 +1206,7 @@ begin
 //    HomeButton
 //  ], false);
 
-  Cell := TCellUnitFrame(CellPopupMenu.PopupComponent.Owner).Cell;
+  Cell := TCellUnitFrame(CellPopupMenu.PopupComponent).Cell;
   if Cell.IsDone then
     AppManager.CreateUpdateCellAttributesThread(Self, Cell.Id, false, UpdateCellIsDone)
   else
@@ -1268,7 +1296,7 @@ begin
       end
     );
 
-    CellUnitFrame := TCellUnitFrame(CellPopupMenu.PopupComponent.Owner);
+    CellUnitFrame := TCellUnitFrame(CellPopupMenu.PopupComponent);
     CellUnitCheckBox := CellUnitFrame.CellUnitCheckBox;
     CellUnitCheckBox.IsChecked := true;
   end;

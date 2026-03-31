@@ -163,11 +163,11 @@ object SettingsFrame: TSettingsFrame
             TabOrder = 0
           end
           object CancelButton: TButton
-            Align = Left
+            Align = Right
             Margins.Left = 10.000000000000000000
             Margins.Top = 10.000000000000000000
             Margins.Right = 10.000000000000000000
-            Position.X = 50.000000000000000000
+            Position.X = 850.000000000000000000
             Position.Y = 10.000000000000000000
             Size.Width = 30.000000000000000000
             Size.Height = 40.000000000000000000
@@ -179,7 +179,7 @@ object SettingsFrame: TSettingsFrame
             Align = Right
             StyledSettings = [Family, Size, Style]
             Margins.Right = 10.000000000000000000
-            Position.X = 626.000000000000000000
+            Position.X = 576.000000000000000000
             Size.Width = 254.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
