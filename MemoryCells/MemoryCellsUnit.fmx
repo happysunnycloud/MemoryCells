@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Top = 240
   Caption = 'Memory cells'
   ClientHeight = 625
-  ClientWidth = 1325
+  ClientWidth = 1119
   Fill.Color = xFF370022
   Fill.Kind = Solid
   Position = Designed
@@ -5810,7 +5810,7 @@ object MainForm: TMainForm
   end
   object loContent: TLayout
     Align = Contents
-    Size.Width = 1325.000000000000000000
+    Size.Width = 1119.000000000000000000
     Size.Height = 625.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
@@ -5818,14 +5818,14 @@ object MainForm: TMainForm
       Anchors = [akLeft, akTop, akRight, akBottom]
       Position.X = 12.000000000000000000
       Position.Y = 11.000000000000000000
-      Size.Width = 1300.000000000000000000
+      Size.Width = 1094.000000000000000000
       Size.Height = 605.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
       object ControlsLayout: TLayout
         Align = Top
         Position.Y = 557.000000000000000000
-        Size.Width = 1300.000000000000000000
+        Size.Width = 1094.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -5833,7 +5833,7 @@ object MainForm: TMainForm
           Align = Contents
           Fill.Color = xFF2A001A
           HitTest = False
-          Size.Width = 1300.000000000000000000
+          Size.Width = 1094.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           Stroke.Thickness = 0.000000000000000000
@@ -5896,7 +5896,7 @@ object MainForm: TMainForm
           Align = Right
           StyledSettings = [Family, Size, Style]
           Margins.Right = 10.000000000000000000
-          Position.X = 967.000000000000000000
+          Position.X = 761.000000000000000000
           Size.Width = 323.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
@@ -5924,14 +5924,14 @@ object MainForm: TMainForm
       end
       object InfoLayout: TLayout
         Align = Top
-        Size.Width = 1300.000000000000000000
+        Size.Width = 1094.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 3
         object InfoRectangle: TRectangle
           Align = Contents
           Fill.Color = xFF2A001A
-          Size.Width = 1300.000000000000000000
+          Size.Width = 1094.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           Stroke.Kind = None
@@ -5939,7 +5939,7 @@ object MainForm: TMainForm
         end
         object ControlLayout: TLayout
           Align = Right
-          Position.X = 1014.000000000000000000
+          Position.X = 808.000000000000000000
           Size.Width = 286.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
@@ -6013,14 +6013,14 @@ object MainForm: TMainForm
         Anchors = [akLeft, akTop, akRight, akBottom]
         Margins.Bottom = 5.000000000000000000
         Position.Y = 50.000000000000000000
-        Size.Width = 1300.000000000000000000
+        Size.Width = 1094.000000000000000000
         Size.Height = 502.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         object CellLayout: TLayout
           Align = Right
-          Position.X = 630.000000000000000000
-          Size.Width = 670.000000000000000000
+          Position.X = 544.000000000000000000
+          Size.Width = 550.000000000000000000
           Size.Height = 502.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
@@ -6028,14 +6028,14 @@ object MainForm: TMainForm
           object CellControlLayout: TLayout
             Align = Bottom
             Position.Y = 452.000000000000000000
-            Size.Width = 670.000000000000000000
+            Size.Width = 550.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 7
             object CellControlRectangle: TRectangle
               Align = Contents
               Fill.Color = xFF2A001A
-              Size.Width = 670.000000000000000000
+              Size.Width = 550.000000000000000000
               Size.Height = 50.000000000000000000
               Size.PlatformDefault = False
               Stroke.Kind = None
@@ -6080,7 +6080,7 @@ object MainForm: TMainForm
               Hint = 'Delete'
               Margins.Top = 10.000000000000000000
               Margins.Right = 10.000000000000000000
-              Position.X = 630.000000000000000000
+              Position.X = 510.000000000000000000
               Position.Y = 10.000000000000000000
               Size.Width = 30.000000000000000000
               Size.Height = 40.000000000000000000
@@ -6110,7 +6110,7 @@ object MainForm: TMainForm
           end
           object CellMemoLayout: TLayout
             Align = Client
-            Size.Width = 670.000000000000000000
+            Size.Width = 550.000000000000000000
             Size.Height = 452.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 8
@@ -6118,31 +6118,31 @@ object MainForm: TMainForm
         end
         object CellsLayout: TLayout
           Align = Client
-          Size.Width = 318.000000000000000000
+          Size.Width = 282.000000000000000000
           Size.Height = 502.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 7
           OnResize = CellsLayoutResize
           object CellsScrollBox: TScrollBox
             Align = Client
-            Size.Width = 318.000000000000000000
+            Size.Width = 282.000000000000000000
             Size.Height = 452.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
-            Viewport.Width = 318.000000000000000000
+            Viewport.Width = 282.000000000000000000
             Viewport.Height = 452.000000000000000000
           end
           object CellsControlLayout: TLayout
             Align = Bottom
             Position.Y = 452.000000000000000000
-            Size.Width = 318.000000000000000000
+            Size.Width = 282.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
             object CellsControlRectangle: TRectangle
               Align = Contents
               Fill.Color = xFF2A001A
-              Size.Width = 318.000000000000000000
+              Size.Width = 282.000000000000000000
               Size.Height = 50.000000000000000000
               Size.PlatformDefault = False
               Stroke.Kind = None
@@ -6182,39 +6182,39 @@ object MainForm: TMainForm
           Align = Right
           Cursor = crHSplit
           MinSize = 250.000000000000000000
-          Position.X = 624.000000000000000000
+          Position.X = 538.000000000000000000
           Size.Width = 6.000000000000000000
           Size.Height = 502.000000000000000000
           Size.PlatformDefault = False
         end
         object FoldersLayout: TLayout
           Align = Left
-          Size.Width = 300.000000000000000000
+          Size.Width = 250.000000000000000000
           Size.Height = 502.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           OnResize = FoldersLayoutResize
           object FoldersScrollBox: TScrollBox
             Align = Client
-            Size.Width = 300.000000000000000000
+            Size.Width = 250.000000000000000000
             Size.Height = 452.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 300.000000000000000000
+            Viewport.Width = 250.000000000000000000
             Viewport.Height = 452.000000000000000000
           end
           object FoldersControlLayout: TLayout
             Align = Bottom
             Anchors = [akBottom]
             Position.Y = 452.000000000000000000
-            Size.Width = 300.000000000000000000
+            Size.Width = 250.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
             object FoldersControlRectangle: TRectangle
               Align = Contents
               Fill.Color = xFF2A001A
-              Size.Width = 300.000000000000000000
+              Size.Width = 250.000000000000000000
               Size.Height = 50.000000000000000000
               Size.PlatformDefault = False
               Stroke.Kind = None
@@ -6242,7 +6242,7 @@ object MainForm: TMainForm
               Hint = 'Delete'
               Margins.Top = 10.000000000000000000
               Margins.Right = 10.000000000000000000
-              Position.X = 260.000000000000000000
+              Position.X = 210.000000000000000000
               Position.Y = 10.000000000000000000
               Size.Width = 30.000000000000000000
               Size.Height = 40.000000000000000000
@@ -6275,7 +6275,7 @@ object MainForm: TMainForm
           Align = Left
           Cursor = crHSplit
           MinSize = 150.000000000000000000
-          Position.X = 300.000000000000000000
+          Position.X = 250.000000000000000000
           Size.Width = 6.000000000000000000
           Size.Height = 502.000000000000000000
           Size.PlatformDefault = False

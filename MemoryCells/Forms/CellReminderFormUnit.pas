@@ -246,6 +246,11 @@ var
 begin
   CellReminderForm := TCellReminderForm.Create(nil, ACell, ThemeOfClass);
   try
+    CellReminderForm.Left :=
+      Round(((Screen.Width / 2) - (CellReminderForm.Width / 2)));
+    CellReminderForm.Top :=
+      Round(((Screen.Height / 2) - (CellReminderForm.Height / 2)));
+
     // Если приложение было свернуто в трэй, тогда необходимо его показать
     VisibleState := IsWindowVisible(ApplicationHwnd);
     if not VisibleState then
