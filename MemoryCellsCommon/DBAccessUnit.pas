@@ -273,39 +273,17 @@ class function TDBAccess.Backup(const AInParams: TParamsExt; const AOutParams: T
 const
   METHOD = 'TDBAccess.Backup';
 var
-  DBTools: TDBTools;
-  SQLTemplateIdent: String;
-  SQLTemplate: String;
   BackupFileName: String;
 begin
-  TLogger.AddLog(Format('%s in', [METHOD]));
   try
-    SQLTemplateIdent := 'backup';
-    SQLTemplate := FSQLTemplates.GetTemplate(SQLTemplateIdent);
-    if Length(Trim(SQLTemplate)) = 0 then
-      raise Exception.Create(Format('SQL template "%s" not found or empty', [SQLTemplateIdent]));
+    BackupFileName := AInParams.AsString[0];
 
     try
-      DBTools := TDBTools.Create(FDBFileName);
+      TDBTools.Backup(FDBFileName, BackupFileName);
     except
       raise;
     end;
 
-    try
-      BackupFileName := AInParams.AsString[0];
-
-      DBTools.CreateQuery;
-
-      DBTools.Query.AddQuery(SQLTemplate);
-      DBTools.Query.AddParameterAsString(':backup_file_name', BackupFileName);
-
-      DBTools.ExecuteQuery;
-
-      // Коммит идет в конце скрипта
-    finally
-      DBTools.FreeQuery;
-      FreeAndNil(DBTools);
-    end;
   except
     on e: Exception do
     begin
@@ -314,7 +292,6 @@ begin
   end;
 
   Result := rcOk;
-  TLogger.AddLog(Format('%s out', [METHOD]));
 end;
 
 class function TDBAccess.LoadCatalog(const AInParams: TParamsExt; const AOutParams: TParamsExt): TDBAResultCode;

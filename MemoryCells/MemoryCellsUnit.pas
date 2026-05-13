@@ -283,10 +283,7 @@ type
     procedure CellReminderUpdated(const AParams: TParamsExt);
 
     procedure CheckControls;
-//    procedure StoreEvents;
-//    procedure ReStoreEvents;
-
-//    property BorderFrame: TBorderFrame read FBorderFrame;
+    procedure ManualRunBackup;
 
     property  CurrentFolderFrame: TCurrentFolderFrame read FCurrentFolderFrame;
     property  CellMemo: TMemo read GetCellMemo;
@@ -357,6 +354,7 @@ type
     class procedure ShowCellUpdated(const AParams: TParamsExt);
     class procedure ShowCellReminderUpdated;
     class procedure ShowSettingsSaved;
+    class procedure ShowBackupDone;
 
     class procedure Stop;
   end;
@@ -387,6 +385,18 @@ end;
 class procedure TShowStatusExt.ShowSettingsSaved;
 begin
   TShowStatus.ShowStatus(SettingsFrame.StatusLabel, 'Settings saved', FTimeout);
+end;
+
+class procedure TShowStatusExt.ShowBackupDone;
+var
+  OutputControl: TControl;
+begin
+  if Assigned(SettingsFrame) then
+    OutputControl := SettingsFrame.StatusLabel
+  else
+    OutputControl := FTextControl;
+
+  TShowStatus.ShowStatus(OutputControl, 'Backup completed', FTimeout);
 end;
 
 class procedure TShowStatusExt.Stop;
@@ -2553,6 +2563,8 @@ begin
       if Pos(DB_FILE_NAME, DBFileName) > 0 then
         System.SysUtils.DeleteFile(DBFileName);
     end;
+
+    TShowStatusExt.ShowBackupDone;
   finally
     FreeAndNil(SearchRecList);
   end;
@@ -2840,9 +2852,9 @@ begin
 
 //    AppManager.CreateKeyCatcherThread(Self, 'MemoryCellsMemoryFile');
 
-//    RunBackupStarter;
+    RunBackupStarter;
 
-    CellReminderThread   := nil;
+    CellReminderThread := nil;
 
     if AppManager.Settings.IsFavoriteCellsShowing = 1 then
       ShowFavoriteCells(true)
@@ -2912,6 +2924,11 @@ begin
     RenameFolderButton.Enabled := false
   else
     RenameFolderButton.Enabled := true
+end;
+
+procedure TMainForm.ManualRunBackup;
+begin
+  StartBackup(nil);
 end;
 
 procedure TMainForm.PingUTClientOnConnectedHandler(Sender: TObject);
@@ -3120,59 +3137,6 @@ begin
     FCriticalSection.Leave;
   end;
 end;
-
-//procedure TMainForm.StoreEvents;
-//begin
-//  if FEventRecordList.Count = 0 then
-//  begin
-//    THelpmate.ScrollBoxControls(CellsScrollBox,
-//      procedure (const AControl: TControl)
-//      var
-//        CellUnitButton: TButton;
-//      begin
-//        CellUnitButton := TCellUnitFrame(AControl).CellUnitButton;
-//        FEventRecordList.Add(CellUnitButton, CellUnitButton.OnClick, EVENT_ONCLICK);
-//        CellUnitButton.OnClick := nil;
-//      end);
-//
-//    THelpmate.ScrollBoxControls(FoldersScrollBox,
-//      procedure (const AControl: TControl)
-//      var
-//        FolderUnitButton: TButton;
-//      begin
-//        FolderUnitButton := TFolderUnitFrame(AControl).FolderUnitButton;
-//        FEventRecordList.Add(FolderUnitButton, FolderUnitButton.OnClick, EVENT_ONCLICK);
-//        FolderUnitButton.OnClick := nil;
-//      end);
-//
-//    FEventRecordList.Add(CurrentFolderFrame.Panel, CurrentFolderFrame.Panel.OnClick, EVENT_ONCLICK);
-//    CurrentFolderFrame.Panel.OnClick := nil;
-//  end;
-//end;
-
-//procedure TMainForm.ReStoreEvents;
-//begin
-//  THelpmate.ScrollBoxControls(CellsScrollBox,
-//    procedure (const AControl: TControl)
-//    var
-//      CellUnitButton: TButton;
-//    begin
-//      CellUnitButton := TCellUnitFrame(AControl).CellUnitButton;
-//      CellUnitButton.OnClick := FEventRecordList.GetByIdent(CellUnitButton, EVENT_ONCLICK);
-//    end);
-//
-//  THelpmate.ScrollBoxControls(FoldersScrollBox,
-//    procedure (const AControl: TControl)
-//    var
-//      FolderUnitButton: TButton;
-//    begin
-//      FolderUnitButton := TFolderUnitFrame(AControl).FolderUnitButton;
-//      FolderUnitButton.OnClick := FEventRecordList.GetByIdent(FolderUnitButton, EVENT_ONCLICK);
-//    end);
-//
-//  CurrentFolderFrame.Panel.OnClick := FEventRecordList.GetByIdent(CurrentFolderFrame.Panel, EVENT_ONCLICK);
-//end;
-
 // Нарочно протаскиваем иконку, что бы гарантировать ее отображение
 procedure TMainForm.CreateHandle;
 var
@@ -3261,24 +3225,6 @@ begin
 
     FEventRecordList.Delete(i);
   end;
-
-//  THelpmate.ScrollBoxControls(FMainForm.CellsScrollBox,
-//    procedure (const AControl: TControl)
-//    var
-//      CellUnitButton: TButton;
-//    begin
-//      CellUnitButton := TCellUnitFrame(AControl).CellUnitButton;
-//      CellUnitButton.OnClick := FEventRecordList.GetByIdent(CellUnitButton, EVENT_ONCLICK);
-//    end);
-//
-//  THelpmate.ScrollBoxControls(FMainForm.FoldersScrollBox,
-//    procedure (const AControl: TControl)
-//    var
-//      FolderUnitButton: TButton;
-//    begin
-//      FolderUnitButton := TFolderUnitFrame(AControl).FolderUnitButton;
-//      FolderUnitButton.OnClick := FEventRecordList.GetByIdent(FolderUnitButton, EVENT_ONCLICK);
-//    end);
 end;
 
 procedure TEventsManager.DeleteByControl(const AControl: TControl);

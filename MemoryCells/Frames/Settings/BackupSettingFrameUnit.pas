@@ -20,7 +20,9 @@ type
     ControlsControlsLayout: TLayout;
     DateLabel: TLabel;
     DateEdit: TDateEdit;
+    RunManualBackupButton: TButton;
     procedure SelectFolderButtonClick(Sender: TObject);
+    procedure RunManualBackupButtonClick(Sender: TObject);
   private
     FLastBackupDateTime: TDateTime;
   public
@@ -39,7 +41,16 @@ implementation
 
 uses
     DateTimeToolsUnit
-  , FMX.ControlToolsUnit;
+  , FMX.ControlToolsUnit
+  , MemoryCellsUnit
+  ;
+
+procedure TBackupSettingFrame.RunManualBackupButtonClick(Sender: TObject);
+begin
+  inherited;
+
+  MainForm.ManualRunBackup;
+end;
 
 constructor TBackupSettingFrame.Create(AOwner: TComponent);
 begin

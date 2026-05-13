@@ -112,6 +112,7 @@ begin
       BackupSettingEmbeddedFrame.TimeLabel,
       BackupSettingEmbeddedFrame.TimeEdit,
       BackupSettingEmbeddedFrame.SelectFolderButton,
+      BackupSettingEmbeddedFrame.RunManualBackupButton,
 
       LaunchSettingEmbeddedFrame.CaptionLabel,
       LaunchSettingEmbeddedFrame.RunAppAtStartupLabel,

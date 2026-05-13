@@ -1,14 +1,14 @@
 inherited BackupSettingFrame: TBackupSettingFrame
-  Size.Width = 830.000000000000000000
+  Size.Width = 1001.000000000000000000
   Size.Height = 102.000000000000000000
   inherited Layout: TLayout
-    Size.Width = 830.000000000000000000
+    Size.Width = 1001.000000000000000000
     Size.Height = 102.000000000000000000
     inherited Panel: TPanel
-      Size.Width = 830.000000000000000000
+      Size.Width = 1001.000000000000000000
       Size.Height = 102.000000000000000000
       inherited CaptionLayout: TLayout
-        Size.Width = 830.000000000000000000
+        Size.Width = 1001.000000000000000000
         Size.Height = 30.000000000000000000
         inherited CaptionLabel: TLabel
           Margins.Top = 5.000000000000000000
@@ -21,11 +21,11 @@ inherited BackupSettingFrame: TBackupSettingFrame
       end
       inherited ControlsLayout: TLayout
         Position.Y = 30.000000000000000000
-        Size.Width = 830.000000000000000000
+        Size.Width = 1001.000000000000000000
         Size.Height = 68.000000000000000000
         object ControlsCaptionsLayout: TLayout
           Align = Top
-          Size.Width = 830.000000000000000000
+          Size.Width = 1001.000000000000000000
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 2
@@ -74,7 +74,7 @@ inherited BackupSettingFrame: TBackupSettingFrame
         object ControlsControlsLayout: TLayout
           Align = Top
           Position.Y = 30.000000000000000000
-          Size.Width = 830.000000000000000000
+          Size.Width = 1001.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 3
@@ -110,14 +110,13 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Align = Left
             Margins.Left = 10.000000000000000000
             Margins.Top = 5.000000000000000000
-            Margins.Right = 10.000000000000000000
             Margins.Bottom = 5.000000000000000000
             Position.X = 701.000000000000000000
             Position.Y = 5.000000000000000000
             Size.Width = 100.000000000000000000
             Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 5
+            TabOrder = 4
           end
           object DateEdit: TDateEdit
             Date = 45866.000000000000000000
@@ -131,6 +130,20 @@ inherited BackupSettingFrame: TBackupSettingFrame
             Size.Height = 30.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 6
+          end
+          object RunManualBackupButton: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Margins.Top = 5.000000000000000000
+            Margins.Bottom = 5.000000000000000000
+            Position.X = 811.000000000000000000
+            Position.Y = 5.000000000000000000
+            Size.Width = 180.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 7
+            Text = 'Run manual backup'
+            OnClick = RunManualBackupButtonClick
           end
         end
       end

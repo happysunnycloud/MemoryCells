@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 390
   Top = 240
   Caption = 'Memory cells'
-  ClientHeight = 625
-  ClientWidth = 1119
+  ClientHeight = 780
+  ClientWidth = 1369
   Fill.Color = xFF370022
   Fill.Kind = Solid
   Position = Designed
@@ -5810,22 +5810,22 @@ object MainForm: TMainForm
   end
   object loContent: TLayout
     Align = Contents
-    Size.Width = 1119.000000000000000000
-    Size.Height = 625.000000000000000000
+    Size.Width = 1369.000000000000000000
+    Size.Height = 780.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
     object loScreen: TLayout
       Anchors = [akLeft, akTop, akRight, akBottom]
       Position.X = 12.000000000000000000
       Position.Y = 11.000000000000000000
-      Size.Width = 1094.000000000000000000
-      Size.Height = 605.000000000000000000
+      Size.Width = 1344.000000000000000000
+      Size.Height = 760.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
       object ControlsLayout: TLayout
         Align = Top
-        Position.Y = 557.000000000000000000
-        Size.Width = 1094.000000000000000000
+        Position.Y = 712.000000000000000000
+        Size.Width = 1344.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -5833,7 +5833,7 @@ object MainForm: TMainForm
           Align = Contents
           Fill.Color = xFF2A001A
           HitTest = False
-          Size.Width = 1094.000000000000000000
+          Size.Width = 1344.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           Stroke.Thickness = 0.000000000000000000
@@ -5896,7 +5896,7 @@ object MainForm: TMainForm
           Align = Right
           StyledSettings = [Family, Size, Style]
           Margins.Right = 10.000000000000000000
-          Position.X = 761.000000000000000000
+          Position.X = 1011.000000000000000000
           Size.Width = 323.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
@@ -5924,14 +5924,14 @@ object MainForm: TMainForm
       end
       object InfoLayout: TLayout
         Align = Top
-        Size.Width = 1094.000000000000000000
+        Size.Width = 1344.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 3
         object InfoRectangle: TRectangle
           Align = Contents
           Fill.Color = xFF2A001A
-          Size.Width = 1094.000000000000000000
+          Size.Width = 1344.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
           Stroke.Kind = None
@@ -5939,7 +5939,7 @@ object MainForm: TMainForm
         end
         object ControlLayout: TLayout
           Align = Right
-          Position.X = 808.000000000000000000
+          Position.X = 1058.000000000000000000
           Size.Width = 286.000000000000000000
           Size.Height = 50.000000000000000000
           Size.PlatformDefault = False
@@ -6013,21 +6013,21 @@ object MainForm: TMainForm
         Anchors = [akLeft, akTop, akRight, akBottom]
         Margins.Bottom = 5.000000000000000000
         Position.Y = 50.000000000000000000
-        Size.Width = 1094.000000000000000000
-        Size.Height = 502.000000000000000000
+        Size.Width = 1344.000000000000000000
+        Size.Height = 657.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         object CellLayout: TLayout
           Align = Right
-          Position.X = 544.000000000000000000
+          Position.X = 794.000000000000000000
           Size.Width = 550.000000000000000000
-          Size.Height = 502.000000000000000000
+          Size.Height = 657.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           OnResize = CellLayoutResize
           object CellControlLayout: TLayout
             Align = Bottom
-            Position.Y = 452.000000000000000000
+            Position.Y = 607.000000000000000000
             Size.Width = 550.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
@@ -6111,38 +6111,38 @@ object MainForm: TMainForm
           object CellMemoLayout: TLayout
             Align = Client
             Size.Width = 550.000000000000000000
-            Size.Height = 452.000000000000000000
+            Size.Height = 607.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 8
           end
         end
         object CellsLayout: TLayout
           Align = Client
-          Size.Width = 282.000000000000000000
-          Size.Height = 502.000000000000000000
+          Size.Width = 532.000000000000000000
+          Size.Height = 657.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 7
           OnResize = CellsLayoutResize
           object CellsScrollBox: TScrollBox
             Align = Client
-            Size.Width = 282.000000000000000000
-            Size.Height = 452.000000000000000000
+            Size.Width = 532.000000000000000000
+            Size.Height = 607.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
-            Viewport.Width = 282.000000000000000000
-            Viewport.Height = 452.000000000000000000
+            Viewport.Width = 532.000000000000000000
+            Viewport.Height = 607.000000000000000000
           end
           object CellsControlLayout: TLayout
             Align = Bottom
-            Position.Y = 452.000000000000000000
-            Size.Width = 282.000000000000000000
+            Position.Y = 607.000000000000000000
+            Size.Width = 532.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
             object CellsControlRectangle: TRectangle
               Align = Contents
               Fill.Color = xFF2A001A
-              Size.Width = 282.000000000000000000
+              Size.Width = 532.000000000000000000
               Size.Height = 50.000000000000000000
               Size.PlatformDefault = False
               Stroke.Kind = None
@@ -6182,31 +6182,31 @@ object MainForm: TMainForm
           Align = Right
           Cursor = crHSplit
           MinSize = 250.000000000000000000
-          Position.X = 538.000000000000000000
+          Position.X = 788.000000000000000000
           Size.Width = 6.000000000000000000
-          Size.Height = 502.000000000000000000
+          Size.Height = 657.000000000000000000
           Size.PlatformDefault = False
         end
         object FoldersLayout: TLayout
           Align = Left
           Size.Width = 250.000000000000000000
-          Size.Height = 502.000000000000000000
+          Size.Height = 657.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           OnResize = FoldersLayoutResize
           object FoldersScrollBox: TScrollBox
             Align = Client
             Size.Width = 250.000000000000000000
-            Size.Height = 452.000000000000000000
+            Size.Height = 607.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
             Viewport.Width = 250.000000000000000000
-            Viewport.Height = 452.000000000000000000
+            Viewport.Height = 607.000000000000000000
           end
           object FoldersControlLayout: TLayout
             Align = Bottom
             Anchors = [akBottom]
-            Position.Y = 452.000000000000000000
+            Position.Y = 607.000000000000000000
             Size.Width = 250.000000000000000000
             Size.Height = 50.000000000000000000
             Size.PlatformDefault = False
@@ -6277,7 +6277,7 @@ object MainForm: TMainForm
           MinSize = 150.000000000000000000
           Position.X = 250.000000000000000000
           Size.Width = 6.000000000000000000
-          Size.Height = 502.000000000000000000
+          Size.Height = 657.000000000000000000
           Size.PlatformDefault = False
           OnMouseMove = FoldersSplitterMouseMove
         end

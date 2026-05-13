@@ -39,17 +39,16 @@ constructor TBackupStarterThread.Create(
   const AParams: TParamsExt;
   const AProcRef: TParamsProcRef);
 begin
+  inherited Create(AForm);
+
   InParams.CopyFrom(AParams);
   FProcRef := AProcRef;
-
-  inherited Create(AForm);
 end;
 
 procedure TBackupStarterThread.InnerExecute;
 const
   METHOD = 'TBackupStarterThread.InnerExecute';
 var
-//  OutParams: TParamsExt;
   LastBackupDateTime: TDateTime;
   _HoursBetween: Int64;
   i: Word;
@@ -62,7 +61,6 @@ begin
       Params.CopyFrom(InParams);
 
       LastBackupDateTime := Params.AsDateTime[0];
-
       while not Terminated do
       begin
         i := 0;
@@ -95,5 +93,55 @@ begin
     end;
   end;
 end;
+
+//procedure TBackupStarterThread.InnerExecute;
+//const
+//  METHOD = 'TBackupStarterThread.InnerExecute';
+//var
+//  LastBackupDateTime: TDateTime;
+//  _HoursBetween: Int64;
+//  i: Word;
+//  Params: TParamsExt;
+//begin
+//  try
+//    Params := TParamsExt.Create;
+//    try
+//      Params.Clear;
+//      Params.CopyFrom(InParams);
+//
+//      LastBackupDateTime := Params.AsDateTime[0];
+//
+//      while not Terminated do
+//      begin
+//        i := 0;
+//        while (i < 10) and (not Terminated) do
+//        begin
+//          Sleep(1000);
+//
+//          Inc(i);
+//        end;
+//
+//        if Terminated then
+//          Exit;
+//
+//        _HoursBetween := HoursBetween(Now, LastBackupDateTime);
+//
+//        if _HoursBetween >= 24 then
+//        begin
+//          ControlParamsProc(FProcRef, nil{OutParams});
+//
+//          Terminate;
+//        end;
+//      end;
+//    finally
+//      FreeAndNil(Params);
+//    end;
+//  except
+//    on e: Exception do
+//    begin
+//      ExceptionMessage := Format('%s: %s', [METHOD, e.Message]);
+//    end;
+//  end;
+//end;
 
 end.
