@@ -2471,7 +2471,7 @@ begin
     end;
   end;
 end;
-//asd debug TMainForm.ShowCellReminderForm
+
 procedure TMainForm.ShowCellReminderForm(const AParams: TParamsExt);
 var
   Cell: TCell;
@@ -2736,6 +2736,11 @@ begin
     TrayIconMouseRightButtonDown := TrayIconMouseRightButtonDownHandler;
 
     FTrayPopupMenu := TPopupMenuExt.Create(Self);
+    FTrayPopupMenu.Theme.NormalBackgroundColor := BorderFrame.Color;
+    FTrayPopupMenu.Theme.FocusedBackgroundColor :=
+      BorderFrame.ToolButtonMouseOverColor;
+    FTrayPopupMenu.Theme.CustomTextSettings.FontColor := BorderFrame.CaptionColor;
+
     MenuItem := TItem.Create;
     MenuItem.Name := 'CloseMenuItem';
 //    MenuItem.Parent := FPatternBoardMenuItem;
