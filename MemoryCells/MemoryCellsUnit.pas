@@ -180,6 +180,7 @@ type
     procedure CellDeleted(const AParams: TParamsExt);
     procedure UpdateFolder(const AParams: TParamsExt);
     procedure InsertFolder(const AParams: TParamsExt);
+    procedure FolderDeleted(const AParams: TParamsExt);
     procedure DeleteFolderError(const AParams: TParamsExt);
 
     procedure SearchResult(const AParams: TParamsExt);
@@ -355,6 +356,7 @@ type
     class procedure ShowCellReminderUpdated;
     class procedure ShowSettingsSaved;
     class procedure ShowBackupDone;
+    class procedure ShowMainFormMessage(const AMessage: String);
 
     class procedure Stop;
   end;
@@ -397,6 +399,11 @@ begin
     OutputControl := FTextControl;
 
   TShowStatus.ShowStatus(OutputControl, 'Backup completed', FTimeout);
+end;
+
+class procedure TShowStatusExt.ShowMainFormMessage(const AMessage: String);
+begin
+  TShowStatus.ShowStatus(FTextControl, AMessage, FTimeout);
 end;
 
 class procedure TShowStatusExt.Stop;
@@ -765,8 +772,6 @@ procedure TMainForm.GotoFolder(
   const AFolderId: Int64;
   const ACellId: Int64 = 0;
   const ARestartReminder: Boolean = false);
-var
-  Thread: TThreadExt;
 begin
   TLogger.AddLog('TMainForm.GotoFolder -> Входим', MG);
 
@@ -784,6 +789,7 @@ begin
   ThreadFactory.CreateInlineThread('',
     procedure (const AThread: TThreadExt)
     var
+      Thread: TThreadExt;
       ThreadIsDeadEvent: TEvent;
     begin
       ThreadIsDeadEvent := TEvent.Create(nil, true, true, '');
@@ -2197,7 +2203,7 @@ begin
       HomeButton
     ], true);
 
-    // Сисок эвентов после удаления через окно ремайнреда будет пуст
+    // Список эвентов после удаления через окно ремайнреда будет пуст
     FEventsManager.ReStoreEvents;
 
     RestartReminder(nil);
@@ -2289,6 +2295,20 @@ begin
       RenameFolderButton,
       DeleteFolderButton
     ], true);
+  except
+    on e: Exception do
+    begin
+      raise Exception.Create(Format('%s: %s', [METHOD, e.Message]));
+    end;
+  end;
+end;
+
+procedure TMainForm.FolderDeleted(const AParams: TParamsExt);
+const
+  METHOD = 'TMainForm.FolderDeleted';
+begin
+  try
+    TShowStatusExt.ShowMainFormMessage('The folder has been deleted');
   except
     on e: Exception do
     begin
@@ -2657,12 +2677,31 @@ begin
   if FolderId = 1 then
     raise Exception.Create('Can''t delete root folder');
 
-  AppManager.CreateDeleteFolderThread(
-    Self,
-    FolderId,
-    ParentFolderId,
-    BuildFolderCatalog,
-    DeleteFolderError);
+  ThreadFactory.CreateInlineThread('',
+    procedure (const AThread: TThreadExt)
+    var
+      Thread: TThreadExt;
+      ThreadIsDeadEvent: TEvent;
+    begin
+      ThreadIsDeadEvent := TEvent.Create(nil, true, true, '');
+      try
+        Thread := AppManager.CreateDeleteFolderThread(
+          Self,
+          FolderId,
+          FolderDeleted,
+          DeleteFolderError);
+          ThreadFactory.ActivateThreadIsDeadEvent(Thread, ThreadIsDeadEvent);
+          ThreadIsDeadEvent.WaitFor(INFINITE);
+
+          TThread.ForceQueue(nil,
+            procedure
+            begin
+              GotoFolder(ParentFolderId, 0, false);
+            end);
+      finally
+        FreeAndNil(ThreadIsDeadEvent);
+      end;
+    end);
 end;
 
 procedure TMainForm.UpdateCellButtonClick(Sender: TObject);

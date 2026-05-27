@@ -55,9 +55,7 @@ const
   METHOD = 'TDeleteFolderThread.InnerExecute';
 var
   FolderId: Int64;
-  ParentFolderId: Int64;
   ResultCode: TDBAResultCode;
-  CellList: TCellList;
   Params: TParamsExt;
 begin
   try
@@ -66,8 +64,7 @@ begin
       Params.Clear;
       Params.CopyFrom(InParams);
 
-      FolderId := Params.AsInt64[0];
-      ParentFolderId := Params.AsInt64[1];
+      FolderId := Params.AsInt64ByIdent['FolderId'];
 
       Params.Clear;
       Params.Add(FolderId);
@@ -75,31 +72,14 @@ begin
 
       if ResultCode <> TDBAResultCode.rcFolderIsNotEmpty then
       begin
-        Params.Clear;
-        Params.Add(ParentFolderId);
-        Params.Add(CellList);
-
-        TDBAccess.DBAParamsFunc(TDBAccess.LoadCatalog, Params, OutParams);
-
-        CellList := OutParams.AsPointer[0];
-
-        Params.Clear;
-        Params.Add(ParentFolderId);
-        Params.Add(CellList);
-
         ControlParamsProc(FProcRef, Params);
       end
       else
       begin
-        CellList := TCellList.Create;
-        try
-          Params.Clear;
-          Params.Add(ResultCode);
+        Params.Clear;
+        Params.Add(ResultCode);
 
-          ControlParamsProc(FDeleteFolderError, Params);
-        finally
-          FreeAndNil(CellList);
-        end;
+        ControlParamsProc(FDeleteFolderError, Params);
       end;
     finally
       FreeAndNil(Params);

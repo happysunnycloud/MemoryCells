@@ -110,7 +110,6 @@ type
     function CreateDeleteFolderThread(
       const AForm: TFormExt;
       const AFolderId: Int64;
-      const AParentFolderId: Int64;
       const AProcRef: TParamsProcRef;
       const ADeleteFolderError: TParamsProcRef): TDeleteFolderThread;
 
@@ -372,7 +371,6 @@ end;
 function TAppManager.CreateDeleteFolderThread(
   const AForm: TFormExt;
   const AFolderId: Int64;
-  const AParentFolderId: Int64;
   const AProcRef: TParamsProcRef;
   const ADeleteFolderError: TParamsProcRef): TDeleteFolderThread;
 var
@@ -380,8 +378,7 @@ var
 begin
   ParamsObj := TParamsExt.Create;
   try
-    ParamsObj.Add(AFolderId);
-    ParamsObj.Add(AParentFolderId);
+    ParamsObj.Add(AFolderId, 'FolderId');
     Result := TDeleteFolderThread.Create(AForm, ParamsObj, AProcRef, ADeleteFolderError);
   finally
     FreeAndNil(ParamsObj);
