@@ -587,8 +587,8 @@ begin
       CellUnitFrame := TCellUnitFrame(CellButton.Owner);
       Point := Screen.MousePos;
       CellUnitFrame.LocalToAbsolute(Point);
-      CellPopupMenu.Popup(Point.X, Point.Y);
       CellPopupMenu.PopupComponent := CellUnitFrame;
+      CellPopupMenu.Popup(Point.X, Point.Y);
     end
     else
       raise Exception.Create('CellUnitFrameClick: Sender is not a TButton');
